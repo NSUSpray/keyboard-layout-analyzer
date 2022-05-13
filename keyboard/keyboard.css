@@ -82,7 +82,7 @@
     margin:0;
     width:16px;
     height:16px;
-    background-image:url("../img/info-balloon.png");
+    background-image:url("info-balloon.png");
 }
 
 .kb-dialog-inputbox {
@@ -99,7 +99,7 @@
     margin:0;
     width:14px;
     height:4px;
-	background-image:url("../img/arrow_black_down2.png");
+	background-image:url("arrow_black_down2.png");
 }
 
 .kb-dialog-arrow-bottom {
@@ -108,7 +108,7 @@
     margin:0;
     width:14px;
     height:4px;
-	background-image:url("../img/arrow_black_up2.png");
+	background-image:url("arrow_black_up2.png");
 }
 
 .kb-dialog-arrow-left {
@@ -117,7 +117,7 @@
     margin:0;
     width:4px;
     height:14px;
-    background-image:url("../img/arrow_black_right2.png");
+    background-image:url("arrow_black_right2.png");
 }
 
 .kb-dialog-arrow-right {
@@ -126,7 +126,7 @@
     margin:0;
     width:4px;
     height:14px;
-    background-image:url("../img/arrow_black_left2.png");
+    background-image:url("arrow_black_left2.png");
 }
 
 .unselectable {
