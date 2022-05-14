@@ -505,7 +505,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "<div class=\"pagination pagination\">\n" +
     "    <ul>\n" +
     "        <li class=\"switcher\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
-    "            <a href=\"javascript:void(0);\" >❮</a>\n" +
+    "            <a href=\"javascript:void(0);\" >🡠</a>\n" +
     "        </li>\n" +
     "\n" +
     "        <li ng-repeat='ii in [start, stop] | makeRange' \n" +
@@ -515,10 +515,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        </li>\n" +
     "\n" +
     "        <li class=\"switcher\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
-    "            <a href=\"javascript:void(0);\" >❮</a>\n" +
+    "            <a href=\"javascript:void(0);\" >🡠</a>\n" +
     "        </li>\n" +
     "        <li class=\"switcher\" num=\"next\" ng-click=\"handleNav($event, start*1, 'next')\">\n" +
-    "            <a href=\"javascript:void(0);\" >❯</a>\n" +
+    "            <a href=\"javascript:void(0);\" >🡢</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "</div>"

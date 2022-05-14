@@ -35,13 +35,17 @@ KB.KeyDialog = (function() {
         helpBtn.appendChild(helpIcon);
         
         inputBox.style.verticalAlign = "middle";
+        $(inputBox).focus(function() { this.select(); });
         helpBtn.style.verticalAlign = "middle";
         helpBtn.style.marginLeft = "4px";
+        helpBtn.style.cursor = "help";
+        helpBtn.title = helpTxt;
+        helpBtn.setAttribute("tabIndex", "-1");
         
-        $(helpBtn).bind("click", (function() {
+        /*$(helpBtn).bind("click", (function() {
             var txt = helpTxt;
             return function() {alert(txt);}
-        })());
+        })());*/
         
         myTdL.appendChild(labelTxt);
         myTdR.appendChild(inputBox);
@@ -138,7 +142,7 @@ KB.KeyDialog = (function() {
 
         $(canBtn).bind("click", config.cancelFunct);
         
-        $(okBtn).bind("click", function() {
+        function okFunct() {
             var params = {},
                 fCombo = document.getElementById(namespace + "-finger"),
                 fsCombo = document.getElementById(namespace + "-fingerStart");
@@ -151,15 +155,24 @@ KB.KeyDialog = (function() {
             params.fingerStart = fsCombo.options[fsCombo.selectedIndex].value;
             
             config.okFunct(params);
+        }
+        $(okBtn).on("click", okFunct);
+
+        $(myForm).keypress(function(event) {
+            if (event.key == "Enter") okFunct();
         });
-        
+        $(document).on("keydown", function(event) {
+            if (event.key == "Escape")
+                config.cancelFunct();
+        });
+
         btnPanel.className = "kb-dialog-btnpanel";
         btnPanel.appendChild(okBtn);
         btnPanel.appendChild(canBtn);
         
         myForm.appendChild(myTable);
         myForm.appendChild(btnPanel);
-        
+
         return myForm;
     }
     
@@ -474,6 +487,7 @@ KB.KeyDialog = (function() {
             setDisplayText();
             me.position();
             screenPad.style.cursor = "default";
+            $(".kb-dialog-screenpad[style*=block] tbody tr:first-child input").focus();
         };
         me.hide = function() {
             screenPad.style.display = "none";
