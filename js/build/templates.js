@@ -628,6 +628,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <th>\n" +
     "                                    <div class='text-right'>Score</div>\n" +
     "                                </th>\n" +
+    "                                <th></th>\n" +
     "                            </tr>\n" +
     "                        </thead>\n" +
     "                        <tbody>\n" +
@@ -638,6 +639,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <td><div class='text-left'>{{layout.hardwareType}}</div></td>\n" +
     "                                <td><div class='text-left'>{{layout.layoutName}}</div></td>\n" +
     "                                <td><div class='text-right'>{{layout.score.toFixed(2)}}</div></td>\n" +
+    "                                <td class='chart-bar'><div style=\"width:{{layout.score}}px\"></div></td>\n" +
     "                            </tr>\n" +
     "                    \n" +
     "                        </tbody>\n" +

@@ -154,7 +154,8 @@ h1 {
 }
 
 .kla-table-data-narrow {
-    width:450px;
+    width: auto;
+    min-width:450px;
 }
 
 .kla-table-data-text {
@@ -174,6 +175,17 @@ h1 {
 }
 .kla-table-data tr:hover {
     color: #000000;
+}
+.kla-table-data tr .chart-bar div {
+    height: 12px;
+    background-color: rgba(102, 102, 102, 50%);
+}
+.kla-table-data tr:hover .chart-bar div {
+    background-color: rgba(102, 102, 102, 100%);
+}
+
+.kla-table-data th, .kla-table-data td {
+    padding-left: 6px;
 }
 
 .kla-table-data th {
