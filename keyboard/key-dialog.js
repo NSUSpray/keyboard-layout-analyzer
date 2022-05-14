@@ -132,13 +132,15 @@ KB.KeyDialog = (function() {
         myTable.className = "kb-dialog-table";
         myTable.appendChild(myTbody);
         
-        okBtn.appendChild( document.createTextNode("OK") );
+        okBtn.appendChild( document.createTextNode("✔ OK") );
         canBtn.appendChild( document.createTextNode("Cancel") );
         
         okBtn.className = 'btn';
         okBtn.style.marginRight = '4px';
+        okBtn.title = "Accept changes (Enter)";
         canBtn.className = 'btn';
         canBtn.style.marginLeft = '4px';
+        canBtn.title = "Leave as it was (Esc)";
 
         $(canBtn).bind("click", config.cancelFunct);
         

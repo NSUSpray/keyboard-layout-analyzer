@@ -274,10 +274,42 @@ appDirectives.directive('paginate', [
 
             templateUrl: 'partials/paginate.htm',
 
-            controller: function($scope, $element) {
+            controller: function($scope, $element, keyboards) {
                 $scope.start = parseInt($scope.start, 10);
                 $scope.stop = parseInt($scope.stop, 10);
                 $scope.maxVal = $scope.stop - $scope.start;
+                $scope.keyboards = keyboards;
+                $scope.shorten = function(k) {
+                    var shortLabels = [];
+                    k.forEach(function(layout) {
+                        var label = layout.keySet.label;
+                        for (i = 1; label.replaceAll(/[WM]/g, "...").replaceAll(/[^ijlI. ]/g, "..").length > 16; ++i) {
+                            switch (i) {
+                                // trash
+                                case 1: label = label.replaceAll(/[^a-z0-9 ]/gi, ""); break;
+                                // vowels
+                                case 2: label = label.replaceAll(/\B[aeiouy]/gi, ""); break;
+                                // middle
+                                case 3: label = label.replaceAll(/\B[a-z]+([a-z])/g, "$1."); break;
+                                // dots
+                                case 4: label = label.replaceAll(/\./g, ""); break;
+                                // lower
+                                case 5:
+                                    label = label
+                                    .replaceAll(/\B[a-z]/g, "")
+                                    .replaceAll(/\B[A-Z]/g, function(a) {return a.toLowerCase();})
+                                    .replaceAll(/ /g, "");
+                                    break;
+                                default:
+                                    var pos = Math.floor(Math.random() * label.length);
+                                    label = label.slice(1, pos) + label.slice(pos + 1);
+                                    break;
+                            }
+                        }
+                        shortLabels.push(label);
+                    });
+                    return shortLabels;
+                };
                 $scope.current = 0;
 
                 $scope.handleNav = function(evt, start, idx) {

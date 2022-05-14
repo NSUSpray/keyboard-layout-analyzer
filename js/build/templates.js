@@ -504,21 +504,20 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
   $templateCache.put('partials/paginate.htm',
     "<div class=\"pagination pagination\">\n" +
     "    <ul>\n" +
-    "        <li class=\"switcher\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
-    "            <a href=\"javascript:void(0);\" >🡠</a>\n" +
-    "        </li>\n" +
     "\n" +
     "        <li ng-repeat='ii in [start, stop] | makeRange' \n" +
     "            ng-class=\"{switcher: true, active: ($index === current)}\" \n" +
     "            num=\"$index\" ng-click=\"handleNav($event, start*1, $index)\">\n" +
-    "            <a href=\"javascript:void(0);\" >{{start*1+$index}}</a>\n" +
+    "            <a href=\"javascript:void(0);\" title=\"{{keyboards.getLayout($index).keySet.label}}\">" +
+    "                {{shorten(keyboards)[$index]}}" +
+    "            </a>\n" +
     "        </li>\n" +
     "\n" +
     "        <li class=\"switcher\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
-    "            <a href=\"javascript:void(0);\" >🡠</a>\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Previous layout (←Ctrl)\">🡠</a>\n" +
     "        </li>\n" +
     "        <li class=\"switcher\" num=\"next\" ng-click=\"handleNav($event, start*1, 'next')\">\n" +
-    "            <a href=\"javascript:void(0);\" >🡢</a>\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Next layout (Ctrl→)\">🡢</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "</div>"

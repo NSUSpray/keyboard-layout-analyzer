@@ -5189,7 +5189,19 @@ input[type="submit"].btn.btn-mini {
 }
 
 .pagination {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  height: 31px;
   margin: 21px 0;
+  -webkit-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-border-radius: 6px;
+          border-radius: 6px;
+  -moz-border-radius: 6px;
+  -moz-border-radius: 6px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
 .pagination ul {

@@ -84,3 +84,13 @@ $('#showAbout').click(function() {
 });
 
 $('.email').mailto(); // setup email link
+
+$(document).on("keydown", function(event) {
+    if (!event.ctrlKey) return;
+    switch (event.key) {
+        case "ArrowLeft":
+            $(".switcher[num=prev]").click(); break;
+        case "ArrowRight":
+            $(".switcher[num=next]").click(); break;
+    }
+});
