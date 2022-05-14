@@ -483,7 +483,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <option value='academic-1'>English: Academic - Cost Optimization Model</option>\n" +
     "                    <option value='academic-2'>English: Academic - Contractors' Performance in Construction</option>\n" +
     "                    <option value='academic-3'>English: Academic - Binary Logistic Analysis</option>\n" +
-    "                    <option value='lorem'>Lorem Ipsum</option>\n" +
+    "                    <option value='lorem'>Latín: Lorem Ipsum</option>\n" +
     "                    <option value='gol'>Tech: Game of Life</option>\n" +
     "                    <option value='pi1000'>Tech: Pi 1000</option>\n" +
     "                    <option value='pptt'>Tech: Programming Punctuation Torture Test</option>\n" +
@@ -505,7 +505,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "<div class=\"pagination pagination\">\n" +
     "    <ul>\n" +
     "        <li class=\"switcher\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
-    "            <a href=\"javascript:void(0);\" >←</a>\n" +
+    "            <a href=\"javascript:void(0);\" >❮</a>\n" +
     "        </li>\n" +
     "\n" +
     "        <li ng-repeat='ii in [start, stop] | makeRange' \n" +
@@ -514,8 +514,11 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <a href=\"javascript:void(0);\" >{{start*1+$index}}</a>\n" +
     "        </li>\n" +
     "\n" +
+    "        <li class=\"switcher\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
+    "            <a href=\"javascript:void(0);\" >❮</a>\n" +
+    "        </li>\n" +
     "        <li class=\"switcher\" num=\"next\" ng-click=\"handleNav($event, start*1, 'next')\">\n" +
-    "            <a href=\"javascript:void(0);\" >→</a>\n" +
+    "            <a href=\"javascript:void(0);\" >❯</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "</div>"

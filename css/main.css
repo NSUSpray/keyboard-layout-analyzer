@@ -1,11 +1,5 @@
 body {
-    /*
-    background-image: url('/common/images/bgs/white_wall_hash.png');
-
-#1abc9c -> #0088cc
-#1dd2af -> #005580
-    */
-    background-image: url('/common/images/bgs/shattered.png');
+    background-image: url('../common/images/bgs/shattered.png');
     padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
 }
 
