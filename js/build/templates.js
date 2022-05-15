@@ -449,9 +449,6 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
   $templateCache.put('partials/main.htm',
     "<div>\n" +
     "    <div class=\"jumbotron subhead\">\n" +
-    "        This is SteveP's fork of patorjk's Keyboard Layout Analyzer, featuring new functionality and improved analytics. See the <a href=\"#/about\">About Page</a> for a detailed explanation.\n" +
-    "        <br/>\n" +
-    "        <br/>\n" +
     "        <h1>Analyze Text Input</h1>\n" +
     "        <p class=\"lead\">See which layout is best for your input text<p>\n" +
     "    </div>\n" +

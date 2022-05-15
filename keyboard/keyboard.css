@@ -89,8 +89,86 @@
     width: 60px;
 }
 
+.kb-dialog-table td[colspan="2"] {
+    text-align: center;
+}
+
+.kb-dialog-combobox-wrapper {
+    overflow: hidden;
+    display: inline-block;
+    height: 33px;
+}
+
 .kb-dialog-combobox {
-    width: 110px;
+    width: 200%;
+    border: none;
+    background-color: transparent;
+}
+.kb-dialog-combobox:focus {
+    outline: none;
+}
+
+.kb-dialog-combobox option {
+    display: inline-block;
+    width: 1em;
+    padding: 3px;
+    text-align: center;
+    margin-left: -1px;
+    border: solid 1px #8F8F9D;
+    color: #8f8f9d;
+    /*background-color: #E9E9ED;*/
+    background-color: #fff;
+}
+.kb-dialog-combobox option.left-side {
+    -moz-border-radius-topleft: 4px;
+    border-top-left-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    border-bottom-left-radius: 4px;
+    margin-left: 1px;
+}
+.kb-dialog-combobox option.right-side {
+    -moz-border-radius-topright: 4px;
+    border-top-right-radius: 4px;
+    -moz-border-radius-bottomright: 4px;
+    border-bottom-right-radius: 4px;
+    margin-right: 2px;
+}
+.kb-dialog-combobox option[title="Left Pinky"]:checked {
+    background-color: #7fffff;
+}
+.kb-dialog-combobox option[title="Left Ring"]:checked {
+    background-color: #7f7ff2;
+}
+.kb-dialog-combobox option[title="Left Middle"]:checked {
+    background-color: #c3c3ff;
+}
+.kb-dialog-combobox option[title="Left Index"]:checked {
+    background-color: #ff7fff;
+}
+.kb-dialog-combobox option[title="Left Thumb"]:checked {
+    background-color: #ffffff;
+}
+.kb-dialog-combobox option[title="Right Thumb"]:checked {
+    background-color: #e5e5e5;
+}
+.kb-dialog-combobox option[title="Right Index"]:checked {
+    background-color: #ff7f7f;
+}
+.kb-dialog-combobox option[title="Right Middle"]:checked {
+    background-color: #ffc37f;
+}
+.kb-dialog-combobox option[title="Right Ring"]:checked {
+    background-color: #ffff7f;
+}
+.kb-dialog-combobox option[title="Right Pinky"]:checked {
+    background-color: #7fff7f;
+}
+.kb-dialog-combobox option:checked {
+    color: #000;
+}
+.kb-dialog-combobox option:hover {
+    background-color: #D0D0D7;
+    /*border-color: #676774;*/
 }
 
 .kb-dialog-arrow-top {

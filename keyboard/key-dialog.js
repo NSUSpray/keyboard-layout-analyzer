@@ -28,6 +28,7 @@ KB.KeyDialog = (function() {
             helpBtn = document.createElement("button"),
             helpIcon = document.createElement("div");
         myTr.id = fieldId + "-row";
+        myTdR.style.textAlign = "right";
         inputBox.id = fieldId;
         inputBox.className = "kb-dialog-inputbox";
         
@@ -57,28 +58,41 @@ KB.KeyDialog = (function() {
     
     function createComboInputRow(txt, fieldId, opts) {
         var myTr = document.createElement("tr"),
-            myTdL = document.createElement("td"),
-            myTdR = document.createElement("td"),
+            myTd = document.createElement("td"),
             labelTxt = document.createTextNode(txt),
+            selectWrpr = document.createElement("div"),
             selectBox = document.createElement("select"),
             len = opts.length,
             ii,
-            opt;
+            opt,
+            shortLabel;
+        myTd.setAttribute("colspan", "2");
+        selectWrpr.className = "kb-dialog-combobox-wrapper";
         selectBox.id = fieldId;
         selectBox.className = "kb-dialog-combobox";
+        selectBox.setAttribute("size", "2");
         
         for (ii = 0; ii < len; ii++) {
             opt = document.createElement("option");
             opt.value = opts[ii].value;
-            opt.appendChild( document.createTextNode(opts[ii].label) );
-            
+            opt.title = opts[ii].label;
+            shortLabel = opts[ii].label
+                .replace(/(Left|Right|Both) /g, "")
+                .replaceAll(/[a-z ]/g, "")
+                .replaceAll(/N/g, " ");
+            opt.appendChild( document.createTextNode(shortLabel) );
+            if (opts[ii].lside)
+                opt.className += " left-side";
+            if (opts[ii].rside)
+                opt.className += " right-side";
             selectBox.appendChild(opt);
         }
+
+        selectWrpr.appendChild(selectBox);
         
-        myTdL.appendChild(labelTxt);
-        myTdR.appendChild(selectBox);
-        myTr.appendChild(myTdL);
-        myTr.appendChild(myTdR);
+        myTd.appendChild(labelTxt);
+        myTd.appendChild(selectWrpr);
+        myTr.appendChild(myTd);
         return myTr;
     }
     
@@ -106,22 +120,40 @@ KB.KeyDialog = (function() {
         myRows[rr++] = createTextInputRow("Shift + Alt Gr:", namespace + "-shiftAltGrKey",  saHelp);
         
         opts = [
-            {label:"Left Pinky",    value:KB.finger.LEFT_PINKY},
-            {label:"Left Ring",     value:KB.finger.LEFT_RING},
-            {label:"Left Middle",   value:KB.finger.LEFT_MIDDLE},
-            {label:"Left Index",    value:KB.finger.LEFT_INDEX},
-            {label:"Left Thumb",    value:KB.finger.LEFT_THUMB},
-            {label:"Right Thumb",   value:KB.finger.RIGHT_THUMB},
-            {label:"Right Index",   value:KB.finger.RIGHT_INDEX},
-            {label:"Right Middle",  value:KB.finger.RIGHT_MIDDLE},
-            {label:"Right Ring",    value:KB.finger.RIGHT_RING},
-            {label:"Right Pinky",   value:KB.finger.RIGHT_PINKY}
+            {label:"Left Pinky",    value:KB.finger.LEFT_PINKY, lside:true, rside:false},
+            {label:"Left Ring",     value:KB.finger.LEFT_RING, lside:false, rside:false},
+            {label:"Left Middle",   value:KB.finger.LEFT_MIDDLE, lside:false, rside:false},
+            {label:"Left Index",    value:KB.finger.LEFT_INDEX, lside:false, rside:true},
+
+            {label:"Left Thumb",    value:KB.finger.LEFT_THUMB, lside:true, rside:true},
+
+            {label:"Right Thumb",   value:KB.finger.RIGHT_THUMB, lside:true, rside:true},
+
+            {label:"Right Index",   value:KB.finger.RIGHT_INDEX, lside:true, rside:false},
+            {label:"Right Middle",  value:KB.finger.RIGHT_MIDDLE, lside:false, rside:false},
+            {label:"Right Ring",    value:KB.finger.RIGHT_RING, lside:false, rside:false},
+            {label:"Right Pinky",   value:KB.finger.RIGHT_PINKY, lside:false,rside:true}
         ];
 
         myRows[rr++] = createComboInputRow("Finger For Pressing Key:", namespace + "-finger", opts);
         
-        opts.unshift({label:"None",   value:KB.finger.NONE});
-        opts.push({label:"Both Thumbs",   value: KB.finger.BOTH_THUMBS});
+        opts = [
+            {label:"None",   value:KB.finger.NONE, lside:true, rside:true},
+
+            {label:"Left Pinky",    value:KB.finger.LEFT_PINKY, lside:true, rside:false},
+            {label:"Left Ring",     value:KB.finger.LEFT_RING, lside:false, rside:false},
+            {label:"Left Middle",   value:KB.finger.LEFT_MIDDLE, lside:false, rside:false},
+            {label:"Left Index",    value:KB.finger.LEFT_INDEX, lside:false, rside:true},
+
+            {label:"Left Thumb",    value:KB.finger.LEFT_THUMB, lside:true, rside:false},
+            {label:"Both Thumbs",   value: KB.finger.BOTH_THUMBS, lside:false, rside:false},
+            {label:"Right Thumb",   value:KB.finger.RIGHT_THUMB, lside:false, rside:true},
+
+            {label:"Right Index",   value:KB.finger.RIGHT_INDEX, lside:true, rside:false},
+            {label:"Right Middle",  value:KB.finger.RIGHT_MIDDLE, lside:false, rside:false},
+            {label:"Right Ring",    value:KB.finger.RIGHT_RING, lside:false, rside:false},
+            {label:"Right Pinky",   value:KB.finger.RIGHT_PINKY, lside:false,rside:true}
+        ];
         myRows[rr++] = createComboInputRow("Start Position of Finger:", namespace + "-fingerStart", opts);
         
         len = myRows.length;
