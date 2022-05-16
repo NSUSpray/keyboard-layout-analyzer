@@ -230,7 +230,9 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                    <div class='controls'>\n" +
     "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" ng-model=\"aset\" title=\"Copy layout data to clipboard (Ctrl+C)\">Copy</button>\n" +
     "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Paste and load layout data (Ctrl+V)\">Import</button>\n" +
-    "                                        <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button>\n" +
+    "                                        <!-- <input type=\"file\" class=\"kb-config-import btn\" ng-click=\"importJson()\" title=\"Load layout data from computer\">Import</button> -->\n" +
+    "                                        <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save layout data to computer\">Export</a>\n" +
+    "                                        <!-- <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
     "                                    </div>\n" +
     "                                </div>\n" +
     "\n" +
@@ -529,7 +531,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"  data-placeholder=\"false\">Units: {{source.units}}<span class=\"caret\"></span></button>\n" +
     "        <ul class=\"dropdown-menu\">\n" +
     "            <li ng-repeat=\"curUnit in source.allowedUnits\">\n" +
-    "                <input type=\"radio\" name='kla-opt{{settings.id}}-unit-radio' id=\"kla-opt{{settings.id}}-units-{{$index}}\" ng-model=\"source.units\" value='{{curUnit}}'><label for=\"kla-opt{{settings.id}}-units-{{$index}}\" >{{curUnit}}</label>\n" +
+    "                <input type=\"radio\" name='kla-opt{{settings.id}}-unit-radio' id=\"kla-opt{{settings.id}}-units-{{$index}}\" ng-model=\"source.units\" value='{{curUnit}}' /><label for=\"kla-opt{{settings.id}}-units-{{$index}}\" >{{curUnit}}</label>\n" +
     "            </li>\n" +
     "        </ul>\n" +
     "    </div> \n" +
@@ -538,7 +540,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"  data-placeholder=\"false\">Display: {{source.displayType}}<span class=\"caret\"></span></button>\n" +
     "        <ul class=\"dropdown-menu\">\n" +
     "            <li ng-repeat=\"(dType, dValue) in source.displayData track by $index\">\n" +
-    "                <input type=\"radio\" name='kla-opt{{settings.id}}-unit-radio' id=\"kla-opt{{settings.id}}-d-{{$index}}\" ng-model=\"source.displayType\" value='{{dType}}'><label for=\"kla-opt{{settings.id}}-d-{{$index}}\" >{{dType}}</label>\n" +
+    "                <input type=\"radio\" name='kla-opt{{settings.id}}-unit-radio' id=\"kla-opt{{settings.id}}-d-{{$index}}\" ng-model=\"source.displayType\" value='{{dType}}' /><label for=\"kla-opt{{settings.id}}-d-{{$index}}\" >{{dType}}</label>\n" +
     "            </li>\n" +
     "        </ul>\n" +
     "    </div> \n" +
@@ -547,7 +549,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"  data-placeholder=\"false\">Keyboards <span class=\"caret\"></span></button>\n" +
     "        <ul class=\"dropdown-menu\">\n" +
     "            <li ng-repeat=\"layout in source.seriesData.allSeriesLabels\">\n" +
-    "                <input type=\"checkbox\" id=\"kla-opt{{settings.id}}-dd-{{$index}}\" ng-model=\"source.rawSeriesData[$index].visible\"><label for=\"kla-opt{{settings.id}}-dd-{{$index}}\" >{{layout}}</label>\n" +
+    "                <input type=\"checkbox\" id=\"kla-opt{{settings.id}}-dd-{{$index}}\" ng-model=\"source.rawSeriesData[$index].visible\" /><label for=\"kla-opt{{settings.id}}-dd-{{$index}}\" >{{layout}}</label>\n" +
     "            </li>\n" +
     "        </ul>\n" +
     "    </div>\n" +
@@ -637,7 +639,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <td><div class='text-left'>{{layout.hardwareType}}</div></td>\n" +
     "                                <td><div class='text-left'>{{layout.layoutName}}</div></td>\n" +
     "                                <td><div class='text-right'>{{layout.score.toFixed(2)}}</div></td>\n" +
-    "                                <td class='chart-bar'><div style=\"width:{{layout.score}}px\"></div></td>\n" +
+    "                                <td class='chart-bar'><div style=\"width:{{layout.score}}px;\"></div></td>\n" +
     "                            </tr>\n" +
     "                    \n" +
     "                        </tbody>\n" +

@@ -43,6 +43,16 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             setTimeout(function() {$(".kb-config-copy").removeClass("active");}, 250);
         }
 
+        $scope.exportJson = function(e) {
+            var val = JSON.stringify(keyboards.getKeySet($scope.current),  undefined, 4);
+            var $link = $(".kb-config-export");
+            $link.attr("href", "data:text/text;," + val);
+            var filename = keyboards.getKeySet($scope.current).label + "." + keyboards.getKeySet($scope.current).keyboardType;
+            filename = filename.trim().toLowerCase().replace(/ /g, "-");
+            $link.attr("download", filename + ".json");
+
+        }
+
 	    $scope.moreInfoLink = function(keySet) {
 	    	if (typeof keySet.moreInfoUrl === 'undefined') {
 	    		return 'None';
@@ -404,5 +414,7 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
         $scope.$watch('settings.chuIgnoreDups', function(newVal, oldVal, scope) {
             scope.results.consecHandPress.displayType = (newVal === true) ? 'nodups' : 'dups';
         });
+
+        $('#results-navbar-link').removeClass('invisible');
 	}
 ]);
