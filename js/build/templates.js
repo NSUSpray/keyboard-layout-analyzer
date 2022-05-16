@@ -228,7 +228,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <div class='control-group'>\n" +
     "                                    <label class='control-label'>Load/Save:</label>\n" +
     "                                    <div class='controls'>\n" +
-    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\">Import</button>\n" +
+    "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" ng-model=\"aset\" title=\"Copy layout data to clipboard (Ctrl+C)\">Copy</button>\n" +
+    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Paste and load layout data (Ctrl+V)\">Import</button>\n" +
     "                                        <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button>\n" +
     "                                    </div>\n" +
     "                                </div>\n" +
@@ -349,7 +350,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <textarea class='input-block-level kb-config-dialog-txt'></textarea>\n" +
     "                <p class='text-left'>\n" +
-    "                    Paste the text of a previously exported layout in the textbox above and press \"Import\" to load the layout.\n" +
+    "                    Paste the text of a previously copied/exported layout in the textbox above and press \"Import\" to load the layout.\n" +
     "                </p>\n" +
     "            </div>\n" +
     "\n" +

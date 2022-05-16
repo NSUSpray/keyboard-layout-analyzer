@@ -38,7 +38,7 @@ KB.KeyDialog = (function() {
         inputBox.style.verticalAlign = "middle";
         $(inputBox).focus(function() { this.select(); });
         $(inputBox).keyup(function(e) {
-            if (!e.key.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1
+            if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1
                     || e.key == "Backspace" || e.key == "Delete")
                 if ($(this).val().length <= 1 && $(this).val() != "u") {
                     var $t = $(this).parents("tr");

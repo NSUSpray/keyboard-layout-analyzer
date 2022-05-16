@@ -21,6 +21,11 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    $scope.showImportDialog = function() {
 	        $('#kb-config-import-dialog .kb-config-dialog-txt').val("");
 	        $('#kb-config-import-dialog').modal('show');
+            $('#kb-config-import-dialog').keyup(function(event) {
+                if (event.key == "v")
+                    $('#kb-config-import-dialog .btn').first().focus();
+            });
+            setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 750);
 	    };
 
 	    $scope.showExportDialog = function() {
@@ -31,6 +36,12 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    $scope.selectAllExportText = function() {
 	        $('#kb-config-export-dialog .kb-config-dialog-txt').select();
 	    };
+
+        $scope.copyJson = function() {
+            $(".kb-config-copy").addClass("active");
+            navigator.clipboard.writeText(JSON.stringify( keyboards.getKeySet($scope.current), undefined, 4 ));
+            setTimeout(function() {$(".kb-config-copy").removeClass("active");}, 250);
+        }
 
 	    $scope.moreInfoLink = function(keySet) {
 	    	if (typeof keySet.moreInfoUrl === 'undefined') {
@@ -55,6 +66,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	            $('#kb-config-import-dialog').modal('hide');
 	        } else {
 	            alert(res.reason);
+                setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 0);
 	        }
 	    };
 

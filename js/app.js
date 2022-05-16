@@ -18,7 +18,7 @@ app.config(function ($routeProvider, cacheBustSuffix) {
     $routeProvider
         .when('/', 
             {
-                redirectTo: '/main'
+                redirectTo: '/config'
             })
         .when('/main', 
             {
@@ -86,11 +86,15 @@ $('#showAbout').click(function() {
 $('.email').mailto(); // setup email link
 
 $(document).on("keydown", function(event) {
-    if (!event.ctrlKey) return;
+    if (!event.ctrlKey || $("input, textarea").is(":focus")) return;
     switch (event.key) {
         case "ArrowLeft":
             $(".switcher[num=prev]").click(); break;
         case "ArrowRight":
             $(".switcher[num=next]").click(); break;
+        case "c":
+            $(".kb-config-copy").trigger("click"); break;
+        case "v":
+            $(".kb-config-import").trigger("click"); break;
     }
 });
