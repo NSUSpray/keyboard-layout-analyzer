@@ -37,6 +37,15 @@ KB.KeyDialog = (function() {
         
         inputBox.style.verticalAlign = "middle";
         $(inputBox).focus(function() { this.select(); });
+        $(inputBox).keyup(function(e) {
+            if (!e.key.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1
+                    || e.key == "Backspace" || e.key == "Delete")
+                if ($(this).val().length <= 1 && $(this).val() != "u") {
+                    var $t = $(this).parents("tr");
+                    $t = (e.key == "Backspace")? $t.prev() : $t.next();
+                    $t.find("input, select").focus();
+                }
+        });
         helpBtn.style.verticalAlign = "middle";
         helpBtn.style.marginLeft = "4px";
         helpBtn.style.cursor = "help";
