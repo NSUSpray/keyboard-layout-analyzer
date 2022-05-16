@@ -283,27 +283,22 @@ appDirectives.directive('paginate', [
                     var shortLabels = [];
                     k.forEach(function(layout) {
                         var label = layout.keySet.label;
-                        for (i = 1; label.replaceAll(/[WM]/g, "...").replaceAll(/[^ijlI. ]/g, "..").length > 16; ++i) {
+                        for (i = 1; label.replaceAll(/[WMЩЮЖМШ]/ug, "...").replaceAll(/[^ijlI. ]/ug, "..").length > 16; ++i) {
                             switch (i) {
                                 // trash
-                                case 1: label = label.replaceAll(/[^a-z0-9 ]/gi, ""); break;
+                                case 1: label = label.replaceAll(/[^\wа-яё -]/ugi, "").replaceAll(/-/ug, " "); break;
                                 // vowels
-                                case 2: label = label.replaceAll(/\B[aeiouy]/gi, ""); break;
-                                // middle
-                                case 3: label = label.replaceAll(/\B[a-z]+([a-z])/g, "$1."); break;
+                                case 2: label = label.replaceAll(/(?<=[\wА-ЯЁа-яё])[aeiouyаеёийоуыэюя]/ug, ""); break;
+                                // abbreviation
+                                case 3: label = label.replaceAll(/([A-Za-zА-ЯЁа-яё][a-zа-яё])[a-zа-яё]+/ug, "$1."); break;
                                 // dots
-                                case 4: label = label.replaceAll(/\./g, ""); break;
-                                // lower
-                                case 5:
-                                    label = label
-                                    .replaceAll(/\B[a-z]/g, "")
-                                    .replaceAll(/\B[A-Z]/g, function(a) {return a.toLowerCase();})
-                                    .replaceAll(/ /g, "");
+                                case 4: label = label.replaceAll(/\./ug, ""); break;
+                                case 5:  // lower
+                                    label = label.replaceAll(/(?<=[\wА-ЯЁа-яё])[a-zа-яё]/ug, "")
+                                    .replaceAll(/(?<=[\wА-ЯЁа-яё])[A-ZА-ЯЁ]/ug, function(a) {return a.toLowerCase();})
+                                    .replaceAll(/ /ug, "");
                                     break;
-                                default:
-                                    var pos = Math.floor(Math.random() * label.length);
-                                    label = label.slice(1, pos) + label.slice(pos + 1);
-                                    break;
+                                default: i = 2; break;
                             }
                         }
                         shortLabels.push(label);
