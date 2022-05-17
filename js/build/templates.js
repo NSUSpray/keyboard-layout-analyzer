@@ -164,7 +164,12 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
   $templateCache.put('partials/config.htm',
     "<div>\n" +
     "    <div class=\"jumbotron subhead\">\n" +
-    "        <h1>Configuration</h1>\n" +
+    "        <div class='control-group' style='float: right;'>\n" +
+    "            <div class='controls'>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See Which Layout is Best\">Run</button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <h1>Layouts</h1>\n" +
     "        <p class=\"lead\"><strong>Click</strong> or <strong>Drag</strong> the keys on the keyboard below<p>\n" +
     "    </div>\n" +
     "    <p></p>\n" +
@@ -228,8 +233,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <div class='control-group'>\n" +
     "                                    <label class='control-label'>Load/Save:</label>\n" +
     "                                    <div class='controls'>\n" +
-    "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" ng-model=\"aset\" title=\"Copy layout data to clipboard (Ctrl+C)\">Copy</button>\n" +
-    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Paste and load layout data (Ctrl+V)\">Import</button>\n" +
+    "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" title=\"Copy layout data to clipboard (Ctrl+C)\">⏍ Copy</button>\n" +
+    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Load layout data to analyzer (Ctrl+V)\">Import</button>\n" +
     "                                        <!-- <input type=\"file\" class=\"kb-config-import btn\" ng-click=\"importJson()\" title=\"Load layout data from computer\">Import</button> -->\n" +
     "                                        <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save layout data to computer\">Export</a>\n" +
     "                                        <!-- <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
@@ -452,48 +457,55 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
   $templateCache.put('partials/main.htm',
     "<div>\n" +
     "    <div class=\"jumbotron subhead\">\n" +
-    "        <h1>Analyze Text Input</h1>\n" +
+    "        <div class='control-group' style='float: right;'>\n" +
+    "            <div class='controls'>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See Which Layout is Best\">Run</button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <h1>Analyzer</h1>\n" +
     "        <p class=\"lead\">See which layout is best for your input text<p>\n" +
     "    </div>\n" +
-    "    <form class='form-horizontal'>\n" +
+    "    <form id='text-input-form'>\n" +
     "        <div class='control-group'>\n" +
-    "            <label class='control-label' for='txt-input'>Text to Analyze:</label>\n" +
+    "            <label class='control-label' for='text-presets'>Text Presets:</label>\n" +
     "            <div class='controls'>\n" +
-    "                <textarea id='txt-input' class='input-block-level' ng-model='data.text'></textarea>\n" +
+    "                <select id='text-presets' size='2' ng-model='data.textPreset' ng-change=\"applyPreset()\">\n" +
+    "                    <option value='default' selected>[Default Text]</option>\n" +
+    "                    <optgroup label='English: Prose'>\n" +
+    "                        <option value='alice-ch1'>Alice in Wonderland, Chapter 1</option>\n"     +
+    "                        <option value='magna-carta-english'>Magna Carta</option>\n"     +
+    "                        <option value='nineteen-eighty-four-ch1'>1984, Chapter 1</option>\n"     +
+    "                        <option value='tarzan-of-the-apes'>Tarzan Of The Apes</option>\n"     +
+    "                        <option value='jungle-book'>Jungle Book</option>\n"     +
+    "                        <option value='quotes'>Quotes</option>\n"     +
+    "                        <option value='daode-jing'>Tao te Ching / DaodeJing</option>\n"     +
+    "                    </optgroup>\n" +
+    "                    <optgroup label='English: Academic'>\n" +
+    "                        <option value='academic-1'>Cost Optimization Model</option>\n"     +
+    "                        <option value='academic-2'>Contractors' Performance in Construction</option>\n"     +
+    "                        <option value='academic-3'>Binary Logistic Analysis</option>\n"     +
+    "                    </optgroup>\n" +
+    "                    <optgroup label='English: Vocabulary'>\n" +
+    "                        <option value='common-english-words'>List of the most commonly used words</option>\n"     +
+    "                        <option value='common-sat-words'>Most commonly used SAT words</option>\n"     +
+    "                        <option value='difficultwords'>Difficult words</option>\n"     +
+    "                        <option value='medical'>Medical words</option>\n"     +
+    "                        <option value='bigrams'>Bigrams</option>\n"     +
+    "                    </optgroup>\n" +
+    "                    <optgroup label='Non-English'>\n" +
+    "                        <option value='lorem'>Latín: Lorem Ipsum</option>\n" +
+    "                        <option value='gol'>Tech: Game of Life</option>\n" +
+    "                        <option value='pi1000'>Tech: Pi 1000</option>\n" +
+    "                        <option value='pptt'>Tech: Programming Punctuation Torture Test</option>\n" +
+    "                    </optgroup>\n" +
+    "                </select>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class='control-group'>\n" +
-    "            <label class='control-label' for='text-presets'>Text Presets:</label>\n" +
+    "            <label class='control-label' for='txt-input'>Text to Analyze:</label>\n" +
     "            <div class='controls'>\n" +
-    "                <select id='text-presets' ng-model='data.textPreset' ng-change=\"applyPreset()\">\n" +
-    "                    <option value='' selected>[Select Text to Load]</option>\n" +
-    "                    <option value='alice-ch1' selected>English: Alice in Wonderland, Chapter 1</option>\n" +
-    "                    <option value='common-english-words'>English: List of the most commonly used words</option>\n" +
-    "                    <option value='common-sat-words'>English: Most commonly used SAT words</option>\n" +
-    "                    <option value='magna-carta-english'>English: Magna Carta</option>\n" +
-    "                    <option value='nineteen-eighty-four-ch1'>English: 1984, Chapter 1</option>\n" +
-    "                    <option value='tarzan-of-the-apes'>English: Tarzan Of The Apes</option>\n" +
-    "                    <option value='jungle-book'>English: Jungle Book</option>\n" +
-    "                    <option value='difficultwords'>English: Difficult words</option>\n" +
-    "                    <option value='medical'>English: Medical words</option>\n" +
-    "                    <option value='quotes'>English: Quotes</option>\n" +
-    "                    <option value='daode-jing'>English: Tao te Ching / DaodeJing</option>\n" +
-    "                    <option value='bigrams'>English: Bigrams</option>\n" +
-    "                    <option value='academic-1'>English: Academic - Cost Optimization Model</option>\n" +
-    "                    <option value='academic-2'>English: Academic - Contractors' Performance in Construction</option>\n" +
-    "                    <option value='academic-3'>English: Academic - Binary Logistic Analysis</option>\n" +
-    "                    <option value='lorem'>Latín: Lorem Ipsum</option>\n" +
-    "                    <option value='gol'>Tech: Game of Life</option>\n" +
-    "                    <option value='pi1000'>Tech: Pi 1000</option>\n" +
-    "                    <option value='pptt'>Tech: Programming Punctuation Torture Test</option>\n" +
-    "                </select>\n" +
-    "                <!-- <button class='btn' type='button' ng-click='applyPreset()'>Apply</button> -->\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class='control-group'>\n" +
-    "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\">See Which Layout is Best</button>\n" +
+    "                <textarea id='txt-input' class='input-block-level' ng-model='data.text'></textarea>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </form>\n" +

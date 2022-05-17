@@ -4,8 +4,8 @@
 
 var appControllers = appControllers || angular.module('kla.controllers', []);
 
-appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 'keyboards',
-	function($scope, $http, $timeout, $log, keyboards) {
+appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 'keyboards', 'library', '$location',
+	function($scope, $http, $timeout, $log, keyboards, library, $location) {
 	    $scope.submitter = {};
 	    $scope.submitter.name = '';
 	    $scope.submitter.url = '';
@@ -13,6 +13,8 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    $scope.submitter.submitting = false;
 	    $scope.current = 0;
 	    $scope.keyboards = keyboards;
+        $scope.data = {};
+        $scope.data.text = library.get('input-text');
 
 	    $scope.switchLayout = function(evt, start, idx) {
 	        $scope.current = idx;
@@ -140,6 +142,18 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    		$('#kb-config-submit-dialog').modal('hide');
 	    	});
 	    }
+
+        $scope.generateOutput = function(txt) {
+            if (txt === '' || typeof(txt) === 'undefined') {
+                // WORKAROUND
+                $location.path('/main');
+                setTimeout(function() {$('button').trigger('click');}, 0);
+                return;
+            }
+
+            library.set('input-text', txt);
+            $location.path('/load');
+        }
 	}
 ]);
 
@@ -226,19 +240,17 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
 
         $scope.data = {};
         $scope.data.text = library.get('input-text');
-        $scope.data.textPreset = '';
-        if ( typeof $scope.data.text === 'undefined' ) {
-            $scope.data.text = 'This is some sample text to get you started.\n\nTo get the best results, paste some text that reflects what you type on a daily basis. Or load some pre-defined text from the dropdown option below.\n\nWhen you are done, click the "See Which Layout is Best" button.';
-            library.set('input-text', $scope.data.text);
-        }
 
-		$scope.applyPreset = function() {
-            if ($scope.data.textPreset === '') return;
-			$scope.data.text = "Loading, one moment please...";
+        $scope.applyPreset = function() {
+            $scope.data.text = "Loading, one moment please...";
             textPresets.load( $scope.data.textPreset ).then(function(res) {
                 $scope.data.text = res;
             });
-		}
+        }
+
+        $scope.data.textPreset = 'default';
+        if ( typeof $scope.data.text === 'undefined' )
+            $scope.applyPreset();
 
 		$scope.generateOutput = function(txt) {
             if (txt === '') {
@@ -277,7 +289,7 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
 
         // If no result data exist, redirect to the main page
         if ( typeof $scope.results['distance'] === 'undefined') {
-            $location.path('/main');
+            $location.path('/config');
             return;
         }
 
