@@ -246,7 +246,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                    <div class='controls'>\n" +
     "                                        <select id=\"kb-config-select-list\" class=\"kb-config-select-list\">\n" +
     "                                            <option value=\"none\">[Select Layout]</option>\n" +
-    "                                            <optgroup label=\"ANSI Keyboards\">\n" +
+    "                                            <optgroup label=\"Latin: ANSI Keyboards\">\n" +
     "                                                <option value=\"standard.abcdef\">ABCDEF</option>\n" +
     "                                                <option value=\"standard.arensito\">Arensito</option>\n" +
     "                                                <option value=\"standard.adnw\">AdnW</option>\n" +
@@ -266,6 +266,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                                <option value=\"standard.simplifiedDvorak\">Dvorak (Simplified)</option>\n" +
     "                                                <option value=\"standard.programmerDvorak\">Dvorak (Programmer)</option>\n" +
     "                                                <option value=\"standard.spanish-dvorak\">Dvorak (Spanish)</option>\n" +
+    "                                                <option value=\"standard.ohdvorakl\">One-handed Dvorak (Left)</option>\n" +
+    "                                                <option value=\"standard.ohdvorakr\">One-handed Dvorak (Right)</option>\n" +
     "                                                <option value=\"standard.klausler\">Klausler</option>\n" +
     "                                                <option value=\"standard.minimak8key\">Minimak 8-key</option>\n" +
     "                                                <option value=\"standard.minimak12key\">Minimak 12-key</option>\n" +
@@ -274,18 +276,15 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                                <option value=\"standard.neo2_new\">Neo 2 (v2)</option>\n" +
     "                                                <option value=\"standard.niro\">Niro</option>\n" +
     "                                                <option value=\"standard.norman\">Norman</option>\n" +
-    "                                                <option value=\"standard.ohdvorakl\">One-handed Dvorak (Left)</option>\n" +
-    "                                                <option value=\"standard.ohdvorakr\">One-handed Dvorak (Right)</option>\n" +
     "                                                <option value=\"standard.qgmlwy\">QGMLWY</option>\n" +
     "                                                <option value=\"standard.qwerfj\">QWERFJ</option>\n" +
     "                                                <option value=\"standard.qwerty\">QWERTY</option>\n" +
     "                                                <option value=\"standard.qwertywm\">QWERTY - Wide Mod</option>\n" +
     "                                                <option value=\"standard.qwpr\">QWPR</option>\n" +
-    "                                                <option value=\"standard.russian\">Russian</option>\n" +
     "                                                <option value=\"standard.soul\">Soul</option>\n" +
     "                                                <option value=\"standard.workman\">Workman</option>\n" +
     "                                            </optgroup>\n" +
-    "                                            <optgroup label=\"ISO Keyboards\">\n" +
+    "                                            <optgroup label=\"Latin: ISO Keyboards\">\n" +
     "                                                <option value=\"european.azerty\">AZERTY</option>\n" +
     "                                                <option value=\"european.bepo\">BÉPO</option>\n" +
     "                                                <option value=\"european.colemak\">Colemak</option>\n" +
@@ -301,29 +300,35 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                                <option value=\"european.qwerty-spanish\">QWERTY (Spanish)</option>\n" +
     "                                                <option value=\"european.qwerty-estonian\">QWERTY (Estonian)</option>\n" +
     "                                            </optgroup>\n" +
-    "                                            <optgroup label=\"Matrix Keyboards\">\n" +
-    "                                                <option value=\"matrix.qwerty\">QWERTY</option>\n" +
+    "                                            <optgroup label=\"Latin: Matrix Keyboards\">\n" +
     "                                                <option value=\"matrix.colemak\">Colemak</option>\n" +
     "                                                <option value=\"matrix.colemak_dh\">Colemak-DH (Mod-DH)</option>\n" +
     "                                                <option value=\"matrix.dvorak\">Dvorak</option>\n" +
     "                                                <option value=\"matrix.norman\">Norman</option>\n" +
+    "                                                <option value=\"matrix.qwerty\">QWERTY</option>\n" +
     "                                                <option value=\"matrix.workman\">Workman</option>\n" +
     "                                            </optgroup>\n" +
-    "                                            <optgroup label=\"Ergodox Keyboards\">\n" +
+    "                                            <optgroup label=\"Latin: Ergodox Keyboards\">\n" +
     "                                                <option value=\"ergodox.colemak\">Colemak</option>\n" +
     "                                                <option value=\"ergodox.colemak-thumbshift\">Colemak thumbshift</option>\n" +
+    "                                                <option value=\"ergodox.kinesis-advantage-colemak\">Colemak (Kinesis Advantage)</option>\n" +
     "                                                <option value=\"ergodox.colemak_dh\">Colemak-DH (Mod-DH) thumbshift</option>\n" +
     "                                                <option value=\"ergodox.maltron\">Maltron</option>\n" +
     "                                                <option value=\"ergodox.mtgap\">MTGAP</option>\n" +
     "                                                <option value=\"ergodox.mtgap-thumbshift\">MTGAP thumbshift</option>\n" +
+    "                                                <option value=\"ergodox.norman\">Norman</option>\n" +
     "                                                <option value=\"ergodox.qgmlwbcub\">QGMLWB</option>\n" +
     "                                                <option value=\"ergodox.qgmlwycub\">QGMLWY</option>\n" +
     "                                                <option value=\"ergodox.qwerty\">QWERTY</option>\n" +
     "                                                <option value=\"ergodox.qwerty-thumbshift\">QWERTY thumbshift</option>\n" +
     "                                                <option value=\"ergodox.rsthd\">RSTHD</option>\n" +
-    "                                                <option value=\"ergodox.norman\">Norman</option>\n" +
     "                                                <option value=\"ergodox.workman\">Workman</option>\n" +
-    "                                                <option value=\"ergodox.kinesis-advantage-colemak\">Colemak (Kinesis Advantage)</option>\n" +
+    "                                            </optgroup>\n" +
+    "                                            <optgroup label=\"Cyrillic\">\n" +
+    "                                                <option value=\"standard.russian_diktor\">Diktor</option>\n" +
+    "                                                <option value=\"standard.russian\">ЙЦУКЕН</option>\n" +
+    "                                                <option value=\"standard.russian_typewriter\">ЙЦУКЕН (Typewriter)</option>\n" +
+    "                                                <option value=\"standard.russian_yvam-told-2\">ЫВАМ ТОЛД 2.0</option>\n" +
     "                                            </optgroup>\n" +
     "                                        </select>\n" +
     "                                        <button class=\"kb-config-load btn\" ng-click=\"loadLayout()\">Load</button>\n" +
@@ -463,14 +468,13 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Analyzer</h1>\n" +
-    "        <p class=\"lead\">See which layout is best for your input text<p>\n" +
+    "        <p class=\"lead\"><strong>Load</strong> or <strong>Paste</strong> some text that reflects what you type on a daily basis<p>\n" +
     "    </div>\n" +
     "    <form id='text-input-form'>\n" +
     "        <div class='control-group'>\n" +
     "            <label class='control-label' for='text-presets'>Text Presets:</label>\n" +
     "            <div class='controls'>\n" +
     "                <select id='text-presets' size='2' ng-model='data.textPreset' ng-change=\"applyPreset()\">\n" +
-    "                    <option value='default' selected>[Default Text]</option>\n" +
     "                    <optgroup label='English: Prose'>\n" +
     "                        <option value='alice-ch1'>Alice in Wonderland, Chapter 1</option>\n"     +
     "                        <option value='magna-carta-english'>Magna Carta</option>\n"     +
@@ -494,6 +498,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    </optgroup>\n" +
     "                    <optgroup label='Non-English'>\n" +
     "                        <option value='lorem'>Latín: Lorem Ipsum</option>\n" +
+    "                        <option value='crime-and-punishment-ch1'>Russian: Crime and Punishment, Chapter 1</option>\n" +
     "                        <option value='gol'>Tech: Game of Life</option>\n" +
     "                        <option value='pi1000'>Tech: Pi 1000</option>\n" +
     "                        <option value='pptt'>Tech: Programming Punctuation Torture Test</option>\n" +

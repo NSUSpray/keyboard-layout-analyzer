@@ -78,7 +78,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	            $('#kb-config-import-dialog').modal('hide');
 	        } else {
 	            alert(res.reason);
-                setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 0);
+                setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 250);
 	        }
 	    };
 
@@ -147,7 +147,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             if (txt === '' || typeof(txt) === 'undefined') {
                 // WORKAROUND
                 $location.path('/main');
-                setTimeout(function() {$('button').trigger('click');}, 0);
+                setTimeout(function() {$('button').trigger('click');}, 750);
                 return;
             }
 
@@ -248,7 +248,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
             });
         }
 
-        $scope.data.textPreset = 'default';
+        $scope.data.textPreset = 'alice-ch1';
         if ( typeof $scope.data.text === 'undefined' )
             $scope.applyPreset();
 

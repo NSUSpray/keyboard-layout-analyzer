@@ -1,5 +1,5 @@
 {
-    "label": "ЙЦУКЕН",
+    "label": "ЙЦУКЕН (Typewriter)",
     "fingerStart": {
         "1": 29,
         "2": 30,
@@ -15,110 +15,110 @@
         "false": -1
     },
     "keyboardType": "standard",
-    "author": "George B.",
-    "authorUrl": "",
-    "moreInfoUrl": "https://en.wikipedia.org/wiki/Keyboard_layout#JCUKEN",
+    "author": "Vladimir Zevakhin",
+    "authorUrl": "https://github.com/NSUSpray",
+    "moreInfoUrl": "https://ru.wikipedia.org/wiki/Русская_раскладка_клавиатуры",
     "moreInfoText": "Wikipedia Entry",
     "keys": [
         {
-            "primary": 1105,
-            "shift": 1025,
+            "primary": 124,
+            "shift": 43,
             "finger": 1,
             "id": 0,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 49,
-            "shift": 33,
+            "primary": 8470,
+            "shift": 49,
             "finger": 1,
             "id": 1,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 50,
-            "shift": 34,
+            "primary": 45,
+            "shift": 50,
             "finger": 2,
             "id": 2,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 51,
-            "shift": 8470,
+            "primary": 47,
+            "shift": 51,
             "finger": 3,
             "id": 3,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 52,
-            "shift": 59,
+            "primary": 34,
+            "shift": 52,
             "finger": 4,
             "id": 4,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 53,
-            "shift": 37,
+            "primary": 58,
+            "shift": 53,
             "finger": 4,
             "id": 5,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 54,
-            "shift": 58,
+            "primary": 44,
+            "shift": 54,
             "finger": 7,
             "id": 6,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 55,
-            "shift": 63,
+            "primary": 46,
+            "shift": 55,
             "finger": 7,
             "id": 7,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 56,
-            "shift": 42,
+            "primary": 95,
+            "shift": 56,
             "finger": 8,
             "id": 8,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 57,
-            "shift": 40,
+            "primary": 63,
+            "shift": 57,
             "finger": 9,
             "id": 9,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 48,
-            "shift": 41,
+            "primary": 37,
+            "shift": 48,
             "finger": 10,
             "id": 10,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 45,
-            "shift": 95,
+            "primary": 33,
+            "shift": 61,
             "finger": 10,
             "id": 11,
             "altGr": -1,
             "shiftAltGr": -1
         },
         {
-            "primary": 61,
-            "shift": 43,
+            "primary": 59,
+            "shift": 92,
             "finger": 10,
             "id": 12,
             "altGr": -1,
@@ -234,8 +234,8 @@
             "shiftAltGr": -1
         },
         {
-            "primary": 92,
-            "shift": 47,
+            "primary": 41,
+            "shift": 40,
             "finger": 10,
             "id": 27,
             "altGr": -1,
@@ -420,8 +420,8 @@
             "shiftAltGr": -1
         },
         {
-            "primary": 46,
-            "shift": 44,
+            "primary": 1105,
+            "shift": 1025,
             "finger": 10,
             "id": 51,
             "altGr": -1,

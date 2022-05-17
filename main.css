@@ -33,6 +33,7 @@ select#text-presets {
 
 #txt-input {
     height: 200px;
+    resize: none;
 }
 
 #view-container {
