@@ -19,7 +19,17 @@
 
 }
 
+.kb-keyboard-container {
+    position: relative;
+    z-index: 0;
+    height:  252px !important;
+}
+.kb-keyboard-container:hover {
+    z-index: 1;
+}
+
 .kb-config-table {
+    position: relative;
 	border:0;
     margin-top:14px;
     margin-left:auto; 

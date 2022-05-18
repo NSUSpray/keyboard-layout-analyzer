@@ -106,8 +106,8 @@ KB.Keyboard = (function() {
             ctx.clearRect(0, 0, myLayers[layerBg].width, myLayers[layerBg].height);
             
             // draw initial white background
-            ctx.fillStyle = "rgba(255, 255, 255, 1)";  
-            ctx.fillRect (myKeyMap.leftX, myKeyMap.leftY, myLayers[layerBg].getAttribute("width")-5, myLayers[layerBg].getAttribute("height")-5);  
+            // ctx.fillStyle = "rgba(255, 255, 255, 1)";  
+            // ctx.fillRect (myKeyMap.leftX, myKeyMap.leftY, myLayers[layerBg].getAttribute("width")-5, myLayers[layerBg].getAttribute("height")-5);  
             
             for (ii = 0; ii < len; ii++) {
                 myKeys[ii].draw();

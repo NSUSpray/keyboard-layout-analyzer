@@ -26,7 +26,7 @@ KB.Key = (function() {
             keyModel = {},
             myId = null,
             shouldDrawDot = true,
-            myBgColor = {r: null, g: null, b: null, a: 0.5},
+            myBgColor = {r: null, g: null, b: null, a: 0.4},
             myGlyphLayout = KB.glyphLayouts.standard,//default
             highlightBorderOpt = false;
         
@@ -36,13 +36,13 @@ KB.Key = (function() {
                 len = myCoords.length,
                 xCen=0, yCen=0,fingerStart,
                 prevOpacity = me.getBackgroundColorOpacity();
-            me.setBackgroundColorOpacity(0.5);
+            me.setBackgroundColorOpacity(0.4);
             // draw finger start dot (if needed)
             if ( fingerStart = me.getKeyboard().getFingerStartForKey(myId) ) {
                 myCtx.save();
                 myCtx.fillStyle = me.getBackgroundColorString();
-                myCtx.strokeStyle = "rgba(0, 0, 0, 0.5)";
-                myCtx.lineWidth = 2;
+                myCtx.strokeStyle = "rgba(0, 0, 0, 0.2)";
+                myCtx.lineWidth = 1.5;
 
                 xCen = me.getKeyboard().getKeyMap()[myId].cx;
                 yCen = me.getKeyboard().getKeyMap()[myId].cy;
@@ -56,13 +56,15 @@ KB.Key = (function() {
             me.setBackgroundColorOpacity(prevOpacity);
         }
         
-        function drawBackground(myCtx) {
+        function drawBackground(myCtx, isBlank=false) {
             var ii,
                 len = myCoords.length;
             
             myCtx.save();
             
-            myCtx.fillStyle = me.getBackgroundColorString();//KB.finger.getColor(keyModel.finger, opacity);
+            myCtx.fillStyle = isBlank?
+                    me.getBlankColorString()
+                    : me.getBackgroundColorString();//KB.finger.getColor(keyModel.finger, opacity);
             myCtx.beginPath();
             myCtx.moveTo(myCoords[0].x, myCoords[0].y);
             for (ii = 1; ii < len; ii++) {
@@ -82,7 +84,7 @@ KB.Key = (function() {
             offsetY = offsetY || 0;
             
             myCtx.save();
-			myCtx.strokeStyle = "#000";
+			myCtx.strokeStyle = "#2C3E50";
 			myCtx.lineWidth = borderOverride || 1.25;
 			myCtx.beginPath();
 
@@ -99,15 +101,15 @@ KB.Key = (function() {
         function drawGlyphs(myCtx, offsetX, offsetY) {
             var pType,
                 coords,
-                fontSize = 14;
+                fontSize = 15;
                 
             if (!myCtx.fillText) {return;}
             offsetX = offsetX || 0;
             offsetY = offsetY || 0;
                 
             myCtx.save();
-            myCtx.font = fontSize + "px sans-serif"
-            myCtx.fillStyle = "rgba(0, 0, 0, 1)"; 
+            myCtx.font = fontSize + "px Lato, sans-serif";
+            myCtx.fillStyle = "rgba(0, 0, 0, 1)";
                 
             var pName;
             for (pType in KB.PUSH_TYPES) {
@@ -194,6 +196,7 @@ KB.Key = (function() {
         
         me.draw = function() {
             var myCtx = myKeyboard.getBgLayer().getContext("2d");
+            drawBackground(myCtx, true);
             drawBackground(myCtx);
             drawFingerDot(myCtx);
             drawBorder(myCtx);
@@ -272,6 +275,10 @@ KB.Key = (function() {
             myCoords = newCoords;
         };        
         
+        me.getBlankColorString = function () {
+            return "rgba(255,255,255,1)";
+        }
+
         me.getBackgroundColorString = function() {
             if (myBgColor.r !== null) {
                 return "rgba("+myBgColor.r+","+myBgColor.g+","+myBgColor.b+","+myBgColor.a+")";

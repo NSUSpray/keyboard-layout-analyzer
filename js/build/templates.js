@@ -233,10 +233,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <div class='control-group'>\n" +
     "                                    <label class='control-label'>Load/Save:</label>\n" +
     "                                    <div class='controls'>\n" +
-    "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" title=\"Copy layout data to clipboard (Ctrl+C)\">⏍ Copy</button>\n" +
-    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Load layout data to analyzer (Ctrl+V)\">Import</button>\n" +
+    "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" title=\"Copy this layout to clipboard (Ctrl+C)\">Copy</button>\n" +
+    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Load layout to this layout page (Ctrl+V)\">Import</button>\n" +
     "                                        <!-- <input type=\"file\" class=\"kb-config-import btn\" ng-click=\"importJson()\" title=\"Load layout data from computer\">Import</button> -->\n" +
-    "                                        <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save layout data to computer\">Export</a>\n" +
+    "                                        <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save layout to file\">Export</a>\n" +
     "                                        <!-- <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
     "                                    </div>\n" +
     "                                </div>\n" +

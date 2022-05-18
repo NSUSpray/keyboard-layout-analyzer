@@ -130,7 +130,7 @@ appDirectives.directive('keyboardheatmap', [
                 'myindex': '@'
             },
 
-            template: '<div id="{{id}}"><div id="{{hmId}}"></div><div id="{{infoId}}"></div><div style="font-weight:bold;">{{layout.keySet.label}}</div></div>',
+            template: '<div id="{{id}}"><div id="{{hmId}}"></div><div id="{{infoId}}"></div><div style="font-weight:bold;position:relative;z-index:2;">{{layout.keySet.label}}</div></div>',
 
             controller: function($scope) {
                 var myInstance = instance++;
@@ -145,7 +145,9 @@ appDirectives.directive('keyboardheatmap', [
                     if ( $('#'+scope.id).length === 0 ) return;
 
                     $('#'+scope.infoId).css({
-                        margin: '10px'
+                        margin: '10px',
+                        position: 'relative',
+                        zIndex: '2'
                     })
                     if (pointerEventsCheck() === true) {
                         $('#'+scope.infoId).html('Hover over a key to get its press count');  
