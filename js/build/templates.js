@@ -166,7 +166,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <div class=\"jumbotron subhead\">\n" +
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Layouts</h1>\n" +
@@ -464,7 +464,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <div class=\"jumbotron subhead\">\n" +
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Analyzer</h1>\n" +
@@ -475,7 +475,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <label class='control-label' for='text-presets'>Text Presets:</label>\n" +
     "            <div class='controls'>\n" +
     "                <select id='text-presets' size='2' ng-model='data.textPreset' ng-change=\"applyPreset()\">\n" +
-    "                    <optgroup label='English: Prose'>\n" +
+    "                    <optgroup label='English Prose'>\n" +
     "                        <option value='alice-ch1'>Alice in Wonderland, Chapter 1</option>\n"     +
     "                        <option value='magna-carta-english'>Magna Carta</option>\n"     +
     "                        <option value='nineteen-eighty-four-ch1'>1984, Chapter 1</option>\n"     +
@@ -484,12 +484,12 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                        <option value='quotes'>Quotes</option>\n"     +
     "                        <option value='daode-jing'>Tao te Ching / DaodeJing</option>\n"     +
     "                    </optgroup>\n" +
-    "                    <optgroup label='English: Academic'>\n" +
+    "                    <optgroup label='English Academic'>\n" +
     "                        <option value='academic-1'>Cost Optimization Model</option>\n"     +
     "                        <option value='academic-2'>Contractors' Performance in Construction</option>\n"     +
     "                        <option value='academic-3'>Binary Logistic Analysis</option>\n"     +
     "                    </optgroup>\n" +
-    "                    <optgroup label='English: Vocabulary'>\n" +
+    "                    <optgroup label='English Vocabulary'>\n" +
     "                        <option value='common-english-words'>List of the most commonly used words</option>\n"     +
     "                        <option value='common-sat-words'>Most commonly used SAT words</option>\n"     +
     "                        <option value='difficultwords'>Difficult words</option>\n"     +

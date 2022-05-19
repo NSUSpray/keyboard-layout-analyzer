@@ -96,5 +96,7 @@ $(document).on("keydown", function(event) {
             $(".kb-config-copy").trigger("click"); break;
         case "v":
             $(".kb-config-import").trigger("click"); break;
+        case "Enter":
+            $(".kla-run-button .btn").trigger("click"); break;
     }
 });
