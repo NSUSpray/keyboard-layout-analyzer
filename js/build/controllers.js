@@ -240,6 +240,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
 
         $scope.data = {};
         $scope.data.text = library.get('input-text');
+        $scope.data.textPreset = library.get('input-text-preset');
 
         $scope.applyPreset = function() {
             $scope.data.text = "Loading, one moment please...";
@@ -248,7 +249,8 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
             });
         }
 
-        $scope.data.textPreset = 'alice-ch1';
+        if (typeof $scope.data.textPreset === 'undefined')
+            $scope.data.textPreset = 'alice-ch1';
         if ( typeof $scope.data.text === 'undefined' )
             $scope.applyPreset();
 
@@ -264,6 +266,9 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
 
         $scope.$watch('data.text', function(newVal, oldVal) {
             library.set('input-text', $scope.data.text);
+        }, true);
+        $scope.$watch('data.textPreset', function(newVal, oldVal) {
+            library.set('input-text-preset', $scope.data.textPreset);
         }, true);
 	}
 ]);

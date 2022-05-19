@@ -87,6 +87,10 @@ select#text-presets {
     margin-left:80px;
 }
 
+.kla-run-button {
+    float: right;
+}
+
 /*
     Results
 */

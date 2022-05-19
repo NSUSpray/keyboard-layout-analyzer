@@ -164,9 +164,9 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
   $templateCache.put('partials/config.htm',
     "<div>\n" +
     "    <div class=\"jumbotron subhead\">\n" +
-    "        <div class='control-group' style='float: right;'>\n" +
+    "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See Which Layout is Best\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Layouts</h1>\n" +
@@ -234,9 +234,9 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                    <label class='control-label'>Load/Save:</label>\n" +
     "                                    <div class='controls'>\n" +
     "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" title=\"Copy this layout to clipboard (Ctrl+C)\">Copy</button>\n" +
-    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Load layout to this layout page (Ctrl+V)\">Import</button>\n" +
-    "                                        <!-- <input type=\"file\" class=\"kb-config-import btn\" ng-click=\"importJson()\" title=\"Load layout data from computer\">Import</button> -->\n" +
-    "                                        <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save layout to file\">Export</a>\n" +
+    "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Load some layout here (Ctrl+V)\">Import</button>\n" +
+    "                                        <!-- <input type=\"file\" class=\"kb-config-import btn\" ng-click=\"importJson()\" title=\"Load some layout data from computer\">Import</button> -->\n" +
+    "                                        <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
     "                                        <!-- <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
     "                                    </div>\n" +
     "                                </div>\n" +
@@ -462,9 +462,9 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
   $templateCache.put('partials/main.htm',
     "<div>\n" +
     "    <div class=\"jumbotron subhead\">\n" +
-    "        <div class='control-group' style='float: right;'>\n" +
+    "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See Which Layout is Best\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Analyzer</h1>\n" +
