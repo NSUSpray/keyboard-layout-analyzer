@@ -206,7 +206,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                </div>\n" +
     "\n" +
     "                                <div class='control-group'>\n" +
-    "                                    <label class='control-label' for=\"kb-config-kbtype\">Submitted By:</label>\n" +
+    "                                    <label class='control-label' for=\"kb-config-kbtype\">Author:</label>\n" +
     "                                    <div class='controls'>\n" +
     "                                        <div style='padding:5px 7px;'>{{keyboards.getLayout(current).keySet.author}}</div>\n" +
     "                                    </div>\n" +
@@ -325,9 +325,13 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                                <option value=\"ergodox.workman\">Workman</option>\n" +
     "                                            </optgroup>\n" +
     "                                            <optgroup label=\"Cyrillic\">\n" +
+    "                                                <option value=\"standard.bulgarian\">Bulgarian</option>\n" +
     "                                                <option value=\"standard.russian_diktor\">Diktor</option>\n" +
+    "                                                <option value=\"standard.russian_zubachev\">Zubachev</option>\n" +
     "                                                <option value=\"standard.russian\">ЙЦУКЕН</option>\n" +
+    "                                                <option value=\"standard.russiannm\">ЙЦУКЕН - Narrow Mod</option>\n" +
     "                                                <option value=\"standard.russian_typewriter\">ЙЦУКЕН (Typewriter)</option>\n" +
+    "                                                <option value=\"standard.russian_typographic\">ЙЦУКЕН (Typographic)</option>\n" +
     "                                                <option value=\"standard.russian_yvam-told-2\">ЫВАМ ТОЛД 2.0</option>\n" +
     "                                            </optgroup>\n" +
     "                                        </select>\n" +

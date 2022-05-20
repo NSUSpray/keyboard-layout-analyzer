@@ -6,17 +6,17 @@
         "3": 31,
         "4": 32,
         "5": 56,
-        "6": 56,
+        "6": 57,
         "7": 35,
         "8": 36,
         "9": 37,
         "10": 38,
-        "11": 56,
+        "11": -1,
         "false": -1
     },
     "keyboardType": "standard",
     "author": "Vladimir Zevakhin",
-    "authorUrl": "https://github.com/NSUSpray",
+    "authorUrl": "https://vk.com/nsu.spray",
     "moreInfoUrl": "https://klavogonki.ru/forum/academy/15361/",
     "moreInfoText": "klavogonki.ru",
     "keys": [
@@ -458,7 +458,10 @@
         {
             "primary": -18,
             "finger": 6,
-            "id": 57
+            "id": 57,
+            "shift": -1,
+            "altGr": -1,
+            "shiftAltGr": -1
         },
         {
             "primary": -91,

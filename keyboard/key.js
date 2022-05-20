@@ -170,7 +170,7 @@ KB.Key = (function() {
             var myOverlayCtx = myKeyboard.getHighlightLayer().getContext("2d"),
                 opacity = KB.finger.getColorHoverOpacity(keyModel.finger);
             
-            opacity = (typeof opacity !== "undefined") ? opacity : 0.5;
+            opacity = (typeof opacity !== "undefined") ? opacity : 0.4;
             me.setBackgroundColorOpacity(opacity);
 
             // draw background
