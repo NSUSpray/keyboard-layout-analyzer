@@ -18,9 +18,12 @@
 
 .kb-dialog-wrapper {
     position:absolute;
-    border: 1px solid #888888;
+    *border: 1px solid #888888;
     -moz-border-radius: 15px;
     border-radius: 15px;
+    -webkit-box-shadow: 0 9px 21px rgba(0, 0, 0, 0.3);
+       -moz-box-shadow: 0 9px 21px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 9px 21px rgba(0, 0, 0, 0.3);
 }
 
 .kb-dialog {
@@ -134,34 +137,34 @@
     margin-right: 2px;
 }
 .kb-dialog-combobox option[title="Left Pinky"]:checked {
-    background-color: #7fffff;
+    background-color: rgba(0, 255, 255, 0.4);
 }
 .kb-dialog-combobox option[title="Left Ring"]:checked {
-    background-color: #7f7ff2;
+    background-color: rgba(0, 0, 230, 0.4);
 }
 .kb-dialog-combobox option[title="Left Middle"]:checked {
-    background-color: #c3c3ff;
+    background-color: rgba(136, 136, 255, 0.4);
 }
 .kb-dialog-combobox option[title="Left Index"]:checked {
-    background-color: #ff7fff;
+    background-color: rgba(255, 0, 255, 0.4);
 }
 .kb-dialog-combobox option[title="Left Thumb"]:checked {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 .kb-dialog-combobox option[title="Right Thumb"]:checked {
-    background-color: #e5e5e5;
+    background-color: rgba(204, 204, 204, 0.4);
 }
 .kb-dialog-combobox option[title="Right Index"]:checked {
-    background-color: #ff7f7f;
+    background-color: rgba(255, 0, 0, 0.4);
 }
 .kb-dialog-combobox option[title="Right Middle"]:checked {
-    background-color: #ffc37f;
+    background-color: rgba(255, 136, 0, 0.4);
 }
 .kb-dialog-combobox option[title="Right Ring"]:checked {
-    background-color: #ffff7f;
+    background-color: rgba(255, 255, 0, 0.4);
 }
 .kb-dialog-combobox option[title="Right Pinky"]:checked {
-    background-color: #7fff7f;
+    background-color: rgba(0, 255, 0, 0.4);
 }
 .kb-dialog-combobox option:checked {
     color: #000;

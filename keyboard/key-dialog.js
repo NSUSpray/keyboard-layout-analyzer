@@ -466,20 +466,20 @@ KB.KeyDialog = (function() {
                 halfArrH = Math.ceil(me.getArrowHeight(dir)/2);
             
             if (dir === "bottom") {
-	            x = Math.floor(x);
-	            y = Math.floor(y);
+	            x = Math.ceil(x);
+	            y = Math.ceil(y);
                 ret.left = x + halfW - (halfArrW - 1) + "px";
                 ret.top = y - (me.getArrowHeight(dir)) + "px";        
             } else if (dir === "right") {
-	            x = Math.floor(x);
-	            y = Math.floor(y);
+	            x = Math.ceil(x);
+	            y = Math.ceil(y);
                 ret.left = x - (me.getArrowWidth(dir)) + "px";
                 ret.top = y + halfH - (halfArrH) + "px";
             } else if (dir === "top") {
                 x = Math.ceil(x);
                 y = Math.ceil(y);
                 ret.left = x + halfW - (halfArrW - 1) + "px";
-                ret.top = y + me.getHeight()  + "px";  
+                ret.top = y + me.getHeight() + "px";  
             } else if (dir === "left") {
 	            x = Math.ceil(x);
 	            y = Math.ceil(y);

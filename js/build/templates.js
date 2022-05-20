@@ -355,7 +355,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <!-- import modal -->\n" +
     "        <div id='kb-config-import-dialog' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='resultLabel' aria-hidden='true'>\n" +
     "            <div class='modal-header'>\n" +
-    "                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>x</button>\n" +
+    "                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>\n" +
     "                <h3 id='resultLabel'>Import Layout</h3>\n" +
     "            </div>\n" +
     "            <div class='modal-body'>\n" +
@@ -375,7 +375,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <!-- import modal -->\n" +
     "        <div id='kb-config-export-dialog' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='resultLabel' aria-hidden='true'>\n" +
     "            <div class='modal-header'>\n" +
-    "                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>x</button>\n" +
+    "                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>\n" +
     "                <h3 id='resultLabel'>Export Layout</h3>\n" +
     "            </div>\n" +
     "            <div class='modal-body'>\n" +
@@ -395,7 +395,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <!-- submit modal -->\n" +
     "        <div id='kb-config-submit-dialog' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='resultLabel' aria-hidden='true'>\n" +
     "            <div class='modal-header'>\n" +
-    "                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>x</button>\n" +
+    "                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>\n" +
     "                <h3 id='resultLabel'>Submit Layout</h3>\n" +
     "            </div>\n" +
     "            <div class='modal-body'>\n" +
