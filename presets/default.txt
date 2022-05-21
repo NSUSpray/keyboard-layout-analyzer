@@ -1,5 +1,0 @@
-This is some sample text to get you started.
-
-To get the best results, paste some text that reflects what you type on a daily basis. Or load some pre-defined text from the drop-down list on the left.
-
-When you are done, click the "Run" button.

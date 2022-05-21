@@ -86,17 +86,18 @@ $('#showAbout').click(function() {
 $('.email').mailto(); // setup email link
 
 $(document).on("keydown", function(event) {
-    if (!event.ctrlKey || $("input, textarea").is(":focus")) return;
-    switch (event.key) {
-        case "ArrowLeft":
-            $(".switcher[num=prev]").click(); break;
-        case "ArrowRight":
-            $(".switcher[num=next]").click(); break;
-        case "c":
-            $(".kb-config-copy").trigger("click"); break;
-        case "v":
-            $(".kb-config-import").trigger("click"); break;
-        case "Enter":
-            $(".kla-run-button .btn").trigger("click"); break;
-    }
+    var s = event.shiftKey;
+    var c = event.ctrlKey;
+    var k = event.key;
+    var f = !$("input, textarea").is(":focus");
+    if (f && c && k === "ArrowLeft")
+        return $(".switcher[num=prev]").click();
+    if (f && c && k === "ArrowRight")
+        return $(".switcher[num=next]").click();
+    if (f && c && (k === "c" || k === "Insert"))
+        return $(".kb-config-copy").trigger("click");
+    if (f && (c && k === "v" || s && k === "Insert"))
+        return $(".kb-config-import").trigger("click");
+    if (c && k === "Enter")
+        return $(".kla-run-button .btn").trigger("click");
 });

@@ -366,7 +366,7 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
         /*
 			Throws an Error if it fails
         */
-        me.go = function(txt) {
+        me.go = function(txt, settings) {
 
             // --------------------------------------------------------------------
             // Create an analysis report on each layout
@@ -377,7 +377,8 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
                 analysis[analysis.length] = analyzer.examine({
                     text: txt,
                     keyMap: layout.keyMap,
-                    keySet: layout.keySet 
+                    keySet: layout.keySet,
+                    settings: settings
                 });
 
                 var idx = kLayouts.length;
@@ -397,7 +398,8 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
                 var qwertyAnalysis = analyzer.examine({
                     text: txt,
                     keyMap: KB.keyMap.standard.s683_225,
-                    keySet: KB.keySet.standard.qwerty 
+                    keySet: KB.keySet.standard.qwerty,
+                    settings: settings
                 });
                 
                 var qKeys = Array.prototype.sort.call(qwertyAnalysis.keyData, function(a, b) {
@@ -412,7 +414,8 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
                 analysis[analysis.length] = analyzer.examine({
                     text: txt,
                     keyMap: newLayout.keyMap,
-                    keySet: newLayout.keySet
+                    keySet: newLayout.keySet,
+                    settings: settings
                 });
                 
                 library.set('personalized', newLayout);

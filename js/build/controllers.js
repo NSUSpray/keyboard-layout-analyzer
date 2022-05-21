@@ -15,6 +15,9 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    $scope.keyboards = keyboards;
         $scope.data = {};
         $scope.data.text = library.get('input-text');
+        $scope.settings = {};
+        $scope.settings.simplify = library.get('settings-simplify');
+        $scope.settings.ctrlKeys = library.get('settings-ctrl-keys');
 
 	    $scope.switchLayout = function(evt, start, idx) {
 	        $scope.current = idx;
@@ -24,7 +27,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	        $('#kb-config-import-dialog .kb-config-dialog-txt').val("");
 	        $('#kb-config-import-dialog').modal('show');
             $('#kb-config-import-dialog').keyup(function(event) {
-                if (event.key == "v")
+                if (event.key === "v" || event.key === "Insert")
                     $('#kb-config-import-dialog .btn').first().focus();
             });
             setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 750);
@@ -143,7 +146,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    	});
 	    }
 
-        $scope.generateOutput = function(txt) {
+        $scope.generateOutput = function(txt, simplify, ctrlKeys) {
             if (txt === '' || typeof(txt) === 'undefined') {
                 // WORKAROUND
                 $location.path('/main');
@@ -152,6 +155,8 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             }
 
             library.set('input-text', txt);
+            library.set('settings-simplify', simplify);
+            library.set('settings-ctrl-keys', ctrlKeys);
             $location.path('/load');
         }
 	}
@@ -168,9 +173,10 @@ var appControllers = appControllers || angular.module('kla.controllers', []);
 appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$http', '$timeout', '$log', 'keyboards', 'library', 'resultsGenerator',
 	function($scope, $routeParams, $location, $http, $timeout, $log, keyboards, library, resultsGenerator) {
 
-        var analyzeData = function(txt) {
+        var analyzeData = function(txt, simplify, ctrlKeys) {
+            var settings = {simplify: simplify, ctrlKeys: ctrlKeys};
             try {
-                if (resultsGenerator.go(txt)) {
+                if (resultsGenerator.go(txt, settings)) {
                     $location.path('/results');
                 }
             } catch(err) {
@@ -184,7 +190,11 @@ appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$
             $timeout(function() {
                 var textKey = $routeParams.textKey;
                 if (typeof textKey === 'undefined') {
-                    analyzeData( library.get('input-text') );
+                    analyzeData(
+                            library.get('input-text'),
+                            library.get('settings-simplify'),
+                            library.get('settings-ctrl-keys')
+                    );
                 } else {
                     $http({
                         method: 'POST',
@@ -214,7 +224,11 @@ appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$
 
                         library.set('input-text', data.inputText);
                         library.set('textKey', textKey)
-                        analyzeData( library.get('input-text') );
+                        analyzeData(
+                                library.get('input-text'),
+                                library.get('settings-simplify'),
+                                library.get('settings-ctrl-keys')
+                        );
 
                     })
                     .error(function(data, status, headers, config) {
@@ -241,6 +255,9 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         $scope.data = {};
         $scope.data.text = library.get('input-text');
         $scope.data.textPreset = library.get('input-text-preset');
+        $scope.settings = {};
+        $scope.settings.simplify= library.get('settings-simplify');
+        $scope.settings.ctrlKeys= library.get('settings-ctrl-keys');
 
         $scope.applyPreset = function() {
             $scope.data.text = "Loading, one moment please...";
@@ -254,13 +271,73 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         if ( typeof $scope.data.text === 'undefined' )
             $scope.applyPreset();
 
-		$scope.generateOutput = function(txt) {
+        $scope.typographic = function(lang) {
+            var txt = $scope.data.text;
+
+            /* spaces */
+            txt = txt.replaceAll(/(^ *| *$|(?<= ) *)/gm, "");
+
+            /* quotes */
+            switch (lang) {
+                case "en": txt = txt
+                            .replaceAll(/\"(?<=\S)(.*?)(?=\S)\"/g, "“$1”")
+                            .replaceAll(/(?<=\W|^)\'(?=\S)(.*?)(?<=\S)\'(?=\W|$)/gm, "‘$1’")
+                    ; break;
+                case "ru": txt = txt
+                .replaceAll(/\B"(?=\S)(([^"]*|\B"(?=\S)[^"]*(?<=\S)"\B)*)(?<=\S)"\B/g, "«$1»")
+                            .replaceAll(/\"(.*?)\"/g, "„$1“")
+                    ; break;
+            }
+            txt = txt
+                    .replaceAll(/(?<=[\wА-ЯЁа-яё])\'/g, "’")
+                    .replaceAll(/\'(?=[\wА-ЯЁа-яё])/g, "’")
+            ;
+
+            /* dashes */
+            switch (lang) {
+                case "en": txt = txt
+                            // .replaceAll(/(\S)\s+--?(\s|$)/gm, "$1 –$2")  // n-dash
+                            // .replaceAll(/(\S)\s+---(\s|$)/gm, "$1 —$2")  // m-dash
+                            .replaceAll(/^--?(\s)/gm, "–$1")  // quote
+                    ; break;
+                case "ru": txt = txt
+                            .replaceAll(/(\S\s)-{1,3}(\s|$)/gm, "$1—$2")  // dash (maybe minus!)
+                            .replaceAll(/^--?(\s.+;)$/gm, "–$1")  // marked list
+                            .replaceAll(/^-{1,3}(\s)/gm, "—$1")  // direct speach
+                    ; break;
+            }
+            txt = txt
+                    .replaceAll(/(?<!-)--(?!-)/g, "–")
+                    .replaceAll(/(?<!-)---(?!-)/g, "—")
+                    .replaceAll(/ (–|—)/g, " $1")
+                    .replaceAll(/\b(\d+)-{1,3}(\d+)\b/g, "$1–$2")
+                    .replaceAll(/\b(\d+)-{1,3}([^\wА-ЯЁа-яё])/g, "$1—$2")
+            ;
+
+            /* misc */
+            txt = txt
+                    .replaceAll("...", "…")
+                    .replaceAll("(c)", "©").replaceAll("(R)", "®")
+                    .replaceAll(/(?<=[A-Za-zА-ЯЁа-яё])\.(?=[A-Za-zА-ЯЁа-яё])/g, ". ")
+            ;
+            $scope.data.text = txt;
+        }
+
+        if (typeof $scope.settings.simplify === "undefined")
+            $scope.settings.simplify = true;
+
+        if (typeof $scope.settings.ctrlKeys === "undefined")
+            $scope.settings.ctrlKeys = false;
+
+		$scope.generateOutput = function(txt, simplify, ctrlKeys) {
             if (txt === '') {
                 alert('Please enter in some text to analyze.');
                 return;
             }
 
             library.set('input-text', txt);
+            library.set('settings-simplify', simplify);
+            library.set('settings-ctrl-keys', ctrlKeys);
             $location.path('/load');
 		}
 
@@ -269,6 +346,12 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         }, true);
         $scope.$watch('data.textPreset', function(newVal, oldVal) {
             library.set('input-text-preset', $scope.data.textPreset);
+        }, true);
+        $scope.$watch('settings.simplify', function(newVal, oldVal) {
+            library.set('settings-simplify', $scope.settings.simplify);
+        }, true);
+        $scope.$watch('settings.ctrlKeys', function(newVal, oldVal) {
+            library.set('settings-ctrl-keys', $scope.settings.ctrlKeys);
         }, true);
 	}
 ]);

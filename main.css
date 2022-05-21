@@ -22,8 +22,12 @@ h1 {
     padding: 5px;
 }
 
+#text-input-form > div:first-child {
+    width: 37%;
+}
+
 #text-input-form > div:last-child {
-    width: 63%;
+    width: 0;
 }
 
 select#text-presets {
@@ -34,6 +38,11 @@ select#text-presets {
 #txt-input {
     height: 200px;
     resize: none;
+}
+
+#typographics .btn {
+    width: 100%;
+    margin-bottom: 9px;
 }
 
 #view-container {

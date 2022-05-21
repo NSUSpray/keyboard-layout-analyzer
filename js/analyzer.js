@@ -149,15 +149,15 @@ KLA.Analyzer = (function() {
 
         // Blogs often change certain characters to other codes, so do some character changes to accommodate certain instances
         if (ret.fingerUsed === null) {
-	        switch (charCode) {
-	            case 8217:
+/*	        switch (charCode) {
+	            case 8217:  // ’ (apostrophe)
 	                return findCharInKeySet(keySet, 39); // '
-                case 8220:
-                case 8221:
+                case 8220:  // “
+                case 8221:  // ” (double typographic quotes)
                     return findCharInKeySet(keySet, 34); // "
-                case 8211:
+                case 8211:  // – (en dash)
 	                return findCharInKeySet(keySet, 45); // -
-	        }
+	        }*/
 	        ret.errors.push("Char code not found: " + charCode + " ("+String.fromCharCode(charCode)+")");
         }
 
@@ -505,7 +505,10 @@ KLA.Analyzer = (function() {
         config.text
     */
     me.examine = function(config) {
-        if (!config || !config.keyMap || !config.keySet || typeof config.text === "undefined") {
+        if (!config || !config.keyMap || !config.keySet || typeof config.text === "undefined"
+                || !config.settings
+                        || config.settings.simplify === "undefined"
+                        || config.settings.ctrlKeys === "undefined") {
             console.log("config object for examine function does not contain the needed parameters.");
             return;
         }
@@ -516,6 +519,8 @@ KLA.Analyzer = (function() {
             text = config.text.replace(/\r\n/g,"\r").replace(/\n/g,"\r"),
             keyMap = config.keyMap,
             keySet = config.keySet,
+            simplify = config.settings.simplify,
+            ctrlKeys = config.settings.ctrlKeys,
             charCode,
             finger,
             fingerLabel,
@@ -584,11 +589,16 @@ KLA.Analyzer = (function() {
             analysis.errors.push("Fatal Error: (right) Shift key not set correctly.");
             return analysis; 
         }
-        if (char2KeyMap[16].errors.length > 1) {
+        if (char2KeyMap[-18].errors.length > 1) {
             analysis.errors.push("Fatal Error: AltGr key not set correctly.");
             return analysis; 
         }
         
+        if (ctrlKeys)
+            text = text.replaceAll(/<u:-?[0-9A-Fa-f]+>/g, function(a) {
+                return String.fromCharCode(parseInt(a.slice(3, -1), 16));
+            });
+
         for (ii = 0; ii < tLen; ii++) {
             charCode = text.charCodeAt(ii);
             //console.log("char: " + charCode + " " + String.fromCharCode(charCode));
@@ -597,6 +607,33 @@ KLA.Analyzer = (function() {
             char2KeyMap[charCode] = char2KeyMap[charCode] || findCharInKeySet(keySet, charCode);
             
             if ( char2KeyMap[charCode].fingerUsed === null ) {
+                if (simplify) {
+                    var char = text.charAt(ii), subs = "";
+                    switch (char) {
+                        case "‴": subs = "'''"; break;
+                        case "«": case "»": case "“": case "”": case "„": case "″":
+                            subs = '"'; break;
+                        case "‘": case "’": case "′": case "′": case "‹": case "›":
+                            subs = "'"; break;
+                        case "⟨": subs = "<"; break;
+                        case "⟩": subs = ">"; break;
+                        case "–": subs = "--"; break;
+                        case "—": subs = "---"; break;
+                        case "−": subs = "-"; break;
+                        case "…": subs = "..."; break;
+                        case " ": subs = " "; break;
+                        case "©": subs = "(c)"; break;
+                        case "®": subs = "(R)"; break;
+                        case "×": subs = "*"; break;
+                        case "™": subs = "TM"; break;
+                        default: subs = "";
+                    }
+                    if (subs.length > 0) {
+                        text = text.replaceAll(char, subs);
+                        tLen = text.length;
+                        ii--; continue;
+                    }
+                }
                 console.log("Char code not found on keyboard (ignoring key):" + charCode); 
                 analysis.errors.push.apply(analysis.errors, char2KeyMap[charCode].errors);
                 continue;

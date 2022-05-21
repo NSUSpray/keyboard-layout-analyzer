@@ -166,7 +166,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <div class=\"jumbotron subhead\">\n" +
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text, settings.simplify, settings.ctrlKeys)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Layouts</h1>\n" +
@@ -468,11 +468,11 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <div class=\"jumbotron subhead\">\n" +
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text, settings.simplify, settings.ctrlKeys)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Analyzer</h1>\n" +
-    "        <p class=\"lead\"><strong>Load</strong> or <strong>Paste</strong> some text that reflects what you type on a daily basis<p>\n" +
+    "        <p class=\"lead\"><strong>Choose</strong> a sample text or <strong>Adjust</strong> the engine settings<p>\n" +
     "    </div>\n" +
     "    <form id='text-input-form'>\n" +
     "        <div class='control-group'>\n" +
@@ -512,12 +512,25 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "\n" +
     "        <div class='control-group'>\n" +
-    "            <label class='control-label' for='txt-input'>Text to Analyze:</label>\n" +
+    "            <label class='control-label' for='txt-input'>Load or paste some text that reflects what you type on a daily basis</label>\n" +
     "            <div class='controls'>\n" +
-    "                <textarea id='txt-input' class='input-block-level' ng-model='data.text'></textarea>\n" +
+    "                <textarea id='txt-input' class='input-block-level' ng-model='data.text' ng-trim='false'></textarea>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class='control-group'>\n" +
+    "            <label class='control-label' for='typographics'>Enrich:</label>\n" +
+    "            <div id='typographics' class='controls'>\n" +
+    "               <button class=\"btn\" type=\"button\" ng-click=\"typographic('en')\" title=\"Convert ASCII punctuation to English typographic marks\">EN</button>\n" +
+    "               <button class=\"btn\" type=\"button\" ng-click=\"typographic('ru')\" title=\"Convert ASCII punctuation to Russian typographic marks\">RU</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </form>\n" +
+    "    <label title='Replace characters with their ASCII counterparts if they are not present in the target layout: from (— – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™) to (-- \" &apos; < > * (c) (R) TM)'>\n" +
+    "        <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\"> Simplify punctuation for non-typographic layouts\n" +
+    "    </label>\n" +
+    "    <label title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt; and &lt;u:11&gt; as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>\n" +
+    "        <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\"> Allow modifier/control keys in input text\n" +
+    "    </label>\n" +
     "</div>\n"
   );
 
