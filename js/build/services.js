@@ -592,12 +592,12 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
 
 
             var seriesColors = [
-                'rgb(66, 98, 152)',
+                'rgb(94, 121, 167)',
                 'rgb(81, 121, 218)',
-                'rgb(42, 166, 105)',
-                'rgb(157, 210, 131)',
+                'rgb(38, 155, 97)',
+                'rgb(104, 190, 63)',
                 'rgb(195, 105, 139)',
-                'rgb(214, 185, 158)'
+                'rgb(215, 166, 121)'
             ];
             var distSeriesData = [];
             var fuSeriesData = [];
@@ -872,7 +872,7 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
             library.set('fingerUsage', {
                 rawSeriesData: fuSeriesData,
                 displayFilter: displayFilter,
-                displayType: 'All',
+                displayType: 'Fingers',
                 displayData: displayData,
                 units: 'Key Presses',
                 allowedUnits: ['Key Presses', 'Percent']

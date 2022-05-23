@@ -27,8 +27,10 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	        $('#kb-config-import-dialog .kb-config-dialog-txt').val("");
 	        $('#kb-config-import-dialog').modal('show');
             $('#kb-config-import-dialog').keyup(function(event) {
-                if (event.key === "v" || event.key === "Insert")
-                    $('#kb-config-import-dialog .btn').first().focus();
+                if (event.key === "v" || event.key === "Insert") {
+                    $('#kb-config-import-dialog .btn').first().click();
+                    $('.kb-config-import').focus();  // WORKAROUND
+                }
             });
             setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 750);
 	    };

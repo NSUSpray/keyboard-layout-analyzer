@@ -472,7 +472,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Analyzer</h1>\n" +
-    "        <p class=\"lead\"><strong>Choose</strong> a sample text or <strong>Adjust</strong> the engine settings<p>\n" +
+    "        <p class=\"lead\"><strong>Choose</strong> a sample text or <strong>Adjust</strong> the engine<p>\n" +
     "    </div>\n" +
     "    <form id='text-input-form'>\n" +
     "        <div class='control-group'>\n" +
@@ -525,10 +525,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </div>\n" +
     "    </form>\n" +
-    "    <label title='Replace characters with their ASCII counterparts if they are not present in the target layout: from (— – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™) to (-- \" &apos; < > * (c) (R) TM)'>\n" +
+    "    <label title='Replace characters with their ASCII counterparts if they are not present in the target layout: { — – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™ } → { -- \" &apos; < > * (c) (R) TM }'>\n" +
     "        <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\"> Simplify punctuation for non-typographic layouts\n" +
     "    </label>\n" +
-    "    <label title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt; and &lt;u:11&gt; as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>\n" +
+    "    <label title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt;, &lt;u:11&gt;, etc. as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>\n" +
     "        <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\"> Allow modifier/control keys in input text\n" +
     "    </label>\n" +
     "</div>\n"
@@ -628,10 +628,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "    <ul class='nav nav-pills' id='main-output-tabs'>\n" +
     "        <li class='kla-pill active'><a ng-click='tabSwitch($event, \"summary\")' href='#summary'>Summary</a></li>\n" +
+    "        <li class='kla-pill'><a ng-click='tabSwitch($event, \"heatMaps\")' href='#heatMaps'>Heat Maps</a></li>\n" +
     "        <li class='kla-pill'><a ng-click='tabSwitch($event, \"distance\")' href='#distance'>Distance</a></li>\n" +
     "        <li class='kla-pill'><a ng-click='tabSwitch($event, \"fingerUsage\")' href='#fingerUsage'>Finger Usage</a></li>\n" +
     "        <li class='kla-pill'><a ng-click='tabSwitch($event, \"rowUsage\")' href='#rowUsage'>Row Usage</a></li>\n" +
-    "        <li class='kla-pill'><a ng-click='tabSwitch($event, \"heatMaps\")' href='#heatMaps'>Heat Maps</a></li>\n" +
     "        <li class='kla-pill'><a ng-click='tabSwitch($event, \"miscellaneous\")' href='#miscellaneous'>Miscellaneous</a></li>\n" +
     "        <!-- <li class='kla-pill'><a ng-click='tabSwitch($event, \"personalized\")' href='#personalized'>Personalized</a></li> -->\n" +
     "    </ul>\n" +
@@ -699,8 +699,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "        <div class='tab-pane' id='distance' style='position:relative'>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.distance\"></seriesbarchart>\n" +
-    "            <resulttable source='results.distance'></resulttable>\n" +
     "            <resultoptions source='results.distance'></resultoptions>\n" +
+    "            <resulttable source='results.distance'></resulttable>\n" +
     "\n" +
     "            <div class='kla-piecharts'>\n" +
     "                <h4 class='text-center kla-pie-header'>Pie Chart Visualizations</h4>\n" +
@@ -713,8 +713,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "        <div class='tab-pane' id='fingerUsage'>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.fingerUsage\"></seriesbarchart>\n" +
-    "            <resulttable source='results.fingerUsage'></resulttable>\n" +
     "            <resultoptions source='results.fingerUsage'></resultoptions>\n" +
+    "            <resulttable source='results.fingerUsage'></resulttable>\n" +
     "\n" +
     "            <div class='kla-piecharts'>\n" +
     "                <h4 class='text-center kla-display-opts-header'>Pie Chart Visualizations</h4>\n" +
@@ -727,8 +727,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "        <div class='tab-pane' id='rowUsage'>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.rowUsage\"></seriesbarchart>\n" +
-    "            <resulttable source='results.rowUsage'></resulttable>\n" +
     "            <resultoptions source='results.rowUsage'></resultoptions>\n" +
+    "            <resulttable source='results.rowUsage'></resulttable>\n" +
     "\n" +
     "            <div class='kla-piecharts'>\n" +
     "                <h4 class='text-center kla-display-opts-header'>Pie Chart Visualizations</h4>\n" +
@@ -784,8 +784,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                <label><input class='kla-result-checkbox' ng-model=\"settings.cfuIgnoreDups\" type=\"checkbox\" /> Include instances of the same key being pressed twice in a row (example: typing \"ff\").</label>\n" +
     "            </div>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.consecFingerPress\"></seriesbarchart>\n" +
-    "            <resulttable source='results.consecFingerPress'></resulttable>\n" +
     "            <resultoptions source='results.consecFingerPress' displayopts=false></resultoptions>\n" +
+    "            <resulttable source='results.consecFingerPress'></resulttable>\n" +
     "\n" +
     "            <div class='kla-misc-spacing'></div>\n" +
     "\n" +
@@ -796,8 +796,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                <label><input class='kla-result-checkbox' ng-model=\"settings.chuIgnoreDups\" type=\"checkbox\" /> Include instances of the same key being pressed twice in a row (example: typing \"ff\").</label>\n" +
     "            </div>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.consecHandPress\"></seriesbarchart>\n" +
-    "            <resulttable source='results.consecHandPress'></resulttable>\n" +
     "            <resultoptions source='results.consecHandPress' displayopts=false></resultoptions>\n" +
+    "            <resulttable source='results.consecHandPress'></resulttable>\n" +
     "\n" +
     "            <div class='kla-misc-spacing'></div>\n" +
     "\n" +
@@ -806,8 +806,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                How often the Shift, AltGr, and Shift+AltGr modifiers are used with characters in the text.\n" +
     "            </div>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.modifierUse\"></seriesbarchart>\n" +
-    "            <resulttable source='results.modifierUse'></resulttable>\n" +
     "            <resultoptions source='results.modifierUse' displayopts=false></resultoptions>\n" +
+    "            <resulttable source='results.modifierUse'></resulttable>\n" +
     "            <div style='padding:30px;font-size:16px;' class='text-center'>\n" +
     "                <p>\n" +
     "                    Additional statistics will be coming to this section later this year. \n" +

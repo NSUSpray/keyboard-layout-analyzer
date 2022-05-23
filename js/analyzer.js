@@ -624,7 +624,7 @@ KLA.Analyzer = (function() {
                         case " ": subs = " "; break;
                         case "©": subs = "(c)"; break;
                         case "®": subs = "(R)"; break;
-                        case "×": subs = "*"; break;
+                        case "×": case "·": subs = "*"; break;
                         case "™": subs = "TM"; break;
                         default: subs = "";
                     }

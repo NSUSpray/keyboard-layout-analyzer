@@ -656,7 +656,7 @@ appDirectives.directive('seriesbarchart', ['$log',
                             var mouseY = ev.pageY - 38;
                             var items = $scope.source.seriesData.seriesLabels;
 
-                            $('#chartpseudotooltip').html( items[seriesIndex] + ', ' + 
+                            $('#chartpseudotooltip').html( //items[seriesIndex] + ', ' + 
                                 data[1].toFixed( unitsFixedTo($scope.source.units) ) + 
                                 unitDisplay($scope.source.units) );
 
@@ -667,6 +667,14 @@ appDirectives.directive('seriesbarchart', ['$log',
                                 'display':'block'
                             };
                             $('#chartpseudotooltip').css(cssObj);
+
+                            $('#seriesbarchart-'+$scope.id+' .jqplot-table-legend tr').css({
+                                'background-color': 'transparent'
+                            })
+                            var trIndex = seriesIndex + 1;
+                            $('#seriesbarchart-'+$scope.id+' .jqplot-table-legend tr:nth-child('+trIndex+')').css({
+                                'background-color': '#ffffff'
+                            })
                         }
                     );
 
@@ -676,6 +684,25 @@ appDirectives.directive('seriesbarchart', ['$log',
                             $('#chartpseudotooltip').css({
                                 'display':'none'
                             });
+                            $('#seriesbarchart-'+$scope.id+' .jqplot-table-legend tr').css({
+                                'background-color': 'transparent'
+                            })
+                        }
+                    );
+
+                    $('#seriesbarchart-'+$scope.id+' .jqplot-table-legend tr').bind('mouseover',
+                        function(ev) {
+                            $(this).css({'background-color': '#ffffff'});
+                            $('#'+$scope.chartId+' .jqplot-series-canvas').css({'opacity': '0.4'});
+                            $('#'+$scope.chartId+' .jqplot-series-canvas').eq($(this).index())
+                                    .css({'opacity': '1.0'});
+                        }
+                    );
+
+                    $('#seriesbarchart-'+$scope.id+' .jqplot-table-legend tr').bind('mouseout',
+                        function(ev) {
+                            $(this).css({'background-color': 'transparent'});
+                            $('#'+$scope.chartId+' .jqplot-series-canvas').css({'opacity': '1.0'});
                         }
                     );
                 }; // end updateChart

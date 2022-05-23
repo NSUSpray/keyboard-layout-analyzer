@@ -131,7 +131,8 @@ select#text-presets {
     background-color:#2C3E4F;
     color:#f0f0f0;
     border-radius:5px;
-    padding:4px;
+    padding: 0 4px;
+    font-size: 13px;
 }
 
 .kla-legend-item {
