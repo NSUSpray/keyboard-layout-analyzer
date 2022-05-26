@@ -10,13 +10,10 @@ if (typeof console === 'undefined') {
 
 KLA.Analyzer = (function() {
 
-    var me, distanceBetweenKeysCached;
+    var me, distanceBetweenKeysCached, settings;
 
     // simulate the arm approaching the keyboard at an angle (10 degrees)
-    var keyUnit = 50;
-    var theta = 10.0 * Math.PI / 180.0;
-    var sintheta = Math.sin(theta);
-    var costheta = Math.cos(theta);
+    var sinThetaL, cosThetaL, sinThetaR, cosThetaR;
 
     me = function() {
         return me;
@@ -33,53 +30,66 @@ KLA.Analyzer = (function() {
     };
 
     function distanceBetweenKeys(keyMap, keyIndex1, keyIndex2, finger) {
-        var xDiff = (keyMap[keyIndex1].cx - keyMap[keyIndex2].cx) / keyUnit,
-            yDiff = (keyMap[keyIndex1].cy - keyMap[keyIndex2].cy) / keyUnit;
-
-        var keyWidth = keyMap[keyIndex1].w / keyUnit;
-        var keyHeight = keyMap[keyIndex1].h / keyUnit;
+        var xDiff = (keyMap[keyIndex1].cx - keyMap[keyIndex2].cx),
+            yDiff = (keyMap[keyIndex1].cy - keyMap[keyIndex2].cy);
 
         var isSplit = keyMap.split;
-        var fingerId = parseInt(finger)
+        var fingerId = parseInt(finger);
         var hand = KB.finger.leftRightOrThumb(fingerId);
     
         var xr, yr;
         if (!isSplit && hand === "left" ) {
             // rotate the movement vector to align with the left hand's approach angle
-            xr = xDiff * costheta + yDiff * sintheta;
-            yr = -xDiff * sintheta + yDiff * costheta;
+            xr = xDiff * cosThetaL + yDiff * sinThetaL;
+            yr = -xDiff * sinThetaL + yDiff * cosThetaL;
         } else if (!isSplit && hand === "right") {
             // rotate the movement vector to align with the right hand's approach angle
-            xr = xDiff * costheta - yDiff * sintheta;
-            yr = xDiff * sintheta + yDiff * costheta;
+            xr = xDiff * cosThetaR + yDiff * sinThetaR;
+            yr = -xDiff * sinThetaR + yDiff * cosThetaR;
         } else {
             xr = xDiff;
             yr = yDiff;
         }
-        // Apply Fitt's Law
-        var xf = Math.log2(1 + Math.abs(xr) / keyWidth);
-        var yf = Math.log2(1 + Math.abs(yr) / keyHeight);
+
+        if (settings.applyFittsLaw) {
+            var keyWidth = keyMap[keyIndex1].w;
+            var keyHeight = keyMap[keyIndex1].h;
+            xr = Math.log2(1 + Math.abs(xr) / keyWidth);
+            yr = Math.log2(1 + Math.abs(yr) / keyHeight);
+        }
         
         // Now consider the different types of movement
         if (hand === "left" || hand === "right") {
             // simulate lateral hand movement is expensive
-            xf *= 2.0;
             // simulate finger-specific movement penalty for vertical movements
-            if (fingerId == KB.finger.LEFT_PINKY || fingerId == KB.finger.RIGHT_PINKY) {
-                yf *= 1.6;
-            } else if (fingerId == KB.finger.LEFT_RING || fingerId == KB.finger.RIGHT_RING) {
-                yf *= 1.3;
-            } else if (fingerId== KB.finger.LEFT_MIDDLE || fingerId == KB.finger.RIGHT_MIDDLE) {
-                yf *= 1.1;
-            } else if (fingerId == KB.finger.LEFT_INDEX || fingerId == KB.finger.RIGHT_INDEX) {
-                yf *= 1.0;
+            switch (fingerId) {
+                case KB.finger.LEFT_PINKY:
+                case KB.finger.RIGHT_PINKY:
+                    xr *= settings.lateralPinky;
+                    yr *= settings.depthPinky;
+                    break;
+                case KB.finger.LEFT_RING:
+                case KB.finger.RIGHT_RING:
+                    xr *= settings.lateralRing;
+                    yr *= settings.depthRing;
+                    break;
+                case KB.finger.LEFT_MIDDLE:
+                case KB.finger.RIGHT_MIDDLE:
+                    xr *= settings.lateralMiddle;
+                    yr *= settings.depthMiddle;
+                    break;
+                case KB.finger.LEFT_INDEX:
+                case KB.finger.RIGHT_INDEX:
+                    xr *= settings.lateralIndex;
+                    yr *= settings.depthIndex;
+                    break;
             }
         } else {
             // handle movement penalty for thumbs
-            xf *= 1.25;
-            yf *= 1.25;
+            xr *= settings.lateralThumb;
+            yr *= settings.depthThumb;
         }
-        var distPenalty = Math.sqrt(xf*xf + yf*yf);
+        var distPenalty = Math.sqrt(xr*xr + yr*yr);
         //console.log("split=%s hand=%s finger=%s:  xdiff=%f, ydiff=%f ... xr=%f, yr=%f ... xf=%f, yf=%f ... dp=%f", 
         //         keyMap.split, hand, finger, xDiff, yDiff, xr, yr, xf, yf, distPenalty);
         return distPenalty;
@@ -171,6 +181,29 @@ KLA.Analyzer = (function() {
         //console.log("Leaving findCharInKeySet %d", charCode);
         
         return ret;
+    }
+
+    function toSimpleChars(char) {
+        var subs = "";
+        switch (char) {
+            case "‴": subs = "'''"; break;
+            case "«": case "»": case "“": case "”": case "„": case "″":
+                subs = '"'; break;
+            case "‘": case "’": case "′": case "′": case "‹": case "›":
+                subs = "'"; break;
+            case "⟨": subs = "<"; break;
+            case "⟩": subs = ">"; break;
+            case "–": case "—": subs = "--"; break;
+            case "−": subs = "-"; break;
+            case "…": subs = "..."; break;
+            case " ": subs = " "; break;  // non-breaking space
+            case "©": subs = "(c)"; break;
+            case "®": subs = "(R)"; break;
+            case "×": case "·": subs = "*"; break;
+            case "™": subs = "TM"; break;
+            default: subs = "";
+        }
+        return subs; 
     }
 
     /*
@@ -381,7 +414,7 @@ KLA.Analyzer = (function() {
         }
 
         // record stats
-    /*
+        /*
         if ( typeof shiftInfo.fingerUsed !== "undefined" ) {
             analysis.distance[shiftInfo.fingerUsed] += moveFingerToKey( keyMap, fingerPositions, shiftInfo );
             analysis.fingerUsage[shiftInfo.fingerUsed]++;
@@ -505,10 +538,9 @@ KLA.Analyzer = (function() {
         config.text
     */
     me.examine = function(config) {
-        if (!config || !config.keyMap || !config.keySet || typeof config.text === "undefined"
-                || !config.settings
-                        || config.settings.simplify === "undefined"
-                        || config.settings.ctrlKeys === "undefined") {
+        if (!config || !config.keyMap || !config.keySet
+                    || typeof config.text === "undefined" || !config.settings
+        ) {
             console.log("config object for examine function does not contain the needed parameters.");
             return;
         }
@@ -519,14 +551,18 @@ KLA.Analyzer = (function() {
             text = config.text.replace(/\r\n/g,"\r").replace(/\n/g,"\r"),
             keyMap = config.keyMap,
             keySet = config.keySet,
-            simplify = config.settings.simplify,
-            ctrlKeys = config.settings.ctrlKeys,
             charCode,
             finger,
             fingerLabel,
             curFingerPos = {},
             char2KeyMap = {},
             analysis = {}; // holds data we collect
+
+        settings = config.settings;
+        sinThetaL = Math.sin(settings.thetaL * Math.PI / 180.0);
+        cosThetaL = Math.cos(settings.thetaL * Math.PI / 180.0);
+        sinThetaR = Math.sin(settings.thetaR * Math.PI / 180.0);
+        cosThetaR = Math.cos(settings.thetaR * Math.PI / 180.0);
         
         //console.log('-----')
         console.log('Layout: ' + keySet.label)
@@ -594,7 +630,7 @@ KLA.Analyzer = (function() {
             return analysis; 
         }
         
-        if (ctrlKeys)
+        if (settings.ctrlKeys)
             text = text.replaceAll(/<u:-?[0-9A-Fa-f]+>/g, function(a) {
                 return String.fromCharCode(parseInt(a.slice(3, -1), 16));
             });
@@ -607,27 +643,9 @@ KLA.Analyzer = (function() {
             char2KeyMap[charCode] = char2KeyMap[charCode] || findCharInKeySet(keySet, charCode);
             
             if ( char2KeyMap[charCode].fingerUsed === null ) {
-                if (simplify) {
-                    var char = text.charAt(ii), subs = "";
-                    switch (char) {
-                        case "‴": subs = "'''"; break;
-                        case "«": case "»": case "“": case "”": case "„": case "″":
-                            subs = '"'; break;
-                        case "‘": case "’": case "′": case "′": case "‹": case "›":
-                            subs = "'"; break;
-                        case "⟨": subs = "<"; break;
-                        case "⟩": subs = ">"; break;
-                        case "–": subs = "--"; break;
-                        case "—": subs = "---"; break;
-                        case "−": subs = "-"; break;
-                        case "…": subs = "..."; break;
-                        case " ": subs = " "; break;
-                        case "©": subs = "(c)"; break;
-                        case "®": subs = "(R)"; break;
-                        case "×": case "·": subs = "*"; break;
-                        case "™": subs = "TM"; break;
-                        default: subs = "";
-                    }
+                if (settings.simplify) {
+                    var char = text.charAt(ii);
+                    var subs = toSimpleChars(char);
                     if (subs.length > 0) {
                         text = text.replaceAll(char, subs);
                         tLen = text.length;
@@ -700,55 +718,84 @@ KLA.Analyzer = (function() {
         var ii, finger, total = [], len = analysis.length;
         for (ii = 0; ii < len; ii++) {
             total[ii] = 0; 
-            for (finger = 0; finger < analysis[ii].distance.length; finger++) {
-                //total[ii] += (analysis[ii].distance[jj] / analysis[ii].pixelsPerCm);
+            for (finger = 0; finger < analysis[ii].distance.length; finger++)
                 total[ii] += analysis[ii].distance[finger];
-            }
-            total[ii] /= analysis[ii].numKeys
+            total[ii] /= analysis[ii].numKeys;
             console.log("DIST (u): L%d %f", ii, total[ii]); //for debug: show distance in key units
-        }
 
-        for (ii = 0; ii < len; ii++) {
-            results.distScores[ii] = 100 * Math.max(0, 3 - total[ii]) / 3;
+            results.distScores[ii] = (settings.applyFittsLaw)?
+                    100 * Math.max(0, 3 - total[ii]) / 3
+                    : 100 * Math.max(0, 4 - total[ii] / analysis[ii].pixelsPerCm) / 4;
             console.log("DIST SCORE: L%d, %f", ii, results.distScores[ii]); 
-            if ( !isFinite(results.distScores[ii]) ) { results.distScores[ii]=0;}
+            if (!isFinite(results.distScores[ii]))
+                results.distScores[ii]=0;
         }
         
         // FINGER USAGE
         results.fingerScores = [];
         var fScoring = {};
-        fScoring[KB.finger.LEFT_PINKY] =    1.6;
-        fScoring[KB.finger.LEFT_RING] =     1.3;
-        fScoring[KB.finger.LEFT_MIDDLE] =   1.1;
-        fScoring[KB.finger.LEFT_INDEX] =    1.0;
-        fScoring[KB.finger.LEFT_THUMB] =    1.0;
-        fScoring[KB.finger.RIGHT_THUMB] =   1.0;
-        fScoring[KB.finger.RIGHT_INDEX] =   1.0;
-        fScoring[KB.finger.RIGHT_MIDDLE] =  1.1;
-        fScoring[KB.finger.RIGHT_RING] =    1.3;
-        fScoring[KB.finger.RIGHT_PINKY] =   1.6;
+        fScoring[KB.finger.LEFT_PINKY] = settings.scorePinky;
+        fScoring[KB.finger.LEFT_RING] = settings.scoreRing;
+        fScoring[KB.finger.LEFT_MIDDLE] = settings.scoreMiddle;
+        fScoring[KB.finger.LEFT_INDEX] = settings.scoreIndex;
+        fScoring[KB.finger.LEFT_THUMB] = settings.scoreThumb;
+        fScoring[KB.finger.RIGHT_THUMB] = settings.scoreThumb;
+        fScoring[KB.finger.RIGHT_INDEX] = settings.scoreIndex;
+        fScoring[KB.finger.RIGHT_MIDDLE] = settings.scoreMiddle;
+        fScoring[KB.finger.RIGHT_RING] = settings.scoreRing;
+        fScoring[KB.finger.RIGHT_PINKY] = settings.scorePinky;
         
-        for (ii = 0; ii < len; ii++) {
-            var totalUsage = 0;
-            var totalImbalancePenalty = 0;
-            for (finger = 0; finger < analysis[ii].fingerUsage.length; finger++) {
-                if (!fScoring[finger]) {continue;}//skip non-fingers
+        var totalUsage;
+        var numKeysLimit;
+        var maxTotalWeight;
+        var totalImbalancePenalty, oppFinger, imbalancePenalty;
 
-                var oppFinger = 11-finger;
-                var imbalancePenalty = 0;
-                if (finger <= KB.finger.LEFT_INDEX || finger >= KB.finger.RIGHT_INDEX) {
-                    if (analysis[ii].fingerUsage[finger] > analysis[ii].fingerUsage[oppFinger]) {
-                        imbalancePenalty = (analysis[ii].fingerUsage[finger] - analysis[ii].fingerUsage[oppFinger]) / 2.0;
-                    }
-                }
-                totalUsage += analysis[ii].fingerUsage[finger] * fScoring[finger];
-                totalImbalancePenalty += imbalancePenalty * fScoring[finger];
+        if (settings.fScoringMethod === "patorjk") {
+            for (finger = 0; finger < analysis[0].fingerUsage.length; finger++) {
+                if (!fScoring[finger]) continue;
+                fScoring[finger] = Math.pow(2, 7 - 5 * fScoring[finger]);
             }
-            totalUsage /= analysis[ii].numKeys;
-            totalImbalancePenalty /= analysis[ii].numKeys;
-            console.log("FINGER TOTAL: L%d imbalance=%f usage=%f", ii, totalImbalancePenalty, totalUsage); 
+            maxTotalWeight = Object.values(fScoring)
+                    .filter(function(s) { return !!s; })
+                    .sort().slice(-5)
+                    .reduce(function(acc, cur) { return acc + cur; });
+        }
 
-            results.fingerScores[ii] = 100 * Math.max(0, 3 - 2 * (totalUsage + totalImbalancePenalty));
+        for (ii = 0; ii < len; ii++) {
+            totalUsage = 0;
+            totalImbalancePenalty = 0;
+            numKeysLimit = analysis[ii].numKeys * 0.2;
+            for (finger = 0; finger < analysis[ii].fingerUsage.length; finger++) {
+                if (!fScoring[finger]) continue;  // skip non-fingers
+
+                switch (settings.fScoringMethod) {
+                    case "patorjk":
+                        totalUsage += Math.min(analysis[ii].fingerUsage[finger], numKeysLimit) * fScoring[finger];
+                        break;
+                    case "stevep":
+                        oppFinger = 11 - finger;
+                        imbalancePenalty = 0;
+                        if (finger <= KB.finger.LEFT_INDEX || finger >= KB.finger.RIGHT_INDEX)
+                            if (analysis[ii].fingerUsage[finger] > analysis[ii].fingerUsage[oppFinger])
+                                imbalancePenalty =
+                                        (analysis[ii].fingerUsage[finger] - analysis[ii].fingerUsage[oppFinger]) / 2.0;
+                        totalUsage += analysis[ii].fingerUsage[finger] * fScoring[finger];
+                        totalImbalancePenalty += imbalancePenalty * fScoring[finger];
+                        break;
+                }
+            }
+            switch (settings.fScoringMethod) {
+                case "patorjk":
+                    results.fingerScores[ii] = 100 * totalUsage / (maxTotalWeight * numKeysLimit);
+                    break;
+                case "stevep":
+                    totalUsage /= analysis[ii].numKeys;
+                    totalImbalancePenalty /= analysis[ii].numKeys;
+                    console.log("FINGER TOTAL: L%d imbalance=%f usage=%f", ii, totalImbalancePenalty, totalUsage); 
+                    results.fingerScores[ii] = 100 * Math.max(0, 3 - 2 * (totalUsage + totalImbalancePenalty));
+                    break;
+            }
+
             console.log("FINGER SCORE: L%d %f", ii, results.fingerScores[ii]); 
 
         }
@@ -762,8 +809,7 @@ KLA.Analyzer = (function() {
                 total[ii] += analysis[ii].consecFingerPressIgnoreDups[finger] ;
             }
             total[ii] = (total[ii] / analysis[ii].numKeys) * 100;
-        }
-        for (ii = 0; ii < len; ii++) {
+
             results.consecFingerScores[ii] = Math.max(0, 10 - total[ii]) * 10;
             console.log("CONSEC FINGER USAGE: L%d %f", ii, results.consecFingerScores[ii]); 
         }
@@ -775,14 +821,18 @@ KLA.Analyzer = (function() {
             total[ii] = (analysis[ii].consecHandPressIgnoreDups["left"] + 
                          analysis[ii].consecHandPressIgnoreDups["right"]) / analysis[ii].numKeys;
             total[ii] = (total[ii]) * 100;
-        }
-        for (ii = 0; ii < len; ii++) {
+            
             results.consecHandScores[ii] = Math.max(0, 50 - total[ii]) * 2;
             console.log("CONSEC HAND USAGE: L%d %f", ii, results.consecHandScores[ii]); 
         }
         
         // put it all together!
-        var consecHandWeight = 0, consecFingerWeight = .3, fingerUsageWeight = .2, distWeight = .5;
+        var whole = settings.weightDistance + settings.weightKeystroke
+                + settings.weightSameFinger + settings.weightSameHand;
+        var consecHandWeight = settings.weightSameHand / whole,
+                consecFingerWeight = settings.weightSameFinger / whole,
+                fingerUsageWeight = settings.weightKeystroke / whole,
+                distWeight = settings.weightDistance / whole;
         results.finalList = [];
         for (ii = 0; ii < len; ii++) {
             results.finalList[ii] = {};

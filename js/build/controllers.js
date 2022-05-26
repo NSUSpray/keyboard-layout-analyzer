@@ -13,11 +13,11 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    $scope.submitter.submitting = false;
 	    $scope.current = 0;
 	    $scope.keyboards = keyboards;
+
+        /* TODO: Is it really needed in ConfigCtrl? */
         $scope.data = {};
         $scope.data.text = library.get('input-text');
-        $scope.settings = {};
-        $scope.settings.simplify = library.get('settings-simplify');
-        $scope.settings.ctrlKeys = library.get('settings-ctrl-keys');
+        $scope.settings = library.get('settings');
 
 	    $scope.switchLayout = function(evt, start, idx) {
 	        $scope.current = idx;
@@ -148,7 +148,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    	});
 	    }
 
-        $scope.generateOutput = function(txt, simplify, ctrlKeys) {
+        $scope.generateOutput = function(txt, settings) {
             if (txt === '' || typeof(txt) === 'undefined') {
                 // WORKAROUND
                 $location.path('/main');
@@ -157,8 +157,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             }
 
             library.set('input-text', txt);
-            library.set('settings-simplify', simplify);
-            library.set('settings-ctrl-keys', ctrlKeys);
+            library.set('settings', settings);
             $location.path('/load');
         }
 	}
@@ -175,8 +174,7 @@ var appControllers = appControllers || angular.module('kla.controllers', []);
 appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$http', '$timeout', '$log', 'keyboards', 'library', 'resultsGenerator',
 	function($scope, $routeParams, $location, $http, $timeout, $log, keyboards, library, resultsGenerator) {
 
-        var analyzeData = function(txt, simplify, ctrlKeys) {
-            var settings = {simplify: simplify, ctrlKeys: ctrlKeys};
+        var analyzeData = function(txt, settings) {
             try {
                 if (resultsGenerator.go(txt, settings)) {
                     $location.path('/results');
@@ -192,11 +190,7 @@ appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$
             $timeout(function() {
                 var textKey = $routeParams.textKey;
                 if (typeof textKey === 'undefined') {
-                    analyzeData(
-                            library.get('input-text'),
-                            library.get('settings-simplify'),
-                            library.get('settings-ctrl-keys')
-                    );
+                    analyzeData(library.get('input-text'), library.get('settings'));
                 } else {
                     $http({
                         method: 'POST',
@@ -226,11 +220,7 @@ appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$
 
                         library.set('input-text', data.inputText);
                         library.set('textKey', textKey)
-                        analyzeData(
-                                library.get('input-text'),
-                                library.get('settings-simplify'),
-                                library.get('settings-ctrl-keys')
-                        );
+                        analyzeData(library.get('input-text'), library.get('settings'));
 
                     })
                     .error(function(data, status, headers, config) {
@@ -257,11 +247,10 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         $scope.data = {};
         $scope.data.text = library.get('input-text');
         $scope.data.textPreset = library.get('input-text-preset');
-        $scope.settings = {};
-        $scope.settings.simplify= library.get('settings-simplify');
-        $scope.settings.ctrlKeys= library.get('settings-ctrl-keys');
+        $scope.data.calcPreset = library.get('input-calc-preset');
+        $scope.settings = library.get('settings');
 
-        $scope.applyPreset = function() {
+        $scope.applyTextPreset = function() {
             $scope.data.text = "Loading, one moment please...";
             textPresets.load( $scope.data.textPreset ).then(function(res) {
                 $scope.data.text = res;
@@ -271,7 +260,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         if (typeof $scope.data.textPreset === 'undefined')
             $scope.data.textPreset = 'alice-ch1';
         if ( typeof $scope.data.text === 'undefined' )
-            $scope.applyPreset();
+            $scope.applyTextPreset();
 
         $scope.typographic = function(lang) {
             var txt = $scope.data.text;
@@ -320,26 +309,93 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
             txt = txt
                     .replaceAll("...", "…")
                     .replaceAll("(c)", "©").replaceAll("(R)", "®")
-                    .replaceAll(/(?<=[A-Za-zА-ЯЁа-яё])\.(?=[A-Za-zА-ЯЁа-яё])/g, ". ")
+                    //.replaceAll(/(?<=[A-Za-zА-ЯЁа-яё])\.(?=[A-Za-zА-ЯЁа-яё])/g, ". ")  // maybe web-adress
             ;
             $scope.data.text = txt;
         }
 
+        $scope.applyCalcPreset = function() {
+            switch ($scope.data.calcPreset) {
+                case "stevep":
+                    $scope.settings = {
+                        simplify: $scope.settings.simplify,
+                        ctrlKeys: $scope.settings.ctrlKeys,
+                    	fScoringMethod: "stevep",
+                    	weightDistance: 5,
+                    	weightKeystroke: 2,
+                    	weightSameFinger: 3,
+                    	weightSameHand: 0,
+                    	scoreThumb: 1.0,
+                    	scoreIndex: 1.0,
+                    	scoreMiddle: 1.1,
+                    	scoreRing: 1.3,
+                    	scorePinky: 1.6,
+                    	thetaL: 10,
+                    	thetaR: -10,
+                    	depthThumb: 1.25,
+                    	depthIndex: 1.0,
+                    	depthMiddle: 1.1,
+                    	depthRing: 1.3,
+                    	depthPinky: 1.6,
+                    	lateralThumb: 1.25,
+                    	lateralIndex: 2.0,
+                    	lateralMiddle: 2.0,
+                    	lateralRing: 2.0,
+                    	lateralPinky: 2.0,
+                    	applyFittsLaw: true
+                    }
+                    break;
+                case "patorjk":
+                    $scope.settings = {
+                        simplify: $scope.settings.simplify,
+                        ctrlKeys: $scope.settings.ctrlKeys,
+                    	fScoringMethod: "patorjk",
+                    	weightDistance: 2,
+                    	weightKeystroke: 2,
+                    	weightSameFinger: 1,
+                    	weightSameHand: 1,
+                    	scoreThumb: 1.6,
+                    	scoreIndex: 1.2,
+                    	scoreMiddle: 1,
+                    	scoreRing: 1.4,
+                    	scorePinky: 1.6,
+                    	thetaL: 0,
+                    	thetaR: 0,
+                    	depthThumb: 1.0,
+                    	depthIndex: 1.0,
+                    	depthMiddle: 1.0,
+                    	depthRing: 1.0,
+                    	depthPinky: 1.0,
+                    	lateralThumb: 1.0,
+                    	lateralIndex: 1.0,
+                    	lateralMiddle: 1.0,
+                    	lateralRing: 1.0,
+                    	lateralPinky: 1.0,
+                    	applyFittsLaw: false
+                    }
+                    break;
+            }
+        }
+
+        if (typeof $scope.settings === "undefined")
+            $scope.settings = {};
         if (typeof $scope.settings.simplify === "undefined")
-            $scope.settings.simplify = true;
-
+                $scope.settings.simplify = true;
         if (typeof $scope.settings.ctrlKeys === "undefined")
-            $scope.settings.ctrlKeys = false;
+                $scope.settings.ctrlKeys = false;
+        if (typeof $scope.data.calcPreset === "undefined") {
+            $scope.data.calcPreset = "stevep";
+            $scope.applyCalcPreset();
+        }
 
-		$scope.generateOutput = function(txt, simplify, ctrlKeys) {
+		$scope.generateOutput = function(txt, settings) {
             if (txt === '') {
                 alert('Please enter in some text to analyze.');
                 return;
             }
 
             library.set('input-text', txt);
-            library.set('settings-simplify', simplify);
-            library.set('settings-ctrl-keys', ctrlKeys);
+            library.set('settings', settings);
             $location.path('/load');
 		}
 
@@ -349,11 +405,11 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         $scope.$watch('data.textPreset', function(newVal, oldVal) {
             library.set('input-text-preset', $scope.data.textPreset);
         }, true);
-        $scope.$watch('settings.simplify', function(newVal, oldVal) {
-            library.set('settings-simplify', $scope.settings.simplify);
+        $scope.$watch('data.calcPreset', function(newVal, oldVal) {
+            library.set('input-calc-preset', $scope.data.calcPreset);
         }, true);
-        $scope.$watch('settings.ctrlKeys', function(newVal, oldVal) {
-            library.set('settings-ctrl-keys', $scope.settings.ctrlKeys);
+        $scope.$watch('settings', function(newVal, oldVal) {
+            library.set('settings', $scope.settings);
         }, true);
 	}
 ]);

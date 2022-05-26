@@ -83,9 +83,9 @@
 .kb-dialog-help {
     padding:0;
     margin:0;
-    width:16px;
-    height:16px;
-    background-image:url("info-balloon.png");
+    width:15px;
+    height:21px;
+    background:url("info-balloon.png") center no-repeat;
 }
 
 .kb-dialog-inputbox {
@@ -114,7 +114,7 @@
 .kb-dialog-combobox option {
     display: inline-block;
     width: 1em;
-    padding: 3px;
+    padding: 2px 3px;
     text-align: center;
     margin-left: -1px;
     border: solid 1px #8F8F9D;

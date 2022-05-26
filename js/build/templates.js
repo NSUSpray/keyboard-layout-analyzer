@@ -166,7 +166,25 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <div class=\"jumbotron subhead\">\n" +
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text, settings.simplify, settings.ctrlKeys)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\"\n" +
+    "                    ng-click=\"generateOutput(data.text, {\n" +
+    "                        simplify:settings.simplify, ctrlKeys:settings.ctrlKeys,\n" +
+    "                        weightDistance:settings.weightDistance, weightKeystroke:settings.weightKeystroke,\n" +
+    "                        weightSameFinger:settings.weightSameFinger, weightSameHand:settings.weightSameHand,\n" +
+    "                        thetaL:settings.thetaL, thetaR:settings.thetaR,\n" +
+    "                        depthThumb:settings.depthThumb, depthIndex:settings.depthIndex,\n" +
+    "                        depthMiddle:settings.depthMiddle, depthRing:settings.depthRing,\n" +
+    "                        depthPinky:settings.depthPinky,\n" +
+    "                        lateralThumb:settings.lateralThumb, lateralIndex:settings.lateralIndex,\n" +
+    "                        lateralMiddle:settings.lateralMiddle, lateralRing:settings.lateralRing,\n" +
+    "                        lateralPinky:settings.lateralPinky,\n" +
+    "                        applyFittsLaw:settings.applyFittsLaw,\n" +
+    "                        scoreThumb:settings.scoreThumb, scoreIndex:settings.scoreIndex,\n" +
+    "                        scoreMiddle:settings.scoreMiddle, scoreRing:settings.scoreRing,\n" +
+    "                        scorePinky:settings.scorePinky,\n" +
+    "                        fScoringMethod:settings.fScoringMethod\n" +
+    "                    })\"\n" +
+    "                    title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Layouts</h1>\n" +
@@ -468,7 +486,25 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <div class=\"jumbotron subhead\">\n" +
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
-    "                <button class=\"btn btn-large\" type=\"button\" ng-click=\"generateOutput(data.text, settings.simplify, settings.ctrlKeys)\" title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
+    "                <button class=\"btn btn-large\" type=\"button\"\n" +
+    "                    ng-click=\"generateOutput(data.text, {\n" +
+    "                        simplify:settings.simplify, ctrlKeys:settings.ctrlKeys,\n" +
+    "                        weightDistance:settings.weightDistance, weightKeystroke:settings.weightKeystroke,\n" +
+    "                        weightSameFinger:settings.weightSameFinger, weightSameHand:settings.weightSameHand,\n" +
+    "                        thetaL:settings.thetaL, thetaR:settings.thetaR,\n" +
+    "                        depthThumb:settings.depthThumb, depthIndex:settings.depthIndex,\n" +
+    "                        depthMiddle:settings.depthMiddle, depthRing:settings.depthRing,\n" +
+    "                        depthPinky:settings.depthPinky,\n" +
+    "                        lateralThumb:settings.lateralThumb, lateralIndex:settings.lateralIndex,\n" +
+    "                        lateralMiddle:settings.lateralMiddle, lateralRing:settings.lateralRing,\n" +
+    "                        lateralPinky:settings.lateralPinky,\n" +
+    "                        applyFittsLaw:settings.applyFittsLaw,\n" +
+    "                        scoreThumb:settings.scoreThumb, scoreIndex:settings.scoreIndex,\n" +
+    "                        scoreMiddle:settings.scoreMiddle, scoreRing:settings.scoreRing,\n" +
+    "                        scorePinky:settings.scorePinky,\n" +
+    "                        fScoringMethod:settings.fScoringMethod\n" +
+    "                    })\"\n" +
+    "                    title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <h1>Analyzer</h1>\n" +
@@ -478,7 +514,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group'>\n" +
     "            <label class='control-label' for='text-presets'>Text Presets:</label>\n" +
     "            <div class='controls'>\n" +
-    "                <select id='text-presets' size='2' ng-model='data.textPreset' ng-change=\"applyPreset()\">\n" +
+    "                <select id='text-presets' size='2' ng-model='data.textPreset' ng-change=\"applyTextPreset()\">\n" +
     "                    <optgroup label='English Prose'>\n" +
     "                        <option value='alice-ch1'>Alice in Wonderland, Chapter 1</option>\n"     +
     "                        <option value='magna-carta-english'>Magna Carta</option>\n"     +
@@ -518,19 +554,149 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </div>\n" +
     "        <div class='control-group'>\n" +
-    "            <label class='control-label' for='typographics'>Enrich:</label>\n" +
+    "            <label class='control-label'>Enrich:</label>\n" +
     "            <div id='typographics' class='controls'>\n" +
     "               <button class=\"btn\" type=\"button\" ng-click=\"typographic('en')\" title=\"Convert ASCII punctuation to English typographic marks\">EN</button>\n" +
     "               <button class=\"btn\" type=\"button\" ng-click=\"typographic('ru')\" title=\"Convert ASCII punctuation to Russian typographic marks\">RU</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </form>\n" +
-    "    <label title='Replace characters with their ASCII counterparts if they are not present in the target layout: { — – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™ } → { -- \" &apos; < > * (c) (R) TM }'>\n" +
-    "        <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\"> Simplify punctuation for non-typographic layouts\n" +
-    "    </label>\n" +
-    "    <label title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt;, &lt;u:11&gt;, etc. as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>\n" +
-    "        <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\"> Allow modifier/control keys in input text\n" +
-    "    </label>\n" +
+    "    <form class='form-horizontal'>\n" +
+    "        <div class='control-group'>\n" +
+    "            <label class='control-label'>Text Preprocessor:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <label title='Replace characters with their ASCII counterparts if they are not present in the target layout:\n\t\t— – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™ \nwith\n\t\t-- \" &apos; < > * (c) (R) TM'>\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\"> Simplify punctuation for non-typographic layouts\n" +
+    "                </label>\n" +
+    "                <label title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt;, &lt;u:11&gt;, etc. as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\"> Allow modifier/control keys in input text\n" +
+    "                </label>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class='control-group pull-right'>\n" +
+    "            <label class='control-label' for='calc-preset'>Preset:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <select id='calc-preset' ng-model='data.calcPreset' ng-change=\"applyCalcPreset()\">\n" +
+    "                    <option value='stevep'>SteveP</option>\n" +
+    "                    <option value='patorjk'>patorjk</option>\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "        </div>\n" + 
+    "        <h4>Total Score</h4>\n" +
+    "        <div class='control-group'>\n" +
+    "            <label class='control-label'>Ratio of Factors:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <table class=\"kla-table-adjust\">\n" +
+    "                    <thead>\n" +
+    "                        <tr>\n" +
+    "                            <th>Distance</th>\n" +
+    "                            <th></th>\n" +
+    "                            <th>Keystroke</th>\n" +
+    "                            <th></th>\n" +
+    "                            <th title=\"Same finger\">Same F.</th>\n" +
+    "                            <th></th>\n" +
+    "                            <th title=\"Same hand\">Same H.</th>\n" +
+    "                        </tr>\n" +
+    "                    </thead>\n" +
+    "                    <tbody>\n" +
+    "                        <tr>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.weightDistance\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.weightKeystroke\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.weightSameFinger\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.weightSameHand\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                        <tr>\n" +
+    "                    </tbody>\n" +
+    "                </table>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <h4>Movements</h4>\n" +
+    "        <div class='control-group'>\n" +
+    "            <label class='control-label'>Hand Approaches:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <em>&theta;<sub>L</sub></em> = <input class=\"input-block-level\" ng-model=\"settings.thetaL\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°,\n" +
+    "                    <em>&theta;<sub>R</sub></em> = <input class=\"input-block-level\" ng-model=\"settings.thetaR\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">° clockwise about the gaze direction axis \n" +
+    "                <button style=\"vertical-align: middle; margin-left: 4px; cursor: help;\" title=\"\\ ₍-₎\\\t−20° : −20°\tclassical\n\n/₍-₎\\\t+30° : −20°\tArensito\n\nI ₍-₎ I\t     0° :     0°\trude\" tabindex=\"-1\"><div class=\"kb-dialog-help\"></div></button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class='control-group'>\n" +
+    "            <label class='control-label'>Finger Effort:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <table class=\"kla-table-adjust\">\n" +
+    "                    <thead>\n" +
+    "                        <tr>\n" +
+    "                            <th>Thumb</th>\n" +
+    "                            <th>Index</th>\n" +
+    "                            <th>Middle</th>\n" +
+    "                            <th>Ring</th>\n" +
+    "                            <th>Pinky</th>\n" +
+    "                        </tr>\n" +
+    "                    </thead>\n" +
+    "                    <tbody>\n" +
+    "                        <tr>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthIndex\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthMiddle\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthRing\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthPinky\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <th title=\"Depth\">🤚⭥</th>\n" +
+    "                        <tr>\n" +
+    "                        </tr>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralIndex\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralMiddle\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralRing\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralPinky\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <th title=\"Lateral\">🤚⬌</th>\n" +
+    "                        </tr>\n" +
+    "                    </tbody>\n" +
+    "                </table>\n" +
+    "                <label class=\"checkbox inline\" title=\"According to Fitts's law estimated effort for a variety of actions, based on the distance, should not linear\">\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.applyFittsLaw\" type=\"checkbox\"> Logarithmic distance\n" +
+    "                </label>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <h4>Keystrokes</h4>\n" +
+    "        <div class='control-group'>\n" +
+    "            <label class='control-label'>Finger Effort:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <table class=\"kla-table-adjust\">\n" +
+    "                    <thead>\n" +
+    "                        <tr>\n" +
+    "                            <td>Thumb</td>\n" +
+    "                            <td>Index</td>\n" +
+    "                            <td>Middle</td>\n" +
+    "                            <td>Ring</td>\n" +
+    "                            <td>Pinky</td>\n" +
+    "                        </tr>\n" +
+    "                    </thead>\n" +
+    "                    <tbody>\n" +
+    "                        <tr>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreThumb\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreIndex\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scorePinky\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <th>Score</th>\n" +
+    "                        <tr>\n" +
+    "                    </tbody>\n" +
+    "                </table>\n" +
+    "            </div>\n" +
+    "            <label class='control-label'>Balancing Method:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <div class=\"btn-group\">\n" +
+    "                    <label class=\"radio inline\">\n" +
+    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"stevep\" ng-model=\"settings.fScoringMethod\"> SteveP\n" +
+    "                    </label>\n" +
+    "                    <label class=\"radio inline\">\n" +
+    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> patorjk\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </form>\n" +
     "</div>\n"
   );
 
@@ -683,10 +849,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </p>\n" +
     "            <p>\n" +
     "                The layout score is based on a weighed calculation that factors in\n" +
-    "                a distance penalty due to how much your fingers moved (50%), \n" +
-    "                how often you use particular fingers (20%),\n" +
-    "                and how often you switch fingers while typing (30%).\n" +
-    "                See the About page for detailed information.\n" +
+    "                a distance penalty due to how much your fingers moved, \n" +
+    "                how often you use particular fingers,\n" +
+    "                and how often you switch fingers while typing\n" +
+    "                in the proportions specified by the analyzer settings.\n" +
     "            </p>\n" +
     "            <!--\n" +
     "            <p>\n" +

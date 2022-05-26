@@ -31,18 +31,31 @@ h1 {
 }
 
 select#text-presets {
-  width: 100%;
-  height: 200px;
+    width: 100%;
+    height: 225px;
 }
 
 #txt-input {
-    height: 200px;
+    height: 225px;
     resize: none;
+}
+
+#text-input-form #txt-input:focus {
+    height: 450px;
 }
 
 #typographics .btn {
     width: 100%;
     margin-bottom: 9px;
+}
+
+input[type=number] {
+    width: 70px;
+    text-align: right;
+}
+
+input[type=number].full-width {
+    width: 100%;
 }
 
 #view-container {
@@ -245,6 +258,20 @@ select#text-presets {
     border-bottom-style:solid;
     border-color: #476FB2;
     text-align: center;
+}
+
+.kla-table-adjust,
+.kla-table-adjust thead th, .kla-table-adjust tfoot th {
+    text-align: center;
+}
+
+.kla-table-adjust thead th,
+.kla-table-adjust tfoot th {
+    font-weight: normal;
+}
+
+.kla-table-adjust th {
+    text-align: left;
 }
 
 /*
