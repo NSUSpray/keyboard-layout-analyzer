@@ -98,6 +98,28 @@ input[type=number].full-width {
 }
 
 /*
+    Main
+*/
+
+.kla-table-adjust,
+.kla-table-adjust thead th, .kla-table-adjust tfoot th {
+    text-align: center;
+}
+
+.kla-table-adjust thead th,
+.kla-table-adjust tfoot th {
+    font-weight: normal;
+}
+
+.kla-table-adjust th {
+    text-align: left;
+}
+
+#left-hand, #right-hand {
+    display: inline-block;
+}
+
+/*
     Config
 */
 
@@ -258,20 +280,6 @@ input[type=number].full-width {
     border-bottom-style:solid;
     border-color: #476FB2;
     text-align: center;
-}
-
-.kla-table-adjust,
-.kla-table-adjust thead th, .kla-table-adjust tfoot th {
-    text-align: center;
-}
-
-.kla-table-adjust thead th,
-.kla-table-adjust tfoot th {
-    font-weight: normal;
-}
-
-.kla-table-adjust th {
-    text-align: left;
 }
 
 /*

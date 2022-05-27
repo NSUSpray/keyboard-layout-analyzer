@@ -13,10 +13,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    </p>\n" +
     "    <hr/>\n" +
     "    <p>\n" +
-    "    This version of the app was <a href=\"https://github.com/stevep99/keyboard-layout-analyzer\">forked by SteveP</a> from the original <a href=\"http://patorjk.com/keyboard-layout-analyzer/\">Keyboard Layout Analyzer</a> by patorjk.\n" +
+    "    This version of the app was <a href=\"https://github.com/stevep99/keyboard-layout-analyzer\">forked by SteveP</a> from the original <a href=\"http://patorjk.com/keyboard-layout-analyzer/\">Keyboard Layout Analyzer</a> by PAT or JK.\n" +
     "    </p>\n" +
     "    <p>A number of changes are made in this version with the aim of making the analyzer more useful and accurate, particularly in regard to the scoring calculation. \n" +
-    "    The changes are detailed below, so you can evaluate the merits of these changes yourself. A huge thanks to Patrick (patorjk) for releasing his source code, making this forked version possible!\n" +
+    "    The changes are detailed below, so you can evaluate the merits of these changes yourself. A huge thanks to Patrick (PAT or JK) for releasing his source code, making this forked version possible!\n" +
     "    </p>\n" +
     "\n" +
     "    <h2>Scoring Algorithm</h2>\n" +
@@ -254,7 +254,15 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" title=\"Copy this layout to clipboard (Ctrl+C)\">Copy</button>\n" +
     "                                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Load some layout here (Ctrl+V)\">Import</button>\n" +
     "                                        <!-- <input type=\"file\" class=\"kb-config-import btn\" ng-click=\"importJson()\" title=\"Load some layout data from computer\">Import</button> -->\n" +
-    "                                        <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
+    "                                        <div class=\"btn-group\">\n" +
+    "                                            <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
+    "                                            <button type=\"button\" class=\"btn dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+    "                                                <span class=\"caret\"></span>\n" +
+    "                                            </button>\n" +
+    "                                            <ul class=\"dropdown-menu\">\n" +
+    "                                                <li><a class=\"kb-config-export\" ng-click=\"exportAllJson()\" title=\"Save the whole set to single file\">Export All</a></li>\n" +
+    "                                            </ul>\n" +
+    "                                        </div>\n" +
     "                                        <!-- <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
     "                                    </div>\n" +
     "                                </div>\n" +
@@ -578,7 +586,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <div class='controls'>\n" +
     "                <select id='calc-preset' ng-model='data.calcPreset' ng-change=\"applyCalcPreset()\">\n" +
     "                    <option value='stevep'>SteveP</option>\n" +
-    "                    <option value='patorjk'>patorjk</option>\n" +
+    "                    <option value='patorjk'>PAT or JK</option>\n" +
     "                </select>\n" +
     "            </div>\n" +
     "        </div>\n" + 
@@ -616,8 +624,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Hand Approaches:</label>\n" +
     "            <div class='controls'>\n" +
-    "                <em>&theta;<sub>L</sub></em> = <input class=\"input-block-level\" ng-model=\"settings.thetaL\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°,\n" +
-    "                    <em>&theta;<sub>R</sub></em> = <input class=\"input-block-level\" ng-model=\"settings.thetaR\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">° clockwise about the gaze direction axis \n" +
+    "                <input class=\"input-block-level\" ng-model=\"settings.thetaL\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°\n" +
+    "                <div id=\"left-hand\" title=\"Left hand approach\">🤚</div>\n" +
+    "                <div id=\"right-hand\" title=\"Right hand approach\">🤚</div>\n" +
+    "                <input class=\"input-block-level\" ng-model=\"settings.thetaR\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°\n" +
     "                <button style=\"vertical-align: middle; margin-left: 4px; cursor: help;\" title=\"\\ ₍-₎\\\t−20° : −20°\tclassical\n\n/₍-₎\\\t+30° : −20°\tArensito\n\nI ₍-₎ I\t     0° :     0°\trude\" tabindex=\"-1\"><div class=\"kb-dialog-help\"></div></button>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -637,18 +647,18 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <tbody>\n" +
     "                        <tr>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthIndex\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthMiddle\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthRing\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthPinky\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthIndex\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthPinky\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <th title=\"Depth\">🤚⭥</th>\n" +
-    "                        <tr>\n" +
     "                        </tr>\n" +
+    "                        <tr>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralIndex\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralMiddle\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralRing\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralPinky\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralIndex\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralPinky\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <th title=\"Lateral\">🤚⬌</th>\n" +
     "                        </tr>\n" +
     "                    </tbody>\n" +
@@ -674,7 +684,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    </thead>\n" +
     "                    <tbody>\n" +
     "                        <tr>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreThumb\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreIndex\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
@@ -691,7 +701,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                        <input type=\"radio\" name=\"finger-score-method\" value=\"stevep\" ng-model=\"settings.fScoringMethod\"> SteveP\n" +
     "                    </label>\n" +
     "                    <label class=\"radio inline\">\n" +
-    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> patorjk\n" +
+    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> PAT or JK\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -746,7 +756,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    </div> \n" +
     "\n" +
     "    <div class=\"btn-group text-left\">\n" +
-    "        <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"  data-placeholder=\"false\">Keyboards <span class=\"caret\"></span></button>\n" +
+    "        <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"  data-placeholder=\"false\">Keyboards<span class=\"caret\"></span></button>\n" +
     "        <ul class=\"dropdown-menu\">\n" +
     "            <li ng-repeat=\"layout in source.seriesData.allSeriesLabels\">\n" +
     "                <input type=\"checkbox\" id=\"kla-opt{{settings.id}}-dd-{{$index}}\" ng-model=\"source.rawSeriesData[$index].visible\" /><label for=\"kla-opt{{settings.id}}-dd-{{$index}}\" >{{layout}}</label>\n" +

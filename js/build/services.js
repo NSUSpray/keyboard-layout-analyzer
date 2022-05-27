@@ -202,7 +202,7 @@ appServices.factory('keyboards', [
             return layouts[index].keySet.keyboardType;
         };
 
-        me.parseKeySet = function(txt) {
+        me.parseKeySets = function(txt) {
             try {
                 var nn = JSON.parse(txt);
             } catch (err) {
@@ -211,6 +211,21 @@ appServices.factory('keyboards', [
                     reason: "Invalid input."
                 };
             }
+            if (Array.isArray(nn)) {
+                var n, res, vv = [];
+                for (n of nn) {
+                    res = me.parseKeySet(n);
+                    if (!res.valid) return res;
+                    vv.push(res.keySet);
+                }
+                return {
+                    valid: true,
+                    keySet: vv
+                };
+            } else return me.parseKeySet(nn);
+        }
+
+        me.parseKeySet = function(nn) {
             var vv = {}, prop, ii, valid = true;
             if (typeof nn.label === "string") {
                 vv.label = nn.label;

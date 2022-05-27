@@ -2917,7 +2917,7 @@ table th[class*="span"],
   width: 0;
   height: 0;
   vertical-align: top;
-  border-top: 4px solid #000000;
+  border-top: 4px solid #fff;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
   content: "";
@@ -2935,7 +2935,7 @@ table th[class*="span"],
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 160px;
+  min-width: 100%;
   padding: 5px 0;
   margin: 2px 0 0;
   list-style: none;
@@ -3015,7 +3015,8 @@ table th[class*="span"],
   white-space: nowrap;
 }
 
-.dropdown-menu > li > label {
+.dropdown-menu > li > label,
+.dropdown-menu > li > a {
   cursor: pointer;
 }
 
@@ -3348,7 +3349,13 @@ table th[class*="span"],
 }
 
 .btn.dropdown-toggle .caret {
-  margin-left: 6px;
+  margin-left: 10px;
+  margin-right: -4px;
+}
+
+.btn.dropdown-toggle-split .caret {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .well {

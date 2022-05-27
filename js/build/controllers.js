@@ -23,17 +23,21 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	        $scope.current = idx;
 	    };
 
-	    $scope.showImportDialog = function() {
-	        $('#kb-config-import-dialog .kb-config-dialog-txt').val("");
-	        $('#kb-config-import-dialog').modal('show');
+        $scope.showImportDialog = function() {
+            $('#kb-config-import-dialog .kb-config-dialog-txt').val("");
+            var $importBtn = $('#kb-config-import-dialog .btn').first();
+            $('#kb-config-import-dialog').modal('show');
             $('#kb-config-import-dialog').keyup(function(event) {
                 if (event.key === "v" || event.key === "Insert") {
+                    if ($importBtn.hasClass('btn-warning')) return;
                     $('#kb-config-import-dialog .btn').first().click();
                     $('.kb-config-import').focus();  // WORKAROUND
                 }
             });
+            $importBtn.removeClass('btn-warning');
+            $importBtn.html('Import');
             setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 750);
-	    };
+        };
 
 	    $scope.showExportDialog = function() {
 	        $('#kb-config-export-dialog').modal('show');
@@ -50,14 +54,23 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             setTimeout(function() {$(".kb-config-copy").removeClass("active");}, 250);
         }
 
-        $scope.exportJson = function(e) {
-            var val = JSON.stringify(keyboards.getKeySet($scope.current),  undefined, 4);
+        $scope.exportJson = function() {
+            var keySet = keyboards.getKeySet($scope.current);
+            var val = JSON.stringify(keySet, undefined, 4);
             var $link = $(".kb-config-export");
             $link.attr("href", "data:text/text;," + val);
-            var filename = keyboards.getKeySet($scope.current).label + "." + keyboards.getKeySet($scope.current).keyboardType;
+            var filename = keySet.label + "." + keySet.keyboardType;
             filename = filename.trim().toLowerCase().replace(/ /g, "-");
             $link.attr("download", filename + ".json");
+        }
 
+        $scope.exportAllJson = function() {
+            var val = JSON.stringify(keyboards.getLayouts().map(
+                function(layout) { return layout.keySet; }
+            ), undefined, 4);
+            $link = $(".kb-config-export");
+            $link.attr("href", "data:text/text;," + val);
+            $link.attr("download", "kla-layouts.json");
         }
 
 	    $scope.moreInfoLink = function(keySet) {
@@ -74,12 +87,26 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    }
 
 	    $scope.importLayout = function() {
-	        var res = keyboards.parseKeySet($('#kb-config-import-dialog .kb-config-dialog-txt').val());
-	        if ( res.valid ) {	            
-	            keyboards.setLayout( $scope.current, {
-	            	keySet: $.extend(true, {}, res.keySet),
-	            	keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(res.keySet.keyboardType))
-	            });
+	        var res = keyboards.parseKeySets($('#kb-config-import-dialog .kb-config-dialog-txt').val());
+	        if ( res.valid ) {
+                if ( Array.isArray(res.keySet) ) {
+                    var $importBtn = $('#kb-config-import-dialog .btn').first();
+                    if (!$importBtn.hasClass('btn-warning')) {
+                        $importBtn.addClass('btn-warning');
+                        $importBtn.html('Yes, Replace All Layouts');
+                        return;
+                    }
+    	            for (var i = 0; i < res.keySet.length; i++)
+                        keyboards.setLayout( i, {
+        	            	keySet: $.extend(true, {}, res.keySet[i]),
+        	            	keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(res.keySet[i].keyboardType))
+        	            });
+                }
+                else
+                    keyboards.setLayout( $scope.current, {
+                        keySet: $.extend(true, {}, res.keySet),
+                        keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(res.keySet.keyboardType))
+                    });
 	            $('#kb-config-import-dialog').modal('hide');
 	        } else {
 	            alert(res.reason);
@@ -410,6 +437,12 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         }, true);
         $scope.$watch('settings', function(newVal, oldVal) {
             library.set('settings', $scope.settings);
+        }, true);
+        $scope.$watch('settings.thetaL', function(newVal, oldVal) {
+            $("#left-hand").css('transform', 'scaleX(-1) rotate(' + -newVal + 'deg)');
+        }, true);
+        $scope.$watch('settings.thetaR', function(newVal, oldVal) {
+            $("#right-hand").css('transform', 'rotate(' + newVal + 'deg)');
         }, true);
 	}
 ]);

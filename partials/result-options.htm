@@ -19,7 +19,7 @@
     </div> 
 
     <div class="btn-group text-left">
-        <button data-toggle="dropdown" class="btn dropdown-toggle"  data-placeholder="false">Keyboards <span class="caret"></span></button>
+        <button data-toggle="dropdown" class="btn dropdown-toggle"  data-placeholder="false">Keyboards<span class="caret"></span></button>
         <ul class="dropdown-menu">
             <li ng-repeat="layout in source.seriesData.allSeriesLabels">
                 <input type="checkbox" id="kla-opt{{settings.id}}-dd-{{$index}}" ng-model="source.rawSeriesData[$index].visible" /><label for="kla-opt{{settings.id}}-dd-{{$index}}" >{{layout}}</label>

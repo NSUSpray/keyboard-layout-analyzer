@@ -85,19 +85,28 @@ $('#showAbout').click(function() {
 
 $('.email').mailto(); // setup email link
 
-$(document).on("keydown", function(event) {
+document.addEventListener("keydown", function(event) {
+// instead of $(document).on("keydown") because jQuery doesn't get a key code
     var s = event.shiftKey;
+    var a = event.altKey;
     var c = event.ctrlKey;
     var k = event.key;
-    var f = !$("input, textarea").is(":focus");
-    if (f && c && k === "ArrowLeft")
+    var cd = event.code;
+    var nf = !$("input, textarea").is(":focus");
+    if (nf && c && k === "ArrowLeft")
         return $(".switcher[num=prev]").click();
-    if (f && c && k === "ArrowRight")
+    if (nf && c && k === "ArrowRight")
         return $(".switcher[num=next]").click();
-    if (f && c && (k === "c" || k === "Insert"))
+    if (nf && c && (k === "c" || k === "Insert"))
         return $(".kb-config-copy").trigger("click");
-    if (f && (c && k === "v" || s && k === "Insert"))
+    if (nf && (c && k === "v" || s && k === "Insert"))
         return $(".kb-config-import").trigger("click");
     if (c && k === "Enter")
         return $(".kla-run-button .btn").trigger("click");
+    if (a && cd === "Digit1")
+        return $(location).attr("href", "#/config");
+    if (a && cd === "Digit2")
+        return $(location).attr("href", "#/main");
+    if (a && cd === "Digit3")
+        return $(location).attr("href", "#/results");
 });
