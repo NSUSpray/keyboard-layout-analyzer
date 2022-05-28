@@ -1212,7 +1212,7 @@ input[type="checkbox"] {
 
 select,
 input[type="file"] {
-  height: 31px;
+  height: 33px;
   /* In IE7, the height of the select element cannot be changed by height, only font-size */
 
   *margin-top: 4px;
@@ -1224,7 +1224,7 @@ input[type="file"] {
 select {
   width: 220px;
   background-color: #ffffff;
-  border: 1px solid #dce4ec;
+  border: 2px solid #dce4ec;
 }
 
 select[multiple],
@@ -1280,7 +1280,7 @@ textarea::-webkit-input-placeholder {
 .radio,
 .checkbox {
   min-height: 21px;
-  padding-left: 20px;
+  padding-left: 23px;
 }
 
 .radio input[type="radio"],
@@ -1931,7 +1931,8 @@ input.search-query {
 .form-search label,
 .form-inline label,
 .form-search .btn-group,
-.form-inline .btn-group {
+.form-inline .btn-group,
+.form-inline .control-group {
   display: inline-block;
 }
 
@@ -1999,8 +2000,16 @@ legend + .control-group {
   *margin-left: 0;
 }
 
-.form-horizontal .controls:first-child {
-  *padding-left: 180px;
+.form-inline .control-group:not(:first-child) .control-label {
+  width: 100px;
+}
+
+.form-inline .control-group:not(:first-child) .controls {
+  margin-left: 110px;
+}
+
+.form-inline .controls label {
+  padding-top: 5px;
 }
 
 .form-horizontal .help-block {
@@ -5224,7 +5233,7 @@ input[type="submit"].btn.btn-mini {
 .pagination {
   position: relative;
   z-index: 2;
-  margin: 21px 0;
+  margin: 21px 0 65px 0;
 }
 
 .pagination ul {
@@ -6653,8 +6662,10 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  padding: 7px 6px;
-  text-indent: 1px;
+  *padding: 7px 6px;
+  *text-indent: 1px;
+  *padding: 6px 6px 8px 6px;
+  text-indent: 4px;
   border: 2px solid #dce4ec;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;

@@ -56,7 +56,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 
         $scope.exportJson = function() {
             var keySet = keyboards.getKeySet($scope.current);
-            var val = JSON.stringify(keySet, undefined, 4);
+            var val = JSON.stringify(keySet);
             var $link = $(".kb-config-export");
             $link.attr("href", "data:text/text;," + val);
             var filename = keySet.label + "." + keySet.keyboardType;
@@ -67,7 +67,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
         $scope.exportAllJson = function() {
             var val = JSON.stringify(keyboards.getLayouts().map(
                 function(layout) { return layout.keySet; }
-            ), undefined, 4);
+            ));
             $link = $(".kb-config-export");
             $link.attr("href", "data:text/text;," + val);
             $link.attr("download", "kla-layouts.json");
@@ -88,12 +88,14 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 
 	    $scope.importLayout = function() {
 	        var res = keyboards.parseKeySets($('#kb-config-import-dialog .kb-config-dialog-txt').val());
+            var $importBtn = $('#kb-config-import-dialog .btn').first();
 	        if ( res.valid ) {
                 if ( Array.isArray(res.keySet) ) {
-                    var $importBtn = $('#kb-config-import-dialog .btn').first();
                     if (!$importBtn.hasClass('btn-warning')) {
                         $importBtn.addClass('btn-warning');
-                        $importBtn.html('Yes, Replace All Layouts');
+                        // $importBtn.html('Import New Ones Instead of Current');
+                        $importBtn.html('Import in Place of All Current');
+                        // $importBtn.html('Import with Replacement of All Current');
                         return;
                     }
     	            for (var i = 0; i < res.keySet.length; i++)
@@ -110,7 +112,9 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	            $('#kb-config-import-dialog').modal('hide');
 	        } else {
 	            alert(res.reason);
-                setTimeout(function() {$('#kb-config-import-dialog textarea').focus();}, 250);
+                $importBtn.removeClass('btn-warning');
+                $importBtn.html('Import');
+                setTimeout(function() { $('#kb-config-import-dialog textarea').focus(); }, 250);
 	        }
 	    };
 
@@ -439,7 +443,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
             library.set('settings', $scope.settings);
         }, true);
         $scope.$watch('settings.thetaL', function(newVal, oldVal) {
-            $("#left-hand").css('transform', 'scaleX(-1) rotate(' + -newVal + 'deg)');
+            $("#left-hand").css('transform', 'rotate(' + newVal + 'deg) scaleX(-1)');
         }, true);
         $scope.$watch('settings.thetaR', function(newVal, oldVal) {
             $("#right-hand").css('transform', 'rotate(' + newVal + 'deg)');

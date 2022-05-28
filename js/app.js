@@ -101,8 +101,10 @@ document.addEventListener("keydown", function(event) {
         return $(".kb-config-copy").trigger("click");
     if (nf && (c && k === "v" || s && k === "Insert"))
         return $(".kb-config-import").trigger("click");
-    if (c && k === "Enter")
+    if (c && k === "Enter") {
+        event.preventDefault();
         return $(".kla-run-button .btn").trigger("click");
+    }
     if (a && cd === "Digit1")
         return $(location).attr("href", "#/config");
     if (a && cd === "Digit2")

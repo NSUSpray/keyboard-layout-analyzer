@@ -32,16 +32,16 @@ h1 {
 
 select#text-presets {
     width: 100%;
-    height: 225px;
+    height: 175px;
 }
 
 #txt-input {
-    height: 225px;
+    height: 175px;
     resize: none;
 }
 
 #text-input-form #txt-input:focus {
-    height: 450px;
+    height: 350px;
 }
 
 #typographics .btn {
@@ -100,6 +100,10 @@ input[type=number].full-width {
 /*
     Main
 */
+
+.kla-table-adjust {
+    margin: 4px 0;
+}
 
 .kla-table-adjust,
 .kla-table-adjust thead th, .kla-table-adjust tfoot th {

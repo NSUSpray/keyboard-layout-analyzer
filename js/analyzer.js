@@ -187,9 +187,13 @@ KLA.Analyzer = (function() {
         var subs = "";
         switch (char) {
             case "‴": subs = "'''"; break;
-            case "«": case "»": case "“": case "”": case "„": case "″":
+            case "«": case "»":
+            case "“": case "”": case "„":
+            case "″":
                 subs = '"'; break;
-            case "‘": case "’": case "′": case "′": case "‹": case "›":
+            case "‹": case "›":
+            case "‘": case "’": case "‛":
+            case "′":
                 subs = "'"; break;
             case "⟨": subs = "<"; break;
             case "⟩": subs = ">"; break;
