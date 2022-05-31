@@ -22,8 +22,8 @@ appServices.factory('keyboards', [
 
 	function() {
         var me = {},
-            layouts = []
-            ;
+            layouts = [],
+            ignore = 0;
 
         // setup layouts
     
@@ -78,7 +78,8 @@ appServices.factory('keyboards', [
         };
 
         me.getKeyMapFromKeyboardType = function(keyboardType) {
-            if ( typeof KB.keyMap[keyboardType] === 'undefined' || typeof KB.keyMap[keyboardType].s683_225 === 'undefined' ) {
+            if ( typeof KB.keyMap[keyboardType] === 'undefined'
+                    || typeof KB.keyMap[keyboardType].s683_225 === 'undefined' ) {
                 throw Error("Invalid keyboard type.");
             }
 
@@ -144,16 +145,72 @@ appServices.factory('keyboards', [
 
             return layouts[index];
         };
-        me.setLayout = function(index, layout) {
+        me.setLayout = function(index, layout, filter="all") {
             if (typeof layouts[index] === 'undefined') {
                 throw Error("keyboards service: Invalid index");
             }
+            var mismatchError = {valid: false, reason: "Keyboard type mismatch"};
+            if (layout.keySet.keyboardType !== layouts[index].keySet.keyboardType
+                    && filter !== "all")
+                return mismatchError;
 
-            layouts[index].keySet = layout.keySet;
+            // layouts[index].keySet = layout.keySet;
+            var ks = layout.keySet,
+                nks = $.extend(true, {}, layouts[index].keySet);
+                sameType = ks.keyboardType === nks.keyboardType,
+                keys = ks.keys;
+
+            var isLetter = function(code) {
+                return String.fromCharCode(code).toUpperCase() !==
+                        String.fromCharCode(code).toLowerCase();
+            }
+            
+            for (prop of ['label', 'author', 'authorUrl', 'moreInfoUrl',
+                    'moreInfoText', 'fingerStart', 'keyboardType'])
+                if (!sameType && ks[prop] === ignore)
+                    return mismatchError;
+                else if (filter === "all")
+                    if (typeof ks[prop] !== "undefined" && ks[prop] !== ignore)
+                        nks[prop] = ks[prop];
+                    else if (typeof ks[prop] === 'undefined' && typeof nks[prop] !== 'undefined')
+                        delete nks[prop];
+
+            nks.keys = nks.keys.filter(
+                function(k) {
+                    return keys.map(function(kk) { return kk.id; }).includes(k.id);
+                }
+            );
+            var ii, jj, key, found, oc, nc;
+            for (ii = 0; ii < keys.length; ii++) {  // each key of loadable layout
+
+                // find target key with same id
+                found = false;
+                for (jj = 0; jj < nks.keys.length; jj++)  
+                    if (nks.keys[jj].id === keys[ii].id) { found = true; break; }
+                if (!found) { nks.keys.push(keys[ii]); continue; }
+
+                key = keys[ii];
+                for (prop of ['primary', 'shift', 'altGr', 'shiftAltGr', 'finger']) {
+                    if (key[prop] === ignore)
+                        if (sameType) continue;
+                        else return mismatchError;
+                    if (filter === 'altGr' && prop !== 'altGr' && prop !== 'shiftAltGr')
+                        continue;
+                    if (typeof key[prop] === "undefined" || key[prop] === -1) {
+                        if (typeof nks.keys[jj][prop] !== 'undefined')
+                            delete nks.keys[jj][prop];
+                    } else if (filter !== "non-letters"
+                            || !isLetter(nks.keys[jj][prop]) && !isLetter(key[prop]))
+                        nks.keys[jj][prop] = key[prop];
+                }
+            }
+
+            layouts[index].keySet = nks;
             layouts[index].keyMap = layout.keyMap;
             if (layouts[index].keyboard !== null) {
-                layouts[index].keyboard.setLayout( layout );
+                layouts[index].keyboard.setLayout( layouts[index] );
             }
+            return {valid: true};
         };
 
         me.getKeySet = function(index) {
@@ -211,9 +268,9 @@ appServices.factory('keyboards', [
                     reason: "Invalid input."
                 };
             }
-            if (Array.isArray(nn)) {
+            if (Array.isArray(nn.layouts)) {
                 var n, res, vv = [];
-                for (n of nn) {
+                for (n of nn.layouts) {
                     res = me.parseKeySet(n);
                     if (!res.valid) return res;
                     vv.push(res.keySet);
@@ -227,7 +284,7 @@ appServices.factory('keyboards', [
 
         me.parseKeySet = function(nn) {
             var vv = {}, prop, ii, valid = true;
-            if (typeof nn.label === "string") {
+            if (typeof nn.label === "string" || nn.label === ignore) {
                 vv.label = nn.label;
             } else {
                 return {
@@ -253,7 +310,7 @@ appServices.factory('keyboards', [
                     reason: "Finger start is not a object."
                 };
             }
-            if (typeof nn.keyboardType === "string") {
+            if (typeof nn.keyboardType === "string" || nn.keyboardType === ignore) {
                 vv.keyboardType = nn.keyboardType;
             } else {
                 return {
@@ -263,6 +320,8 @@ appServices.factory('keyboards', [
             }
             if (typeof nn.author === "string" || typeof nn.author === 'undefined') {
                 vv.author = nn.author || 'Unknown';
+            } else if (nn.author === ignore) {
+                vv.author = nn.author;
             } else {
                 return {
                     valid: false,
@@ -273,6 +332,8 @@ appServices.factory('keyboards', [
             // deprecated, ignore
             if (typeof nn.authorUrl === "string" || typeof nn.authorUrl === 'undefined') {
                 vv.authorUrl = nn.authorUrl || '';
+            } else if (nn.authorUrl === ignore) {
+                vv.authorUrl = nn.authorUrl;
             } else {
                 return {
                     valid: false,
@@ -283,6 +344,8 @@ appServices.factory('keyboards', [
 
             if (typeof nn.moreInfoUrl === "string" || typeof nn.moreInfoUrl === 'undefined') {
                 vv.moreInfoUrl = nn.moreInfoUrl || '';
+            } else if (nn.moreInfoUrl === ignore) {
+                vv.moreInfoUrl = nn.moreInfoUrl;
             } else {
                 return {
                     valid: false,
@@ -291,6 +354,8 @@ appServices.factory('keyboards', [
             }
             if (typeof nn.moreInfoText === "string" || typeof nn.moreInfoText === 'undefined') {
                 vv.moreInfoText = nn.moreInfoText || '';
+            } else if (nn.moreInfoText === ignore) {
+                vv.moreInfoText = nn.moreInfoText;
             } else {
                 return {
                     valid: false,

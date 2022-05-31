@@ -342,7 +342,7 @@
             "shiftAltGr": -1
         },
         {
-            "primary": 0,
+            "primary": -1,
             "finger": 1,
             "id": 41
         },
@@ -435,7 +435,7 @@
             "shiftAltGr": -1
         },
         {
-            "primary": 0,
+            "primary": -1,
             "finger": 10,
             "id": 53
         },

@@ -13,10 +13,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    </p>\n" +
     "    <hr/>\n" +
     "    <p>\n" +
-    "    This version of the app was <a href=\"https://github.com/stevep99/keyboard-layout-analyzer\">forked by SteveP</a> from the original <a href=\"http://patorjk.com/keyboard-layout-analyzer/\">Keyboard Layout Analyzer</a> by PAT or JK.\n" +
+    "    This version of the app was <a href=\"https://github.com/stevep99/keyboard-layout-analyzer\">forked by SteveP</a> from the original <a href=\"http://patorjk.com/keyboard-layout-analyzer/\">Keyboard Layout Analyzer</a> by PAT or JK.\n" +
     "    </p>\n" +
     "    <p>A number of changes are made in this version with the aim of making the analyzer more useful and accurate, particularly in regard to the scoring calculation. \n" +
-    "    The changes are detailed below, so you can evaluate the merits of these changes yourself. A huge thanks to Patrick (PAT or JK) for releasing his source code, making this forked version possible!\n" +
+    "    The changes are detailed below, so you can evaluate the merits of these changes yourself. A huge thanks to Patrick (PAT or JK) for releasing his source code, making this forked version possible!\n" +
     "    </p>\n" +
     "\n" +
     "    <h2>Scoring Algorithm</h2>\n" +
@@ -44,19 +44,19 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <p>If you simply measure distance between J and its nearby keys however, then due to the keyboard stagger, JH is a shorter distance than JU or JM. In such cases, the default algorithm rewards motions involving more difficult (but slightly nearer) keys. What would be desired to fix this problem, is to replace the pure distance measure with a distance penalty, in which horizontal movements are given a higher penalty than vertical ones for the same distance moved.</p>\n" +
     "\n" +
-    "    <p>Also, the raw distance measurement does not take into account that some fingers are stronger than others, especially for motions that involve simple curling inward/outward that don't require the whole hand to move.</p>\n" +
+    "    <p>Also, the raw distance measurement does not take into account that some fingers are stronger than others, especially for motions that involve simple curling inward/outward that don’t require the whole hand to move.</p>\n" +
     "\n" +
     "    <p><b>Flaw 2</b>: Even with a directional penalty added, notice that the distance between JM and JN is the same. In reality though, again because of the stagger on standard boards, the JM movement is easier. To address this issue, we need to consider that the hands approach the keyboard at an angle. On the right-hand side of the keyboard, the arms approach the keyboard in the same direction as the stagger, but on the left-side, the stagger is effectively the wrong way around. A more accurate algorithm should aim to take this effect into account.</p>\n" +
     "\n" +
-    "    <p><b>Flaw 3</b>: The distance penalty should not linear, but rather logarithmic, as observed by <a href=\"https://en.wikipedia.org/wiki/Fitts%27s_law\">Fitts's Law</a>.\n" +
-    "    Fitts's Law is a predictive model of human movement which can be used to estimate the time or effort it takes to perform a variety of actions, based on the distance and size of the target.</p>\n" +
+    "    <p><b>Flaw 3</b>: The distance penalty should not linear, but rather logarithmic, as observed by <a href=\"https://en.wikipedia.org/wiki/Fitts%27s_law\">Fitts’s Law</a>.\n" +
+    "    Fitts’s Law is a predictive model of human movement which can be used to estimate the time or effort it takes to perform a variety of actions, based on the distance and size of the target.</p>\n" +
     "\n" +
     "    <p><b><u>Fixes:</u></b> This version of the app applies fixes to the algorithm to address all these flaws.<br/>\n" +
-    "        - The simple distance calculation is replaced by a \"distance penalty\".<br/> \n" +
+    "        - The simple distance calculation is replaced by a “distance penalty”.<br/> \n" +
     "        - The penalty is finger-dependent for actions that require a simple inward/outward curling of the finger, for example to reach upward with the middle finger from <i>K to I</i> (in Qwerty).<br/>\n" +
     "        - The penalty is larger for horizontal movements, recognising that this component requires the whole hand to move or for fingers to splay out awkwardly, for example the motion of the index finger from <i>F to G</i> (in Qwerty).<br/>\n" +
     "        - The coordinate system for movement vectors is rotated to align with the angle of approach of the hands. This currently set to a 10° angle, and is applied clockwise for the left hand, anticlockwise for the right hand.<br/>\n" +
-    "        - Fitts's Law is incorporated in this version of the analyzer so both horizontal and vertical components are appropriately scaled.</p>\n" +
+    "        - Fitts’s Law is incorporated in this version of the analyzer so both horizontal and vertical components are appropriately scaled.</p>\n" +
     "\n" +
     "    <table style=\"display: inline-block; margin-left:40px\" border=\"1\" cellpadding=\"2\">\n" +
     "        <tbody>\n" +
@@ -124,8 +124,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        THUMB: 0.5<br/>\n" +
     "    </p>\n" +
     "    <p>Then, it calculates what proportion of typing is done on each finger, subject to a maximum of 20% per finger. The final score is proportional to this sum over all fingers:\n" +
-    "    (finger-score) x (finger-frequency)</p>\n" +
-    "    <p>The consequence of this algorithm is that middle finger is heavily favoured, even compared to the index finger. Layouts deemed high scoring would be those that assign 20% of the work to favoured fingers - middle especially followed by index - but with very little or none on pinkies and thumbs. I think this method may be flawed in that it too heavily weights the middle finger, and encourages loading of favoured fingers upto the seemingly arbitrary 20%. However, I accept that this element of the algorithm may in fact be counter-balanced by the distance algorithm, which would reward all home key usage (including pinkies and thumbs where defined), by assigning a movement distance of zero in those cases.</p>\n" +
+    "    (finger-score) × (finger-frequency)</p>\n" +
+    "    <p>The consequence of this algorithm is that middle finger is heavily favoured, even compared to the index finger. Layouts deemed high scoring would be those that assign 20% of the work to favoured fingers – middle especially followed by index – but with very little or none on pinkies and thumbs. I think this method may be flawed in that it too heavily weights the middle finger, and encourages loading of favoured fingers upto the seemingly arbitrary 20%. However, I accept that this element of the algorithm may in fact be counter-balanced by the distance algorithm, which would reward all home key usage (including pinkies and thumbs where defined), by assigning a movement distance of zero in those cases.</p>\n" +
     "\n" +
     "    <p><b><u>Fix:</u></b> A simpler effort calculation is employed based on the finger weightings in the table above, representing the relative strength of each finger.\n" +
     "        Additionally, a small finger-imbalance factor has been introduced to this element, recognising that a good layout should assign rougly equal work symmetrically to fingers of both left and right hands. \n" +
@@ -138,7 +138,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <p><b><u>Fix:</u></b> No fix needed. The weighting of this element of the calculation is increased from 17% to 30%.<br/>\n" +
     "\n" +
     "    <h3>Element 4: Hand alternation</h3>\n" +
-    "    <p>Similar to the same-finger count, it simply counts which proportion of key presses were with same hand as the previous one. This favours heavily alternating layouts. However, in my view this flawed, as no account is taken that some same-hand combinations are actually some of the most comfortable bigrams of all: the Colemak ST and NE, or the Dvorak TH, for examples. Perhaps this element could be improved, for example to detect longer same-hand sequences which would be detrimental. In it's current form though, I don't see much value in this element.</p>\n" +
+    "    <p>Similar to the same-finger count, it simply counts which proportion of key presses were with same hand as the previous one. This favours heavily alternating layouts. However, in my view this flawed, as no account is taken that some same-hand combinations are actually some of the most comfortable bigrams of all: the Colemak ST and NE, or the Dvorak TH, for examples. Perhaps this element could be improved, for example to detect longer same-hand sequences which would be detrimental. In it’s current form though, I don’t see much value in this element.</p>\n" +
     "    <p><b><u>Fix:</u></b> Removed from the scoring calculation.<br/>\n" +
     "\n" +
     "    <h2>Other changes made from the original repo</h2>\n" +
@@ -147,9 +147,9 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <li>There were a lot of seemingly random, unrecognised layouts. I removed most of them. The list now only contains layouts that are at least semi-well-known in the community.</li>\n" +
     "        <li>The Colemak-DH layout variants have been added.</li>\n" +
     "        <li>Number of layouts in the comparison changed from 5 to 6.</li>\n" +
-    "        <li>Removed the generated 'Personalized Layout' as I considered it to not really have any value.</li>\n" +
+    "        <li>Removed the generated ‘Personalized Layout’ as I considered it to not really have any value.</li>\n" +
     "        <li>Added support for additional keyboard types.</li>\n" +
-    "        <li>Various other input texts have been added, these were obtained from from <a href=\"https://bitbucket.org/Shenafu/keyboard-layout-analyzer/src/master/\">shenafu's fork</a> of the same app.</li>\n" +
+    "        <li>Various other input texts have been added, these were obtained from from <a href=\"https://bitbucket.org/Shenafu/keyboard-layout-analyzer/src/master/\">shenafu’s fork</a> of the same app.</li>\n" +
     "        <li>Disabled the API functionality (e.g. link to results) as github hosting does not support php.</li>\n" +
     "    </ul>\n" +
     "\n" +
@@ -234,27 +234,37 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                <div class='control-group'>\n" +
     "                    <label class='control-label'>Load/Save Data:</label>\n" +
     "                    <div class='controls'>\n" +
-    "                        <button class=\"kb-config-copy btn\" ng-click=\"copyJson()\" title=\"Copy this layout to clipboard (Ctrl+C)\">Copy</button>\n" +
-    "                        <button class=\"kb-config-import btn\" ng-click=\"showImportDialog()\" title=\"Load some layout here (Ctrl+V)\">Paste</button>\n" +
-    "                        <!-- <input type=\"file\" class=\"kb-config-import btn\" ng-click=\"importJson()\" title=\"Load some layout data from computer\">Import</button> -->\n" +
-    "                        <div class=\"btn-group\">\n" +
-    "                            <a class=\"kb-config-export btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
+    "                        <div class=\"btn-group dropdown\">\n" +
+    "                            <a id=\"kb-config-copy\" class=\"btn\" ng-click=\"copyJson()\" title=\"Copy this layout to clipboard (Ctrl+C)\">Copy</a>\n" +
     "                            <button type=\"button\" class=\"btn dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
     "                                <span class=\"caret\"></span>\n" +
     "                            </button>\n" +
     "                            <ul class=\"dropdown-menu\">\n" +
-    "                                <li><a class=\"kb-config-export\" ng-click=\"exportAllJson()\" title=\"Save the whole set to single file\">Export All</a></li>\n" +
+    "                                <li><a ng-click=\"copyJson(fingering=true)\" title=\"Copy finger zones and positions\">Copy Fingering</a></li>\n" +
+    "                                <li><a ng-click=\"copyAllJson()\" title=\"Copy the whole set\">Copy All Layouts</a></li>\n" +
     "                            </ul>\n" +
     "                        </div>\n" +
-    "                        <!-- <button class=\"kb-config-export btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
+    "                        <button id=\"kb-config-import\" class=\"btn\" ng-click=\"showImportDialog()\" title=\"Load some layout here (Ctrl+V)\">Paste</button>\n" +
+    "                        <!-- <input type=\"file\" id=\"kb-config-import\" class=\"btn\" ng-click=\"importJson()\" title=\"Load some layout data from computer\">Import</button> -->\n" +
+    "                        <div class=\"btn-group dropdown\">\n" +
+    "                            <a id=\"kb-config-export\" class=\"btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
+    "                            <button type=\"button\" class=\"btn dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+    "                                <span class=\"caret\"></span>\n" +
+    "                            </button>\n" +
+    "                            <ul class=\"dropdown-menu\">\n" +
+    "                                <li><a id=\"kb-config-export-fingering\" ng-click=\"exportJson(fingering=true)\" title=\"Save finger zones and positions\">Export Fingering</a></li>\n" +
+    "                                <li><a id=\"kb-config-export-all\" ng-click=\"exportAllJson()\" title=\"Save the whole set to single file\">Exprot All Layouts</a></li>\n" +
+    "                            </ul>\n" +
+    "                        </div>\n" +
+    "                        <!-- <button id=\"kb-config-export\" class=\"btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
     "                <div class='control-group'>\n" +
-    "                    <label class='control-label' for=\"kb-config-select-list\">Preset:</label>\n" +
+    "                    <!-- <label class='control-label' for=\"kb-config-select-list\">Preset:</label> -->\n" +
     "                    <div class='controls'>\n" +
     "                        <select id=\"kb-config-select-list\" class=\"kb-config-select-list\">\n" +
-    "                            <option value=\"none\">[Select Layout]</option>\n" +
+    "                            <option value=\"none\">[Select Preset]</option>\n" +
     "                            <optgroup label=\"Latin: ANSI Keyboards\">\n" +
     "                                <option value=\"standard.abcdef\">ABCDEF</option>\n" +
     "                                <option value=\"standard.arensito\">Arensito</option>\n" +
@@ -263,15 +273,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"standard.capewell\">Capewell</option>\n" +
     "                                <option value=\"standard.carpalxq\">CarpalxQ</option>\n" +
     "                                <option value=\"standard.colemak\">Colemak</option>\n" +
-    "                                <option value=\"standard.tarmak1\">Colemak - Tarmak 1</option>\n" +
-    "                                <option value=\"standard.tarmak2\">Colemak - Tarmak 2</option>\n" +
-    "                                <option value=\"standard.tarmak3\">Colemak - Tarmak 3</option>\n" +
-    "                                <option value=\"standard.tarmak4\">Colemak - Tarmak 4</option>\n" +
     "                                <option value=\"standard.colemak_dh\">Colemak-DH (Mod-DH)</option>\n" +
-    "                                <option value=\"standard.tarmak1_dh\">Colemak-DH - Tarmak 1</option>\n" +
-    "                                <option value=\"standard.tarmak2_dh\">Colemak-DH - Tarmak 2</option>\n" +
-    "                                <option value=\"standard.tarmak3_dh\">Colemak-DH - Tarmak 3</option>\n" +
-    "                                <option value=\"standard.tarmak4_dh\">Colemak-DH - Tarmak 4</option>\n" +
     "                                <option value=\"standard.simplifiedDvorak\">Dvorak (Simplified)</option>\n" +
     "                                <option value=\"standard.programmerDvorak\">Dvorak (Programmer)</option>\n" +
     "                                <option value=\"standard.spanish-dvorak\">Dvorak (Spanish)</option>\n" +
@@ -288,9 +290,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"standard.qgmlwy\">QGMLWY</option>\n" +
     "                                <option value=\"standard.qwerfj\">QWERFJ</option>\n" +
     "                                <option value=\"standard.qwerty\">QWERTY</option>\n" +
-    "                                <option value=\"standard.qwertywm\">QWERTY - Wide Mod</option>\n" +
+    "                                <option value=\"standard.qwertywm\">QWERTY – Wide Mod</option>\n" +
     "                                <option value=\"standard.qwpr\">QWPR</option>\n" +
     "                                <option value=\"standard.soul\">Soul</option>\n" +
+    "                                <option value=\"standard.tnwmlc\">TNWMLC</option>\n" +
     "                                <option value=\"standard.workman\">Workman</option>\n" +
     "                            </optgroup>\n" +
     "                            <optgroup label=\"Latin: ISO Keyboards\">\n" +
@@ -300,10 +303,6 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"european_ss.colemak\">Colemak split-space</option>\n" +
     "                                <option value=\"european.colemak_dh\">Colemak-DH (Mod-DH)</option>\n" +
     "                                <option value=\"european_ss.colemak_dh\">Colemak-DH (Mod-DH) split-space</option>\n" +
-    "                                <option value=\"european.tarmak1_dh\">Colemak-DH - Tarmak 1</option>\n" +
-    "                                <option value=\"european.tarmak2_dh\">Colemak-DH - Tarmak 2</option>\n" +
-    "                                <option value=\"european.tarmak3_dh\">Colemak-DH - Tarmak 3</option>\n" +
-    "                                <option value=\"european.tarmak4_dh\">Colemak-DH - Tarmak 4</option>\n" +
     "                                <option value=\"european.qwerty\">QWERTY</option>\n" +
     "                                <option value=\"european_ss.qwerty\">QWERTY split-space</option>\n" +
     "                                <option value=\"european.qwerty-spanish\">QWERTY (Spanish)</option>\n" +
@@ -338,7 +337,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"standard.russian_diktor\">Diktor</option>\n" +
     "                                <option value=\"standard.russian_zubachev\">Zubachev</option>\n" +
     "                                <option value=\"standard.russian\">ЙЦУКЕН</option>\n" +
-    "                                <option value=\"standard.russiannm\">ЙЦУКЕН - Narrow Mod</option>\n" +
+    "                                <option value=\"standard.russiannm\">ЙЦУКЕН – Narrow Mod</option>\n" +
     "                                <option value=\"standard.russian_typewriter\">ЙЦУКЕН (Typewriter)</option>\n" +
     "                                <option value=\"standard.russian_typographic\">ЙЦУКЕН (Typographic)</option>\n" +
     "                                <option value=\"standard.russian_yvam-told-2\">ЫВАМ ТОЛД 2.0</option>\n" +
@@ -368,11 +367,25 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <textarea class='input-block-level kb-config-dialog-txt'></textarea>\n" +
     "                <p class='text-left'>\n" +
-    "                    Paste the text of a previously copied/exported layout in the textbox above and press \"Import\" to load the layout.\n" +
+    "                    Paste the text of a previously copied/exported layout in the textbox above and press “Import” to load the layout.\n" +
     "                </p>\n" +
     "            </div>\n" +
     "\n" +
     "            <div class='modal-footer'>\n" +
+    "                <form id='importFilter' class='form-horizontal form-inline pull-left'>\n" +
+    "                    <label class='control-label'>Filter:</label>\n" +
+    "                        <div class=\"btn-group\">\n" +
+    "                            <label class=\"radio inline\">\n" +
+    "                                <input type=\"radio\" name=\"import-filter\" value=\"all\" ng-model=\"submitter.importFilter\"> All\n" +
+    "                            </label>\n" +
+    "                            <label class=\"radio inline\">\n" +
+    "                                <input type=\"radio\" name=\"import-filter\" value=\"non-letters\" ng-model=\"submitter.importFilter\"> Non-Letters\n" +
+    "                            </label>\n" +
+    "                            <label class=\"radio inline\">\n" +
+    "                                <input type=\"radio\" name=\"import-filter\" value=\"altGr\" ng-model=\"submitter.importFilter\"> Alt Gr Layer\n" +
+    "                            </label>\n" +
+    "                        </div>\n" +
+    "                </form>\n" +
     "                <button class=\"btn\" ng-click=\"importLayout()\">Import</button>\n" +
     "                <button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Close</button>\n" +
     "            </div>\n" +
@@ -510,7 +523,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    </optgroup>\n" +
     "                    <optgroup label='English Academic'>\n" +
     "                        <option value='academic-1'>Cost Optimization Model</option>\n"     +
-    "                        <option value='academic-2'>Contractors' Performance in Construction</option>\n"     +
+    "                        <option value='academic-2'>Contractors’ Performance in Construction</option>\n"     +
     "                        <option value='academic-3'>Binary Logistic Analysis</option>\n"     +
     "                    </optgroup>\n" +
     "                    <optgroup label='English Vocabulary'>\n" +
@@ -562,7 +575,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <div class='controls'>\n" +
     "                <select id='calc-preset' ng-model='data.calcPreset' ng-change=\"applyCalcPreset()\">\n" +
     "                    <option value='stevep'>SteveP</option>\n" +
-    "                    <option value='patorjk'>PAT or JK</option>\n" +
+    "                    <option value='patorjk'>PAT or JK</option>\n" +
     "                </select>\n" +
     "            </div>\n" +
     "        </div>\n" + 
@@ -639,7 +652,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                        </tr>\n" +
     "                    </tbody>\n" +
     "                </table>\n" +
-    "                <label class=\"checkbox\" title=\"According to Fitts's law estimated effort for a variety of actions, based on the distance, should not linear\">\n" +
+    "                <label class=\"checkbox\" title=\"According to Fitts’s law estimated effort for a variety of actions, based on the distance, should not linear\">\n" +
     "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.applyFittsLaw\" type=\"checkbox\"> Logarithmic distance\n" +
     "                </label>\n" +
     "            </div>\n" +
@@ -676,8 +689,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <label class=\"radio inline\">\n" +
     "                        <input type=\"radio\" name=\"finger-score-method\" value=\"stevep\" ng-model=\"settings.fScoringMethod\"> SteveP\n" +
     "                    </label>\n" +
-    "                    <label class=\"radio inline\" title=\"Weight ∼ exp(−Effort)\">\n" +
-    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> PAT or JK\n" +
+    "                    <label class=\"radio inline\" title=\"Weight ∼ exp(−5·Effort)\">\n" +
+    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> PAT or JK\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -928,12 +941,12 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "        <div class='tab-pane' id='miscellaneous'>\n" +
     "            <div class=\"kla-misc-box\">\n" +
-    "                <strong>Consecutive Finger Use</strong> - \n" +
+    "                <strong>Consecutive Finger Use</strong> – \n" +
     "                How often the same finger is used to type a key as was used to type the previous key.\n" +
-    "                An example of this would be typing \"fg\" on QWERTY. When looking at \"g\", the program notes that  the index finger\n" +
-    "                was also previously used to type \"f\". The lower the number the better.\n" +
+    "                An example of this would be typing “fg” on QWERTY. When looking at “g”, the program notes that  the index finger\n" +
+    "                was also previously used to type “f”. The lower the number the better.\n" +
     "                <p></p>\n" +
-    "                <label><input class='kla-result-checkbox' ng-model=\"settings.cfuIgnoreDups\" type=\"checkbox\" /> Include instances of the same key being pressed twice in a row (example: typing \"ff\").</label>\n" +
+    "                <label><input class='kla-result-checkbox' ng-model=\"settings.cfuIgnoreDups\" type=\"checkbox\" /> Include instances of the same key being pressed twice in a row (example: typing “ff”).</label>\n" +
     "            </div>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.consecFingerPress\"></seriesbarchart>\n" +
     "            <resultoptions source='results.consecFingerPress' displayopts=false></resultoptions>\n" +
@@ -942,10 +955,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <div class='kla-misc-spacing'></div>\n" +
     "\n" +
     "            <div class=\"kla-misc-box\">\n" +
-    "                <strong>Consecutive Hand and Thumb Use</strong> - \n" +
-    "                How often the same hand was used to type a key as was used to type the previous key (thumbs are grouped as a separate entity). An example of this would be typing \"af\" on QWERTY. When looking at \"f\", the program notes that the left hand was also previously used to type \"a\". The lower the number the better.\n" +
+    "                <strong>Consecutive Hand and Thumb Use</strong> – \n" +
+    "                How often the same hand was used to type a key as was used to type the previous key (thumbs are grouped as a separate entity). An example of this would be typing “af” on QWERTY. When looking at “f”, the program notes that the left hand was also previously used to type “a”. The lower the number the better.\n" +
     "                <p></p>\n" +
-    "                <label><input class='kla-result-checkbox' ng-model=\"settings.chuIgnoreDups\" type=\"checkbox\" /> Include instances of the same key being pressed twice in a row (example: typing \"ff\").</label>\n" +
+    "                <label><input class='kla-result-checkbox' ng-model=\"settings.chuIgnoreDups\" type=\"checkbox\" /> Include instances of the same key being pressed twice in a row (example: typing “ff”).</label>\n" +
     "            </div>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.consecHandPress\"></seriesbarchart>\n" +
     "            <resultoptions source='results.consecHandPress' displayopts=false></resultoptions>\n" +
@@ -954,8 +967,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <div class='kla-misc-spacing'></div>\n" +
     "\n" +
     "            <div class=\"kla-misc-box\">\n" +
-    "                <strong>Modifier Key Use</strong> - \n" +
-    "                How often the Shift, AltGr, and Shift+AltGr modifiers are used with characters in the text.\n" +
+    "                <strong>Modifier Key Use</strong> – \n" +
+    "                How often the Shift, Alt Gr, and Shift + Alt Gr modifiers are used with characters in the text.\n" +
     "            </div>\n" +
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.modifierUse\"></seriesbarchart>\n" +
     "            <resultoptions source='results.modifierUse' displayopts=false></resultoptions>\n" +
@@ -965,7 +978,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    Additional statistics will be coming to this section later this year. \n" +
     "                </p>\n" +
     "                <p>\n" +
-    "                    I hate these sort of place holder messages, however, I figured I'd make a note so you'd know where to look in coming updates.\n" +
+    "                    I hate these sort of place holder messages, however, I figured I’d make a note so you’d know where to look in coming updates.\n" +
     "                </p>\n" +
     "                <p>\n" +
     "                    If you have any suggestions feel free to email me.\n" +
@@ -981,7 +994,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <h3 class='text-center'>Personalized Layout</h3>\n" +
     "                </p>\n" +
     "                <p>\n" +
-    "                    And now just for fun, here is what the optimal layout of your keyboard would be if it were tailored to fit the way you type. This personalized layout is based only on a frequency analysis. It places your most commonly typed characters in the most optimal spots and your least typed characters in the least optimal spots - however, for practical reasons, I have frozen certain keys. The more you type, the more accurate this layout will be. I should note that the generated design does not take into account how often you switch hands while typing or how close together common letter pairings are. Most modern layouts take into account ergonomic considerations as well as key usage.\n" +
+    "                    And now just for fun, here is what the optimal layout of your keyboard would be if it were tailored to fit the way you type. This personalized layout is based only on a frequency analysis. It places your most commonly typed characters in the most optimal spots and your least typed characters in the least optimal spots – however, for practical reasons, I have frozen certain keys. The more you type, the more accurate this layout will be. I should note that the generated design does not take into account how often you switch hands while typing or how close together common letter pairings are. Most modern layouts take into account ergonomic considerations as well as key usage.\n" +
     "                </p>\n" +
     "                <p>\n" +
     "                    Initially I was going to leave out this feature for the latest version of the analyzer, but I had some requests to keep it so I did. Since a complete ergonomic analysis isn't taken into account, the generated layout should be taken with a grain of salt, but it can give you some ideas of good key placements.\n" +

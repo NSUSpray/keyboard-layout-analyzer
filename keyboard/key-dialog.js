@@ -118,10 +118,10 @@ KB.KeyDialog = (function() {
             pHelp, sHelp, aHelp, saHelp,boilerPlateHelp;
             
         boilerPlateHelp = "IMPORTANT: You may enter in a single character as input or a unicode value.\n\nSide notes: Some keys have no unicode equivant or no way of differentiating between what side of the keyboard the key is on, such as the Windows Key or the right and left shift keys. In cases like this, a special negative value is used to identify the key. You will never really need to change keys like this, but I figured I'd mention what those values mean to fend off confusion.";
-        pHelp = "The \"primary\" key represents the value that a key press equates to when no special helper keys (such as shift) are held down to modify the key press.\n\n" + boilerPlateHelp;
-        sHelp = "The \"shift\" key represents the value that a key press equates to when the shift key is held down with the key press.\n\n" + boilerPlateHelp;
-        aHelp = "The \"alt gr\" key represents the value that a key press equates to when the alt gr key is held down with the key press.\n\n" + boilerPlateHelp;
-        saHelp = "The \"shift + alt gr\" key represents the value that a key press equates to when the shift and alt gr keys are held down with the key press.\n\n" + boilerPlateHelp;
+        pHelp = "The “primary” key represents the value that a key press equates to when no special helper keys (such as shift) are held down to modify the key press.\n\n" + boilerPlateHelp;
+        sHelp = "The “shift” key represents the value that a key press equates to when the shift key is held down with the key press.\n\n" + boilerPlateHelp;
+        aHelp = "The “alt gr” key represents the value that a key press equates to when the alt gr key is held down with the key press.\n\n" + boilerPlateHelp;
+        saHelp = "The “shift + alt gr” key represents the value that a key press equates to when the shift and alt gr keys are held down with the key press.\n\n" + boilerPlateHelp;
             
         myRows[rr++] = createTextInputRow("Primary Key:",    namespace + "-primaryKey",     pHelp);
         myRows[rr++] = createTextInputRow("Shift Key:",      namespace + "-shiftKey",       sHelp);

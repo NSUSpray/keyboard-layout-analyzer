@@ -311,7 +311,7 @@ KLA.Analyzer = (function() {
         if ( ( shiftInfo.fingerUsed && shiftInfo.fingerUsed === altGrInfo.fingerUsed ) ||
             shiftInfo.fingerUsed === keyInfo.fingerUsed ||
             altGrInfo.fingerUsed === keyInfo.fingerUsed ) {
-            errors.push("Keyboard configuration error: Same finger used to type shift, altgr or " + String.fromCharCode(keyInfo.charCode));
+            errors.push("Keyboard configuration error: Same finger used to type Shift, Alt Gr or " + String.fromCharCode(keyInfo.charCode));
             console.log("Exiting typeKey due to errors.");
             return errors;
         }
@@ -412,7 +412,7 @@ KLA.Analyzer = (function() {
         if ( ( shiftInfo.fingerUsed && shiftInfo.fingerUsed === altGrInfo.fingerUsed ) ||
             shiftInfo.fingerUsed === keyInfo.fingerUsed ||
             altGrInfo.fingerUsed === keyInfo.fingerUsed ) {
-            errors.push("Keyboard configuration error: Same finger used to type shift, altgr or " + String.fromCharCode(keyInfo.charCode));
+            errors.push("Keyboard configuration error: Same finger used to type Shift, Alt Gr or " + String.fromCharCode(keyInfo.charCode));
             console.log("Exiting typeKey due to errors.");
             return errors;
         }
@@ -630,7 +630,7 @@ KLA.Analyzer = (function() {
             return analysis; 
         }
         if (char2KeyMap[-18].errors.length > 1) {
-            analysis.errors.push("Fatal Error: AltGr key not set correctly.");
+            analysis.errors.push("Fatal Error: Alt Gr key not set correctly.");
             return analysis; 
         }
         

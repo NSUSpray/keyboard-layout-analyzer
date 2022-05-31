@@ -98,9 +98,9 @@ document.addEventListener("keydown", function(event) {
     if (nf && c && k === "ArrowRight")
         return $(".switcher[num=next]").click();
     if (nf && c && (k === "c" || k === "Insert"))
-        return $(".kb-config-copy").trigger("click");
+        return $("#kb-config-copy").trigger("click");
     if (nf && (c && k === "v" || s && k === "Insert"))
-        return $(".kb-config-import").trigger("click");
+        return $("#kb-config-import").trigger("click");
     if (c && k === "Enter") {
         event.preventDefault();
         return $(".kla-run-button .btn").trigger("click");
