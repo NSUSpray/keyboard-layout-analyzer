@@ -93,7 +93,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
                 });
                 filename += ".fingering";
             }
-            filename = filename.trim().toLowerCase().replace(/ /g, "-");
+            filename = filename.trim().toLowerCase().replace(/\s/g, "-");
             var val = JSON.stringify(keySet);
             var $link = $("#kb-config-export" + (fingering? "-fingering" : ""));
             $link.attr("href", "data:text/text;," + val);
@@ -124,28 +124,33 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    	return '<a href="'+keySet.moreInfoUrl+'">'+keySet.moreInfoText + '</a>';
 	    }
 
+        $scope.setLayout = function(keySet) {
+            if ( Array.isArray(keySet) ) {
+                for (var i = 0; i < keySet.length; i++)
+                    keyboards.setLayout( i, {
+                        keySet: $.extend(true, {}, keySet[i]),
+                        keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(keySet[i].keyboardType))
+                    });
+                return {valid: true};
+            } else {
+                return keyboards.setLayout( $scope.current, {
+                    keySet: $.extend(true, {}, keySet),
+                    keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(keySet.keyboardType))
+                }, $scope.submitter.importFilter);
+            }
+        }
+
 	    $scope.importLayout = function() {
 	        var res = keyboards.parseKeySets($('#kb-config-import-dialog .kb-config-dialog-txt').val());
             var $importBtn = $('#kb-config-import-dialog .btn').first();
 	        if ( res.valid ) {
-                if ( Array.isArray(res.keySet) ) {
-                    if (!$importBtn.hasClass('btn-warning')) {
-                        $('#importFilter').addClass('hide');
-                        $importBtn.addClass('btn-warning');
-                        $importBtn.html('Import in Place of All Current');
-                        return;
-                    }
-    	            for (var i = 0; i < res.keySet.length; i++)
-                        keyboards.setLayout( i, {
-        	            	keySet: $.extend(true, {}, res.keySet[i]),
-        	            	keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(res.keySet[i].keyboardType))
-        	            });
-                } else {
-                    res = keyboards.setLayout( $scope.current, {
-                        keySet: $.extend(true, {}, res.keySet),
-                        keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(res.keySet.keyboardType))
-                    }, $scope.submitter.importFilter);
+                if ( Array.isArray(res.keySet) && !$importBtn.hasClass('btn-warning') ) {
+                    $('#importFilter').addClass('hide');
+                    $importBtn.addClass('btn-warning');
+                    $importBtn.html('Import in Place of All Current');
+                    return;
                 }
+                res = $scope.setLayout(res.keySet);
 	        }
             if ( res.valid )
                 $('#kb-config-import-dialog').modal('hide');
@@ -158,8 +163,12 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    };
 
 	    $scope.loadLayout = function() {
-	        var val = $('#kb-config-select-list').find('option:selected').attr('value').split(".");	        
-            if (typeof KB.keySet[val[0]] !== 'undefined' && typeof KB.keySet[val[0]][val[1]] !== 'undefined') {
+            var value = $('#kb-config-select-list').find('option:selected').attr('value');
+	        var val = value.split(".");
+            // TODO: do it normal
+            if (typeof KB.keySet[val[0]] !== 'undefined'
+                    && typeof KB.keySet[val[0]][val[1]] !== 'undefined'
+                    && val[2] !== 'fingering') {
             	keyboards.setLayout( $scope.current, {
 	            	keySet: $.extend(true, {}, KB.keySet[val[0]][val[1]]),
             		keyMap: $.extend(true, {}, KB.keyMap[val[0]].s683_225)
@@ -167,13 +176,15 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             } else {
 		    	$http({
 		    		method: 'GET',
-		    		url: './layouts/' + val[0] + "." + val[1]
+		    		url: './layouts/' + value
 		    	})
 		    	.success(function(data, status, headers, config) {
-	            	keyboards.setLayout( $scope.current, {
-		            	keySet: data,
-	            		keyMap: KB.keyMap[val[0]].s683_225
-	            	});
+                    var res;
+                    if ( typeof data.layouts !== 'undefined' && Array.isArray(data.layouts) )
+                        res = $scope.setLayout(data.layouts);
+                    else
+                        res = $scope.setLayout(data);
+                    if ( !res.valid ) alert(res.reason);
 		    	})
 		    	.error(function(data, status, headers, config) {
 		    		alert('Unexpected Error. Layout not loaded.');

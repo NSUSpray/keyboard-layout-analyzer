@@ -1,5 +1,5 @@
 {
-    "label": "Colemak-DHk (Mod-DH)",
+    "label": "Colemak-DHk",
     "author": "SteveP",
     "moreInfoUrl": "https://colemakmods.github.io/mod-dh/",
     "moreInfoText": "Colemak Mod-DH",
@@ -135,9 +135,7 @@
             "primary": 98,
             "shift": 66,
             "finger": 4,
-            "id": 19,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 19
         },
         {
             "primary": 106,
@@ -220,17 +218,13 @@
             "primary": 103,
             "shift": 71,
             "finger": 4,
-            "id": 33,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 33
         },
         {
             "primary": 107,
             "shift": 75,
             "finger": 7,
-            "id": 34,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 34
         },
         {
             "primary": 110,
@@ -276,57 +270,43 @@
             "primary": 120,
             "shift": 88,
             "finger": 2,
-            "id": 42,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 42
         },
         {
             "primary": 99,
             "shift": 67,
             "finger": 3,
-            "id": 43,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 43
         },
         {
             "primary": 100,
             "shift": 68,
             "finger": 4,
-            "id": 44,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 44
         },
         {
             "primary": 118,
             "shift": 86,
             "finger": 4,
-            "id": 45,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 45
         },
         {
             "primary": 122,
             "shift": 90,
             "finger": 4,
-            "id": 46,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 46
         },
         {
             "primary": 109,
             "shift": 77,
             "finger": 7,
-            "id": 47,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 47
         },
         {
             "primary": 104,
             "shift": 72,
             "finger": 7,
-            "id": 48,
-            "altGr": -1,
-            "shiftAltGr": -1
+            "id": 48
         },
         {
             "primary": 44,

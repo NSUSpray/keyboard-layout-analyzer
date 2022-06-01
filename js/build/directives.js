@@ -281,38 +281,43 @@ appDirectives.directive('paginate', [
                 $scope.stop = parseInt($scope.stop, 10);
                 $scope.maxVal = $scope.stop - $scope.start;
                 $scope.keyboards = keyboards;
-                $scope.shorten = function(k) {
-                    var shortLabels = [];
-                    k.forEach(function(layout) {
-                        var label = layout.keySet.label.trim();
-                        if (label == "")
-                            return shortLabels.push("<empty>");
-                        var l = label;
-                        for (i = 1; l.replaceAll(/[WMЩЮЖМШ]/ug, "...").replaceAll(/[^ijlI. ]/ug, "..").length > 16; ++i) {
-                            switch (i) {
-                                // trash
-                                case 1: l = l.replaceAll(/[^\wа-яё -]/ugi, "").replaceAll(/-/ug, " "); break;
-                                // vowels
-                                case 2: l = l.replaceAll(/(?<=[\wА-ЯЁа-яё])[aeiouyаеёийоуыэюя]/ug, ""); break;
-                                // abbreviation
-                                case 3: l = l.replaceAll(/([A-Za-zА-ЯЁа-яё][a-zа-яё])[a-zа-яё]+/ug, "$1."); break;
-                                // dots
-                                case 4: l = l.replaceAll(/\./ug, ""); break;
-                                case 5:  // lower
-                                    l = l.replaceAll(/(?<=[\wА-ЯЁа-яё])[a-zа-яё]/ug, "")
-                                    .replaceAll(/(?<=[\wА-ЯЁа-яё])[A-ZА-ЯЁ]/ug, function(a) {return a.toLowerCase();})
-                                    .replaceAll(/ /ug, "");
-                                    break;
-                                // digits
-                                case 6: l = l.replaceAll(/(\d)\d+/g, "$1"); break;
-                                default: i = 2; break;
-                            }
-                            l = l.trim();
+                $scope.typedLabel = function(layout) {
+                    var label = layout.keySet.label.trim();
+                    switch (layout.keySet.keyboardType) {
+                        case "ergodox":
+                            label = "Ergodox " + label; break;
+                        case "matrix":
+                            label += " Matrix"; break;
+                    }
+                    return label;
+                }
+                $scope.shortLabel = function(layout) {
+                    var label = $scope.typedLabel(layout);
+                    if (label == "")
+                        return "<empty>";
+                    var l = label;
+                    for (i = 1; l.replaceAll(/[WMЩЮЖМШ]/ug, "...").replaceAll(/[^ijlI. ]/ug, "..").length > 19; ++i) {
+                        switch (i) {
+                            // trash
+                            case 1: l = l.replaceAll(/[^\wа-яё -]/ugi, "").replaceAll(/-/ug, " "); break;
+                            // vowels
+                            case 2: l = l.replaceAll(/(?<=[\wА-ЯЁа-яё])[aeiouyаеёийоуыэюя]/ug, ""); break;
+                            // abbreviation
+                            case 3: l = l.replaceAll(/([A-Za-zА-ЯЁа-яё][a-zа-яё])[a-zа-яё]+/ug, "$1."); break;
+                            // dots
+                            case 4: l = l.replaceAll(/\./ug, ""); break;
+                            case 5:  // lower
+                                l = l.replaceAll(/(?<=[\wА-ЯЁа-яё])[a-zа-яё]/ug, "")
+                                .replaceAll(/(?<=[\wА-ЯЁа-яё])[A-ZА-ЯЁ]/ug, function(a) {return a.toLowerCase();})
+                                .replaceAll(/ /ug, "");
+                                break;
+                            // digits
+                            case 6: l = l.replaceAll(/(\d)\d+/g, "$1"); break;
+                            default: i = 2; break;
                         }
-                        label = (l == "")? label.slice(0, 6) + "…" : l;
-                        shortLabels.push(label);
-                    });
-                    return shortLabels;
+                        l = l.trim();
+                    }
+                    return (l == "")? label.slice(0, 6) + "…" : l;
                 };
                 $scope.current = 0;
 

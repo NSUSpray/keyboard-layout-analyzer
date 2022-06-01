@@ -244,7 +244,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <li><a ng-click=\"copyAllJson()\" title=\"Copy the whole set\">Copy All Layouts</a></li>\n" +
     "                            </ul>\n" +
     "                        </div>\n" +
-    "                        <button id=\"kb-config-import\" class=\"btn\" ng-click=\"showImportDialog()\" title=\"Load some layout here (Ctrl+V)\">Paste</button>\n" +
+    "                        <button id=\"kb-config-import\" class=\"btn\" ng-click=\"showImportDialog()\" title=\"Load some layout/set here (Ctrl+V)\">Paste</button>\n" +
     "                        <!-- <input type=\"file\" id=\"kb-config-import\" class=\"btn\" ng-click=\"importJson()\" title=\"Load some layout data from computer\">Import</button> -->\n" +
     "                        <div class=\"btn-group dropdown\">\n" +
     "                            <a id=\"kb-config-export\" class=\"btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
@@ -265,6 +265,13 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <div class='controls'>\n" +
     "                        <select id=\"kb-config-select-list\" class=\"kb-config-select-list\">\n" +
     "                            <option value=\"none\">[Select Preset]</option>\n" +
+    "                            <optgroup label=\"Sets\">\n" +
+    "                                <option value=\"famous.set\">Famous Alternatives</option>\n" +
+    "                                <option value=\"standard.tarmak.set\">Tarmak</option>\n" +
+    "                                <option value=\"standard.tarmak_dh.set\">Tarmak-DH</option>\n" +
+    "                                <option value=\"european.tarmak_dh.set\">Tarmak-DH ISO</option>\n" +
+    "                                <option value=\"standard.russian-alternatives.set\">Russian Alternatives</option>\n" +
+    "                            </optgroup>\n" +
     "                            <optgroup label=\"Latin: ANSI Keyboards\">\n" +
     "                                <option value=\"standard.abcdef\">ABCDEF</option>\n" +
     "                                <option value=\"standard.arensito\">Arensito</option>\n" +
@@ -342,6 +349,19 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"standard.russian_typographic\">ЙЦУКЕН (Typographic)</option>\n" +
     "                                <option value=\"standard.russian_yvam-told-2\">ЫВАМ ТОЛД 2.0</option>\n" +
     "                            </optgroup>\n" +
+    "                            <optgroup label=\"Fingerings\">\n" +
+    "                                <option value=\"standard.classical.fingering\">ANSI: Classical</option>\n" +
+    "                                <option value=\"standard.classical-wide.fingering\">ANSI: Classical Wide</option>\n" +
+    "                                <option value=\"standard.colemak_dh.fingering\">ANSI: Colemak-DH</option>\n" +
+    "                                <option value=\"standard.diktor.fingering\">ANSI: Diktor</option>\n" +
+    "                                <option value=\"standard.shift-up.fingering\">ANSI: Shift Up</option>\n" +
+    "                                <option value=\"standard.symmetric-typing-project.fingering\">ANSI: Symmetric Typing Project</option>\n" +
+    "                                <option value=\"standard.untangled.fingering\">ANSI: Untangled</option>\n" +
+    "                                <option value=\"european.classical.fingering\">ISO: Classical</option>\n" +
+    "                                <option value=\"european_ss.classical.fingering\">ISO: Classical split-space</option>\n" +
+    "                                <option value=\"european.colemak_dh.fingering\">ISO: Colemak-DH</option>\n" +
+    "                                <option value=\"european_ss.colemak_dh.fingering\">ISO: Colemak-DH split-space</option>\n" +
+    "                            </optgroup>\n" +
     "                        </select>\n" +
     "                        <button class=\"kb-config-load btn\" ng-click=\"loadLayout()\">Load</button>\n" +
     "                    </div>\n" +
@@ -361,13 +381,13 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div id='kb-config-import-dialog' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='resultLabel' aria-hidden='true'>\n" +
     "            <div class='modal-header'>\n" +
     "                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>\n" +
-    "                <h3 id='resultLabel'>Import Layout</h3>\n" +
+    "                <h3 id='resultLabel'>Import Layouts</h3>\n" +
     "            </div>\n" +
     "            <div class='modal-body'>\n" +
     "\n" +
     "                <textarea class='input-block-level kb-config-dialog-txt'></textarea>\n" +
     "                <p class='text-left'>\n" +
-    "                    Paste the text of a previously copied/exported layout in the textbox above and press “Import” to load the layout.\n" +
+    "                    Paste the text of a previously copied or exported layout/set in the textbox above and press “Import” to load.\n" +
     "                </p>\n" +
     "            </div>\n" +
     "\n" +
@@ -401,7 +421,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <textarea class='input-block-level kb-config-dialog-txt'></textarea>\n" +
     "                <p class='text-left'>\n" +
-    "                    The above text represents the keyboard layout. You can come back to the app later and load this layout with this text using the \"Import\" feature.\n" +
+    "                    The above text represents the keyboard layout. You can come back to the app later and load this layout with this text using the “Import” feature.\n" +
     "                </p>\n" +
     "            </div>\n" +
     "\n" +
@@ -707,8 +727,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <li ng-repeat='ii in [start, stop] | makeRange' \n" +
     "            ng-class=\"{switcher: true, active: ($index === current)}\" \n" +
     "            num=\"$index\" ng-click=\"handleNav($event, start*1, $index)\">\n" +
-    "            <a href=\"javascript:void(0);\" title=\"{{keyboards.getLayout($index).keySet.label}}\">" +
-    "                {{shorten(keyboards)[$index]}}" +
+    "            <a href=\"javascript:void(0);\" title=\"{{typedLabel(keyboards.getLayout($index))}}\">" +
+    "                {{shortLabel(keyboards.getLayout($index))}}" +
     "            </a>\n" +
     "        </li>\n" +
     "\n" +
