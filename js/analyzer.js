@@ -556,8 +556,10 @@ KLA.Analyzer = (function() {
             keyMap = config.keyMap,
             keySet = config.keySet,
             charCode,
-            finger,
-            fingerLabel,
+            refKeyMap = config.reference.keyMap,
+            refKeySet = config.reference.keySet,
+            // finger,
+            // fingerLabel,
             curFingerPos = {},
             char2KeyMap = {},
             analysis = {}; // holds data we collect
@@ -586,6 +588,12 @@ KLA.Analyzer = (function() {
         analysis.consecHandPressIgnoreDups = {"left":0,"right":0,"thumbs":0};
         analysis.modifierUse = {"shift":0,"altGr":0,"shiftAltGr":0};
         analysis.numKeys = 0;
+        analysis.charFreq = {};
+        analysis.numChars = 0;
+        analysis.difference = {};
+        analysis.maxDifferencePerChar = Math.max(settings.layerChange,
+                settings.rowChange, settings.fingerChange, settings.handChange);
+        analysis.charFreqAccounting = settings.charFreqAccounting;
         
         // initialize data keyData and charData data set
         for (ii = 0; ii < keySet.keys.length; ii++) {
@@ -639,6 +647,45 @@ KLA.Analyzer = (function() {
                 return String.fromCharCode(parseInt(a.slice(3, -1), 16));
             });
 
+        // compare with reference layout
+        var diff, key, refKey, pp, qq, found;
+        for (ii = 0; ii < refKeySet.keys.length; ii++) {
+            refKey = refKeySet.keys[ii];
+            for (pp in refKey) {
+                if (pp !== "primary" && pp !== "shift"
+                        && pp !== "altGr" && pp !== "shiftAltGr"
+                        || refKey[pp] === -1)
+                    continue;
+                diff = 0; found = false;
+                for (jj = 0; jj < keySet.keys.length; jj++) {
+                    key = keySet.keys[jj];
+                    for (qq in key) {
+                        if (qq !== "primary" && qq !== "shift"
+                                && qq !== "altGr" && qq !== "shiftAltGr")
+                            continue;
+                        if (key[qq] === refKey[pp]) {
+                            if (qq !== pp)
+                                diff += settings.layerChange;
+                            if (key.finger === refKey.finger) {
+                                if (keyMap[jj].row - keySet.fingerStart[key.finger] !==
+                                        refKeyMap[ii].row - refKeySet.fingerStart[refKey.finger])
+                                    diff += settings.rowChange;
+                            } else if (key.finger > KB.finger.LEFT_THUMB ===
+                                    refKey.finger > KB.finger.LEFT_THUMB)
+                                diff += settings.fingerChange;
+                            else if (refKey[pp] !== 17 && refKey[pp] !== -91)  // Ctrl and Win
+                                diff += settings.handChange;
+                            found = true;
+                            jj = keySet.keys.length; break;
+                        }
+                    }
+                }
+                if (!found) diff += settings.charMissing;
+                analysis.difference[refKey[pp]] = diff;
+                analysis.charFreq[refKey[pp]] = 0;
+            }
+        }
+        
         var char, subs;
         for (ii = 0; ii < tLen; ii++) {
             charCode = text.charCodeAt(ii);
@@ -659,8 +706,17 @@ KLA.Analyzer = (function() {
                 }
                 console.log("Char code not found on keyboard (ignoring key):" + charCode); 
                 analysis.errors.push.apply(analysis.errors, char2KeyMap[charCode].errors);
+                if (typeof analysis.charFreq[charCode] === "undefined")
+                    analysis.charFreq[charCode] = 1;
+                else
+                    analysis.charFreq[charCode]++;
                 continue;
             }
+
+            if (typeof analysis.charFreq[charCode] === "undefined")
+                analysis.charFreq[charCode] = 1;
+            else
+                analysis.charFreq[charCode]++;
             
             returnFingersToHomeRow({
                 keyMap: keyMap,
@@ -691,6 +747,7 @@ KLA.Analyzer = (function() {
         analysis.pixelsPerCm = keyMap.pixelsPerCm;
         analysis.layoutName = keySet.label;
         analysis.hardwareType = hardwareType(keySet.keyboardType);
+        analysis.numChars = tLen;
         
 /*        for (finger in KB.fingers) {
             fingerLabel = KB.fingers[finger];
@@ -738,7 +795,7 @@ KLA.Analyzer = (function() {
         
         // FINGER USAGE
         results.fingerScores = [];
-        var fScoring = {};
+        var fScoring = {}, totalUsage;
         fScoring[KB.finger.LEFT_PINKY] = settings.scorePinky;
         fScoring[KB.finger.LEFT_RING] = settings.scoreRing;
         fScoring[KB.finger.LEFT_MIDDLE] = settings.scoreMiddle;
@@ -750,34 +807,37 @@ KLA.Analyzer = (function() {
         fScoring[KB.finger.RIGHT_RING] = settings.scoreRing;
         fScoring[KB.finger.RIGHT_PINKY] = settings.scorePinky;
         
-        var totalUsage,
-            numKeysLimit,
-            maxTotalWeight,
-            totalImbalancePenalty, oppFinger, imbalancePenalty;
+        switch (settings.fScoringMethod) {
 
-        if (settings.fScoringMethod === "patorjk") {
-            for (finger = 0; finger < analysis[0].fingerUsage.length; finger++) {
-                if (!fScoring[finger]) continue;
-                fScoring[finger] = Math.pow(2, 7 - 5 * fScoring[finger]);
-            }
-            maxTotalWeight = Object.values(fScoring)
-                    .filter(function(s) { return !!s; })
-                    .sort().slice(-5)
-                    .reduce(function(acc, cur) { return acc + cur; });
-        }
-
-        for (ii = 0; ii < len; ii++) {
-            totalUsage = 0;
-            totalImbalancePenalty = 0;
-            numKeysLimit = analysis[ii].numKeys * 0.2;
-            for (finger = 0; finger < analysis[ii].fingerUsage.length; finger++) {
-                if (!fScoring[finger]) continue;  // skip non-fingers
-
-                switch (settings.fScoringMethod) {
-                    case "patorjk":
+            case "patorjk":
+                var numKeysLimit, maxTotalWeight;
+                for (finger = 0; finger < analysis[0].fingerUsage.length; finger++) {
+                    if (!fScoring[finger]) continue;
+                    fScoring[finger] = Math.pow(2, 7 - 5 * fScoring[finger]);
+                }
+                maxTotalWeight = Object.values(fScoring)
+                        .filter(function(s) { return !!s; })
+                        .sort().slice(-5)
+                        .reduce(function(acc, cur) { return acc + cur; });
+                for (ii = 0; ii < len; ii++) {
+                    totalUsage = 0;
+                    numKeysLimit = analysis[ii].numKeys * 0.2;
+                    for (finger = 0; finger < analysis[ii].fingerUsage.length; finger++) {
+                        if (!fScoring[finger]) continue;  // skip non-fingers
                         totalUsage += Math.min(analysis[ii].fingerUsage[finger], numKeysLimit) * fScoring[finger];
-                        break;
-                    case "stevep":
+                    }
+                    results.fingerScores[ii] = 100 * totalUsage / (maxTotalWeight * numKeysLimit);
+                    console.log("FINGER SCORE: L%d %f", ii, results.fingerScores[ii]); 
+                }
+                break;
+
+            case "stevep":
+                var totalImbalancePenalty, oppFinger, imbalancePenalty;
+                for (ii = 0; ii < len; ii++) {
+                    totalUsage = 0;
+                    totalImbalancePenalty = 0;
+                    for (finger = 0; finger < analysis[ii].fingerUsage.length; finger++) {
+                        if (!fScoring[finger]) continue;  // skip non-fingers
                         oppFinger = 11 - finger;
                         imbalancePenalty = 0;
                         if (finger <= KB.finger.LEFT_INDEX || finger >= KB.finger.RIGHT_INDEX)
@@ -786,23 +846,14 @@ KLA.Analyzer = (function() {
                                         (analysis[ii].fingerUsage[finger] - analysis[ii].fingerUsage[oppFinger]) / 2.0;
                         totalUsage += analysis[ii].fingerUsage[finger] * fScoring[finger];
                         totalImbalancePenalty += imbalancePenalty * fScoring[finger];
-                        break;
-                }
-            }
-            switch (settings.fScoringMethod) {
-                case "patorjk":
-                    results.fingerScores[ii] = 100 * totalUsage / (maxTotalWeight * numKeysLimit);
-                    break;
-                case "stevep":
+                    }
                     totalUsage /= analysis[ii].numKeys;
                     totalImbalancePenalty /= analysis[ii].numKeys;
                     console.log("FINGER TOTAL: L%d imbalance=%f usage=%f", ii, totalImbalancePenalty, totalUsage); 
                     results.fingerScores[ii] = 100 * Math.max(0, 3 - 2 * (totalUsage + totalImbalancePenalty));
-                    break;
-            }
-
-            console.log("FINGER SCORE: L%d %f", ii, results.fingerScores[ii]); 
-
+                    console.log("FINGER SCORE: L%d %f", ii, results.fingerScores[ii]); 
+                }
+                break;
         }
         
         // CONSEC FINGER USAGE
@@ -830,14 +881,35 @@ KLA.Analyzer = (function() {
             results.consecHandScores[ii] = Math.max(0, 50 - total[ii]) * 2;
             console.log("CONSEC HAND USAGE: L%d %f", ii, results.consecHandScores[ii]); 
         }
+
+        // SIMILARITY
+        var charCode, factor;
+        results.similarity = [];
+        for (ii = 0; ii < len; ii++) {
+            total = 0;
+            if (analysis[ii].charFreqAccounting) {
+                for (charCode in analysis[ii].difference)
+                    total += analysis[ii].difference[charCode]
+                            * analysis[ii].charFreq[charCode];
+                factor = analysis[ii].maxDifferencePerChar * analysis[ii].numChars;
+            } else {
+                for (charCode in analysis[ii].difference)
+                    total += analysis[ii].difference[charCode];
+                factor = analysis[ii].maxDifferencePerChar * Object.keys(analysis[ii].difference).length;
+            }
+            results.similarity[ii] = 100 * Math.max(0, 1 - total / factor);
+            console.log("SIMILARITY: L%d %f", ii, results.similarity[ii]);
+        }
         
         // put it all together!
         var whole = settings.weightDistance + settings.weightKeystroke
-                + settings.weightSameFinger + settings.weightSameHand;
+                + settings.weightSameFinger + settings.weightSameHand
+                + settings.weightSimilarity;
         var consecHandWeight = settings.weightSameHand / whole,
                 consecFingerWeight = settings.weightSameFinger / whole,
                 fingerUsageWeight = settings.weightKeystroke / whole,
-                distWeight = settings.weightDistance / whole;
+                distWeight = settings.weightDistance / whole,
+                similarityWeight = settings.weightSimilarity / whole;
         results.finalList = [];
         for (ii = 0; ii < len; ii++) {
             results.finalList[ii] = {};
@@ -847,7 +919,8 @@ KLA.Analyzer = (function() {
                 (results.consecHandScores[ii] * consecHandWeight) +
                 (results.consecFingerScores[ii] * consecFingerWeight) +
                 (results.fingerScores[ii] * fingerUsageWeight) +
-                (results.distScores[ii] * distWeight);
+                (results.distScores[ii] * distWeight) +
+                (results.similarity[ii] * similarityWeight);
             if ( !isFinite( results.finalList[ii].score ) ) { results.finalList[ii].score=0;}
         }
         

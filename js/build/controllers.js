@@ -229,16 +229,16 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    	});
 	    }
 
-        $scope.generateOutput = function(txt, settings) {
-            if (txt === '' || typeof(txt) === 'undefined') {
+        $scope.generateOutput = function() {
+            if ($scope.data.text === '' || typeof($scope.data.text) === 'undefined') {
                 // WORKAROUND
                 $location.path('/main');
                 setTimeout(function() {$('button').trigger('click');}, 750);
                 return;
             }
 
-            library.set('input-text', txt);
-            library.set('settings', settings);
+            library.set('input-text', $scope.data.text);
+            library.set('settings', $scope.settings);
             $location.path('/load');
         }
         $scope.$watch('submitter.importFilter', function(newVal, oldVal) {
@@ -325,17 +325,20 @@ appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$
 
 var appControllers = appControllers || angular.module('kla.controllers', []);
 
-appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'resultsGenerator', 'textPresets',
-	function($scope, $location, library, resultsGenerator, textPresets) {
+appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'resultsGenerator', 'textPresets', 'keyboards',
+	function($scope, $location, library, resultsGenerator, textPresets, keyboards) {
 
         $scope.data = {};
         $scope.data.text = library.get('input-text');
         $scope.data.textPreset = library.get('input-text-preset');
         $scope.data.calcPreset = library.get('input-calc-preset');
         $scope.settings = library.get('settings');
+        $scope.layoutNames = keyboards.getLayouts().map(function(layout) {
+            return layout.keySet.label;
+        });
 
         $scope.applyTextPreset = function() {
-            $scope.data.text = "Loading, one moment please...";
+            $scope.data.text = "Loading, one moment please…";
             textPresets.load( $scope.data.textPreset ).then(function(res) {
                 $scope.data.text = res;
             });
@@ -402,6 +405,43 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
 
         $scope.applyCalcPreset = function() {
             switch ($scope.data.calcPreset) {
+                case "spray":
+                    $scope.settings = {
+                        simplify: $scope.settings.simplify,
+                        ctrlKeys: $scope.settings.ctrlKeys,
+                        fScoringMethod: "stevep",
+                        weightDistance: 5,
+                        weightKeystroke: 2,
+                        weightSameFinger: 3,
+                        weightSameHand: 0,
+                        weightSimilarity: 7,
+                        scoreThumb: 1.0,
+                        scoreIndex: 1.0,
+                        scoreMiddle: 1.1,
+                        scoreRing: 1.3,
+                        scorePinky: 1.6,
+                        thetaL: 25,
+                        thetaR: -15,
+                        depthThumb: 1.25,
+                        depthIndex: 1.0,
+                        depthMiddle: 1.1,
+                        depthRing: 1.3,
+                        depthPinky: 1.6,
+                        lateralThumb: 1.25,
+                        lateralIndex: 2.0,
+                        lateralMiddle: 2.0,
+                        lateralRing: 2.0,
+                        lateralPinky: 2.0,
+                        applyFittsLaw: true,
+                        refLayoutIndex: $scope.settings.refLayoutIndex,
+                        layerChange: 1,
+                        rowChange: 1,
+                        fingerChange: 2,
+                        handChange: 4,
+                        charMissing: 8,
+                        charFreqAccounting: true
+                    }
+                    break;
                 case "stevep":
                     $scope.settings = {
                         simplify: $scope.settings.simplify,
@@ -411,6 +451,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     	weightKeystroke: 2,
                     	weightSameFinger: 3,
                     	weightSameHand: 0,
+                        weightSimilarity: 0,
                     	scoreThumb: 1.0,
                     	scoreIndex: 1.0,
                     	scoreMiddle: 1.1,
@@ -428,7 +469,14 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     	lateralMiddle: 2.0,
                     	lateralRing: 2.0,
                     	lateralPinky: 2.0,
-                    	applyFittsLaw: true
+                    	applyFittsLaw: true,
+                        refLayoutIndex: $scope.settings.refLayoutIndex,
+                        layerChange: 1,
+                        rowChange: 1,
+                        fingerChange: 1,
+                        handChange: 1,
+                        charMissing: 1,
+                        charFreqAccounting: false
                     }
                     break;
                 case "patorjk":
@@ -440,6 +488,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     	weightKeystroke: 2,
                     	weightSameFinger: 1,
                     	weightSameHand: 1,
+                        weightSimilarity: 0,
                     	scoreThumb: 1.6,
                     	scoreIndex: 1.2,
                     	scoreMiddle: 1,
@@ -457,7 +506,14 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     	lateralMiddle: 1.0,
                     	lateralRing: 1.0,
                     	lateralPinky: 1.0,
-                    	applyFittsLaw: false
+                    	applyFittsLaw: false,
+                        refLayoutIndex: $scope.settings.refLayoutIndex,
+                        layerChange: 1,
+                        rowChange: 1,
+                        fingerChange: 1,
+                        handChange: 1,
+                        charMissing: 1,
+                        charFreqAccounting: false
                     }
                     break;
             }
@@ -473,15 +529,18 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
             $scope.data.calcPreset = "stevep";
             $scope.applyCalcPreset();
         }
+        if (typeof $scope.settings.refLayoutIndex === "undefined") {
+            $scope.settings.refLayoutIndex = 0;
+        }
 
-		$scope.generateOutput = function(txt, settings) {
-            if (txt === '') {
+		$scope.generateOutput = function() {
+            if ($scope.data.text === '') {
                 alert('Please enter in some text to analyze.');
                 return;
             }
 
-            library.set('input-text', txt);
-            library.set('settings', settings);
+            library.set('input-text', $scope.data.text);
+            library.set('settings', $scope.settings);
             $location.path('/load');
 		}
 
@@ -550,7 +609,7 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
             };
             if ($scope.share.generatingUrl === true) return;
             $scope.share.generatingUrl = true;
-            $scope.share.url = 'One moment please...';
+            $scope.share.url = 'One moment please…';
 
             var layouts = $.extend(true, [], $scope.results.layouts);
             layouts.pop(); // remove personalized layout

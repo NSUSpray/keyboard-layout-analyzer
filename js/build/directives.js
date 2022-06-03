@@ -300,7 +300,6 @@ appDirectives.directive('paginate', [
                         numSwitchers = $(".switcher.common").length,
                         maxLabelLength =
                                 (maxPagLength - 2*numSwitchers) / ($scope.stop - $scope.start + 1);
-                    console.log($scope.start + ", " + numSwitchers);
                     for (i = 1; l.replaceAll(/[WMЩЮЖМШ]/ug, "...")
                             .replaceAll(/[^ijlI. ]/ug, "..").length > maxLabelLength; ++i) {
                         switch (i) {

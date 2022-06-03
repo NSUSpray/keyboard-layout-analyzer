@@ -458,7 +458,8 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
                     text: txt,
                     keyMap: layout.keyMap,
                     keySet: layout.keySet,
-                    settings: settings
+                    settings: settings,
+                    reference: keyboards.getLayout(settings.refLayoutIndex)
                 });
 
                 var idx = kLayouts.length;

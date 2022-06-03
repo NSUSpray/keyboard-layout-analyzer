@@ -167,23 +167,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
     "                <button class=\"btn btn-large\" type=\"button\"\n" +
-    "                    ng-click=\"generateOutput(data.text, {\n" +
-    "                        simplify:settings.simplify, ctrlKeys:settings.ctrlKeys,\n" +
-    "                        weightDistance:settings.weightDistance, weightKeystroke:settings.weightKeystroke,\n" +
-    "                        weightSameFinger:settings.weightSameFinger, weightSameHand:settings.weightSameHand,\n" +
-    "                        thetaL:settings.thetaL, thetaR:settings.thetaR,\n" +
-    "                        depthThumb:settings.depthThumb, depthIndex:settings.depthIndex,\n" +
-    "                        depthMiddle:settings.depthMiddle, depthRing:settings.depthRing,\n" +
-    "                        depthPinky:settings.depthPinky,\n" +
-    "                        lateralThumb:settings.lateralThumb, lateralIndex:settings.lateralIndex,\n" +
-    "                        lateralMiddle:settings.lateralMiddle, lateralRing:settings.lateralRing,\n" +
-    "                        lateralPinky:settings.lateralPinky,\n" +
-    "                        applyFittsLaw:settings.applyFittsLaw,\n" +
-    "                        scoreThumb:settings.scoreThumb, scoreIndex:settings.scoreIndex,\n" +
-    "                        scoreMiddle:settings.scoreMiddle, scoreRing:settings.scoreRing,\n" +
-    "                        scorePinky:settings.scorePinky,\n" +
-    "                        fScoringMethod:settings.fScoringMethod\n" +
-    "                    })\"\n" +
+    "                    ng-click=\"generateOutput()\"\n" +
     "                    title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -265,13 +249,12 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <div class='controls'>\n" +
     "                        <select id=\"kb-config-select-list\" class=\"kb-config-select-list\">\n" +
     "                            <option value=\"none\">[Select Preset]</option>\n" +
-    "                            <optgroup label=\"Sets\">\n" +
-    "                                <option value=\"famous.set\">Famous Alternatives</option>\n" +
-    "                                <option value=\"standard.tarmak.set\">Tarmak</option>\n" +
-    "                                <option value=\"standard.tarmak_dh.set\">Tarmak-DH</option>\n" +
-    "                                <option value=\"european.tarmak_dh.set\">Tarmak-DH ISO</option>\n" +
-    "                                <option value=\"standard.russian-alternatives.set\">Russian Alternatives</option>\n" +
-    "                            </optgroup>\n" +
+    "                            <option value=\"default.set\">Default Set</option>\n" +
+    "                            <option value=\"famous.set\">Famous Latin Layouts</option>\n" +
+    "                            <option value=\"standard.tarmak.set\">Tarmak Set</option>\n" +
+    "                            <option value=\"standard.tarmak_dh.set\">Tarmak-DH Set</option>\n" +
+    "                            <option value=\"european.tarmak_dh.set\">Tarmak-DH ISO Set</option>\n" +
+    "                            <option value=\"standard.russian-alternatives.set\">Russian Layouts</option>\n" +
     "                            <optgroup label=\"Latin: ANSI Keyboards\">\n" +
     "                                <option value=\"standard.abcdef\">ABCDEF</option>\n" +
     "                                <option value=\"standard.arensito\">Arensito</option>\n" +
@@ -493,7 +476,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "    <p>\n" +
     "    	<img src='img/loading2.gif'>\n" +
     "    </p>\n" +
-    "    Loading, one moment please...\n" +
+    "    Loading, one moment please…\n" +
     "</div>"
   );
 
@@ -504,23 +487,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group kla-run-button'>\n" +
     "            <div class='controls'>\n" +
     "                <button class=\"btn btn-large\" type=\"button\"\n" +
-    "                    ng-click=\"generateOutput(data.text, {\n" +
-    "                        simplify:settings.simplify, ctrlKeys:settings.ctrlKeys,\n" +
-    "                        weightDistance:settings.weightDistance, weightKeystroke:settings.weightKeystroke,\n" +
-    "                        weightSameFinger:settings.weightSameFinger, weightSameHand:settings.weightSameHand,\n" +
-    "                        thetaL:settings.thetaL, thetaR:settings.thetaR,\n" +
-    "                        depthThumb:settings.depthThumb, depthIndex:settings.depthIndex,\n" +
-    "                        depthMiddle:settings.depthMiddle, depthRing:settings.depthRing,\n" +
-    "                        depthPinky:settings.depthPinky,\n" +
-    "                        lateralThumb:settings.lateralThumb, lateralIndex:settings.lateralIndex,\n" +
-    "                        lateralMiddle:settings.lateralMiddle, lateralRing:settings.lateralRing,\n" +
-    "                        lateralPinky:settings.lateralPinky,\n" +
-    "                        applyFittsLaw:settings.applyFittsLaw,\n" +
-    "                        scoreThumb:settings.scoreThumb, scoreIndex:settings.scoreIndex,\n" +
-    "                        scoreMiddle:settings.scoreMiddle, scoreRing:settings.scoreRing,\n" +
-    "                        scorePinky:settings.scorePinky,\n" +
-    "                        fScoringMethod:settings.fScoringMethod\n" +
-    "                    })\"\n" +
+    "                    ng-click=\"generateOutput()\"\n" +
     "                    title=\"See which layout is best (Ctrl+Enter)\">Run</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -556,6 +523,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <optgroup label='Non-English'>\n" +
     "                        <option value='lorem'>Latín: Lorem Ipsum</option>\n" +
     "                        <option value='crime-and-punishment-ch1'>Russian: Crime and Punishment, Chapter 1</option>\n" +
+    "                        <option value='hajduk'>Russian: How an Old Rastaman Went to Africa</option>\n" +
     "                        <option value='gol'>Tech: Game of Life</option>\n" +
     "                        <option value='pi1000'>Tech: Pi 1000</option>\n" +
     "                        <option value='pptt'>Tech: Programming Punctuation Torture Test</option>\n" +
@@ -582,23 +550,28 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Text Preprocessor:</label>\n" +
     "            <div class='controls'>\n" +
-    "                <label class='checkbox' title='Replace characters with their ASCII counterparts if they are not present in the target layout:\n\t\t— – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™ \nwith\n\t\t-- \" &apos; < > * (c) (R) TM'>\n" +
-    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\"> Simplify punctuation for non-typographic layouts\n" +
+    "                <label class='checkbox'>\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\"> <abbr title='Replace characters with their ASCII counterparts if they are not present in the target layout:\n\t\t— – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™ \nwith\n\t\t-- \" &apos; < > * (c) (R) TM'>Simplify punctuation for non-typographic layouts</abbr>\n" +
     "                </label>\n" +
-    "                <label class='checkbox' title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt;, &lt;u:11&gt;, etc. as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>\n" +
-    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\"> Allow modifier/control keys in input text\n" +
+    "                <label class='checkbox'>\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\"> <abbr title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt;, &lt;u:11&gt;, etc. as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>Allow modifier/control keys in input text</abbr>\n" +
     "                </label>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class='control-group pull-right'>\n" +
+    "    </form>\n" +
+    "    <form class='pull-right'>\n" +
+    "        <div class='control-group'>\n" +
     "            <label class='control-label' for='calc-preset'>Preset:</label>\n" +
     "            <div class='controls'>\n" +
     "                <select id='calc-preset' ng-model='data.calcPreset' ng-change=\"applyCalcPreset()\">\n" +
     "                    <option value='stevep'>SteveP</option>\n" +
     "                    <option value='patorjk'>PAT or JK</option>\n" +
+    "                    <option value='spray'>Ergonomics/Difficulty</option>\n" +
     "                </select>\n" +
     "            </div>\n" +
     "        </div>\n" + 
+    "    </form>\n" +
+    "    <form class='form-horizontal'>\n" +
     "        <h4>Total Score</h4>\n" +
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Ratio of Factors:</label>\n" +
@@ -608,11 +581,13 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                        <tr>\n" +
     "                            <th>Distance</th>\n" +
     "                            <th></th>\n" +
-    "                            <th>Keystroke</th>\n" +
+    "                            <th><abbr title=\"Finger usage\">F. Usage</abbr></th>\n" +
     "                            <th></th>\n" +
-    "                            <th title=\"Same finger\">Same F.</th>\n" +
+    "                            <th><abbr title=\"Same finger\">Same F.</abbr></th>\n" +
     "                            <th></th>\n" +
-    "                            <th title=\"Same hand\">Same H.</th>\n" +
+    "                            <th><abbr title=\"Same hand\">Same H.</abbr></th>\n" +
+    "                            <th></th>\n" +
+    "                            <th>Similarity</th>\n" +
     "                        </tr>\n" +
     "                    </thead>\n" +
     "                    <tbody>\n" +
@@ -624,12 +599,14 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.weightSameFinger\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
     "                            <td>:</td>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.weightSameHand\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.weightSimilarity\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
     "                        <tr>\n" +
     "                    </tbody>\n" +
     "                </table>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <h4>Movements</h4>\n" +
+    "        <h4>Distance</h4>\n" +
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Hand Approaches:</label>\n" +
     "            <div class='controls'>\n" +
@@ -672,12 +649,12 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                        </tr>\n" +
     "                    </tbody>\n" +
     "                </table>\n" +
-    "                <label class=\"checkbox\" title=\"According to Fitts’s law estimated effort for a variety of actions, based on the distance, should not linear\">\n" +
-    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.applyFittsLaw\" type=\"checkbox\"> Logarithmic distance\n" +
+    "                <label class=\"checkbox\">\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.applyFittsLaw\" type=\"checkbox\"> <abbr title=\"According to Fitts’s law estimated effort for a variety of actions, based on the distance, should not linear\">Logarithmic distance</abbr>\n" +
     "                </label>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <h4>Keystrokes</h4>\n" +
+    "        <h4>Finger Usage</h4>\n" +
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Finger Effort:</label>\n" +
     "            <div class='controls'>\n" +
@@ -698,7 +675,6 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <td><input class=\"input-block-level\" ng-model=\"settings.scorePinky\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <th>Score</th>\n" +
     "                        <tr>\n" +
     "                    </tbody>\n" +
     "                </table>\n" +
@@ -709,10 +685,47 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <label class=\"radio inline\">\n" +
     "                        <input type=\"radio\" name=\"finger-score-method\" value=\"stevep\" ng-model=\"settings.fScoringMethod\"> SteveP\n" +
     "                    </label>\n" +
-    "                    <label class=\"radio inline\" title=\"Weight ∼ exp(−5·Effort)\">\n" +
-    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> PAT or JK\n" +
+    "                    <label class=\"radio inline\">\n" +
+    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> <abbr title=\"Weight ∼ exp(−5 Effort)\">PAT or JK</abbr>\n" +
     "                    </label>\n" +
     "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <h4>Similarity</h4>\n" +
+    "        <div class='control-group'>\n" +
+    "            <label class='control-label'>Transition Effort:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <div class=\"btn-group dropup pull-right\">\n" +
+    "                    <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"  data-placeholder=\"false\">Reference: {{layoutNames[settings.refLayoutIndex]}}<span class=\"caret\"></span></button>\n" +
+    "                    <ul class=\"dropdown-menu\">\n" +
+    "                        <li ng-repeat=\"layoutName in layoutNames\">\n" +
+    "                            <input type=\"radio\" name='kla-opt-layout-radio' id=\"kla-opt-dd-{{$index}}\" ng-model=\"settings.refLayoutIndex\" value='{{$index}}' /><label for=\"kla-opt-dd-{{$index}}\" >{{layoutName}}</label>\n" +
+    "                        </li>\n" +
+    "                    </ul>\n" +
+    "                </div> \n" +
+    "                <table class=\"kla-table-adjust\">\n" +
+    "                    <thead>\n" +
+    "                        <tr>\n" +
+    "                            <td><abbr title=\"Character is typed with the same finger, but is in a different layer\">Layer</abbr></td>\n" +
+    "                            <td><abbr title=\"Character is typed with the same finger, but is in a different row\">Row</abbr></td>\n" +
+    "                            <td><abbr title=\"Character is typed with the same hand, but with a different finger\">Finger</abbr></td>\n" +
+    "                            <td><abbr title=\"Character is typed with the different hand\">Hand</abbr></td>\n" +
+    "                            <td><abbr title=\"Character is missing from the layout\">Missing</abbr></td>\n" +
+    "                        </tr>\n" +
+    "                    </thead>\n" +
+    "                    <tbody>\n" +
+    "                        <tr>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.layerChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.rowChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.fingerChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.handChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.charMissing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                        <tr>\n" +
+    "                    </tbody>\n" +
+    "                </table>\n" +
+    "                <label class=\"checkbox\">\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.charFreqAccounting\" type=\"checkbox\"> Take into account the character frequency\n" +
+    "                </label>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </form>\n" +
@@ -871,9 +884,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </p>\n" +
     "            <p>\n" +
     "                The layout score is based on a weighed calculation that factors in\n" +
-    "                a distance penalty due to how much your fingers moved, \n" +
+    "                a distance penalty due to how much your fingers moved,\n" +
     "                how often you use particular fingers,\n" +
-    "                and how often you switch fingers while typing\n" +
+    "                how often you switch fingers while typing,\n" +
+    "                and how much the layout is similar to the reference\n" +
     "                in the proportions specified by the analyzer settings.\n" +
     "            </p>\n" +
     "            <!--\n" +
@@ -996,7 +1010,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <seriesbarchart width=\"940px\" height=\"300px\" source=\"results.modifierUse\"></seriesbarchart>\n" +
     "            <resultoptions source='results.modifierUse' displayopts=false></resultoptions>\n" +
     "            <resulttable source='results.modifierUse'></resulttable>\n" +
-    "            <div style='padding:30px;font-size:16px;' class='text-center'>\n" +
+    "            <!-- <div style='padding:30px;font-size:16px;' class='text-center'>\n" +
     "                <p>\n" +
     "                    Additional statistics will be coming to this section later this year. \n" +
     "                </p>\n" +
@@ -1006,7 +1020,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                <p>\n" +
     "                    If you have any suggestions feel free to email me.\n" +
     "                </p>\n" +
-    "            </div>\n" +
+    "            </div> -->\n" +
     "        </div>\n" +
     "        <div class='tab-pane' id='personalized'>\n" +
     "            <div class='text-center'>\n" +
