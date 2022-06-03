@@ -87,16 +87,18 @@ $('.email').mailto(); // setup email link
 
 document.addEventListener("keydown", function(event) {
 // instead of $(document).on("keydown") because jQuery doesn't get a key code
-    var s = event.shiftKey;
-    var a = event.altKey;
-    var c = event.ctrlKey;
-    var k = event.key;
-    var cd = event.code;
-    var nf = !$("input, textarea").is(":focus");
+    var s = event.shiftKey,
+        a = event.altKey,
+        c = event.ctrlKey,
+        k = event.key,
+        cd = event.code,
+        nf = !$("input, textarea").is(":focus");
     if (nf && c && k === "ArrowLeft")
         return $(".switcher[num=prev]").click();
     if (nf && c && k === "ArrowRight")
         return $(".switcher[num=next]").click();
+    if (nf && c && k === " ")
+        return $(".switcher[num=last]").click();
     if (nf && c && (k === "c" || k === "Insert"))
         return $("#kb-config-copy").trigger("click");
     if (nf && (c && k === "v" || s && k === "Insert"))

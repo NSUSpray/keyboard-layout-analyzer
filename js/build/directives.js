@@ -295,8 +295,14 @@ appDirectives.directive('paginate', [
                     var label = $scope.typedLabel(layout);
                     if (label == "")
                         return "<empty>";
-                    var l = label;
-                    for (i = 1; l.replaceAll(/[WMЩЮЖМШ]/ug, "...").replaceAll(/[^ijlI. ]/ug, "..").length > 19; ++i) {
+                    var l = label,
+                        maxPagLength = 118,
+                        numSwitchers = $(".switcher.common").length,
+                        maxLabelLength =
+                                (maxPagLength - 2*numSwitchers) / ($scope.stop - $scope.start + 1);
+                    console.log($scope.start + ", " + numSwitchers);
+                    for (i = 1; l.replaceAll(/[WMЩЮЖМШ]/ug, "...")
+                            .replaceAll(/[^ijlI. ]/ug, "..").length > maxLabelLength; ++i) {
                         switch (i) {
                             // trash
                             case 1: l = l.replaceAll(/[^\wа-яё -]/ugi, "").replaceAll(/-/ug, " "); break;
@@ -321,15 +327,18 @@ appDirectives.directive('paginate', [
                 };
                 $scope.current = 0;
 
+                var last = $scope.current;
                 $scope.handleNav = function(evt, start, idx) {
 
                     idx = (idx === 'next') ? $scope.current + 1 : idx;
                     idx = (idx === 'prev') ? $scope.current - 1 : idx;
+                    idx = (idx === 'last') ? last : idx;
 
                     if (idx === $scope.current) return;
-                    if (idx < 0) return;
-                    if (idx > $scope.maxVal) return;
+                    if (idx < 0) idx = $scope.maxVal;
+                    if (idx > $scope.maxVal) idx = 0;
 
+                    last = $scope.current;
                     $scope.current = idx;
 
                     if (typeof $scope.handler !== 'undefined') {

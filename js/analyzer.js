@@ -639,6 +639,7 @@ KLA.Analyzer = (function() {
                 return String.fromCharCode(parseInt(a.slice(3, -1), 16));
             });
 
+        var char, subs;
         for (ii = 0; ii < tLen; ii++) {
             charCode = text.charCodeAt(ii);
             //console.log("char: " + charCode + " " + String.fromCharCode(charCode));
@@ -648,8 +649,8 @@ KLA.Analyzer = (function() {
             
             if ( char2KeyMap[charCode].fingerUsed === null ) {
                 if (settings.simplify) {
-                    var char = text.charAt(ii);
-                    var subs = toSimpleChars(char);
+                    char = text.charAt(ii);
+                    subs = toSimpleChars(char);
                     if (subs.length > 0) {
                         text = text.replaceAll(char, subs);
                         tLen = text.length;
@@ -691,7 +692,7 @@ KLA.Analyzer = (function() {
         analysis.layoutName = keySet.label;
         analysis.hardwareType = hardwareType(keySet.keyboardType);
         
-        for (finger in KB.fingers) {
+/*        for (finger in KB.fingers) {
             fingerLabel = KB.fingers[finger];
 	        //console.log(analysis.layoutName + " " + fingerLabel + " distance:" + analysis.distance[ finger ]);
             
@@ -704,7 +705,7 @@ KLA.Analyzer = (function() {
 	        //console.log("meters:" + numMeters);
 	        //console.log("feet:" + numFeet);
 	        //console.log("miles:" + numMiles);
-	    }
+	    }*/
         
         distanceBetweenKeysCached = null;
         return analysis;
@@ -749,10 +750,10 @@ KLA.Analyzer = (function() {
         fScoring[KB.finger.RIGHT_RING] = settings.scoreRing;
         fScoring[KB.finger.RIGHT_PINKY] = settings.scorePinky;
         
-        var totalUsage;
-        var numKeysLimit;
-        var maxTotalWeight;
-        var totalImbalancePenalty, oppFinger, imbalancePenalty;
+        var totalUsage,
+            numKeysLimit,
+            maxTotalWeight,
+            totalImbalancePenalty, oppFinger, imbalancePenalty;
 
         if (settings.fScoringMethod === "patorjk") {
             for (finger = 0; finger < analysis[0].fingerUsage.length; finger++) {

@@ -375,10 +375,11 @@ KB.Key.getDisplayText = function(keyInput) {
         } 
     }
     if (key === "") {return "";} // error
-    if (key >= 33 && key <= 126) {
-        return String.fromCharCode(key);
+    if (key <= 32 || key >= 127 && key <= 160
+            || String.fromCharCode(key).search(/\s/) !== -1) {
+        return "u:" + key.toString(16);
     }
-    return "u:" + key.toString(16);
+    return String.fromCharCode(key);
 };
 
 KB.Key.NONE = -1;

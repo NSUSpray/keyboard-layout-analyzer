@@ -300,7 +300,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"standard.qwertywm\">QWERTY – Wide Mod</option>\n" +
     "                                <option value=\"standard.qwpr\">QWPR</option>\n" +
     "                                <option value=\"standard.soul\">Soul</option>\n" +
-    "                                <option value=\"standard.tnwmlc\">TNWMLC</option>\n" +
+    "                                <option value=\"standard.tnwmlc\">TNWMLC (Worst CarpalX layout)</option>\n" +
     "                                <option value=\"standard.workman\">Workman</option>\n" +
     "                            </optgroup>\n" +
     "                            <optgroup label=\"Latin: ISO Keyboards\">\n" +
@@ -402,7 +402,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <input type=\"radio\" name=\"import-filter\" value=\"non-letters\" ng-model=\"submitter.importFilter\"> Non-Letters\n" +
     "                            </label>\n" +
     "                            <label class=\"radio inline\">\n" +
-    "                                <input type=\"radio\" name=\"import-filter\" value=\"altGr\" ng-model=\"submitter.importFilter\"> Alt Gr Layer\n" +
+    "                                <input type=\"radio\" name=\"import-filter\" value=\"altGr\" ng-model=\"submitter.importFilter\"> “Alt Gr” Layer\n" +
     "                            </label>\n" +
     "                        </div>\n" +
     "                </form>\n" +
@@ -573,8 +573,8 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Enrich:</label>\n" +
     "            <div id='typographics' class='controls'>\n" +
-    "               <button class=\"btn\" type=\"button\" ng-click=\"typographic('en')\" title=\"Convert ASCII punctuation to English typographic marks\">EN</button>\n" +
-    "               <button class=\"btn\" type=\"button\" ng-click=\"typographic('ru')\" title=\"Convert ASCII punctuation to Russian typographic marks\">RU</button>\n" +
+    "               <button id=\"en\" class=\"btn\" type=\"button\" ng-click=\"typographic('en')\" title=\"Convert ASCII punctuation to English typographic marks\">EN</button>\n" +
+    "               <button id=\"ru\" class=\"btn\" type=\"button\" ng-click=\"typographic('ru')\" title=\"Convert ASCII punctuation to Russian typographic marks\">RU</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </form>\n" +
@@ -732,10 +732,13 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </a>\n" +
     "        </li>\n" +
     "\n" +
-    "        <li class=\"switcher\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
+    "        <li class=\"switcher common\" num=\"last\" ng-click=\"handleNav($event, start*1, 'last')\">\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Last layout (Ctrl+Space)\">⭯</a>\n" +
+    "        </li>\n" +
+    "        <li class=\"switcher common\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
     "            <a href=\"javascript:void(0);\" title=\"Previous layout (←Ctrl)\">🡠</a>\n" +
     "        </li>\n" +
-    "        <li class=\"switcher\" num=\"next\" ng-click=\"handleNav($event, start*1, 'next')\">\n" +
+    "        <li class=\"switcher common\" num=\"next\" ng-click=\"handleNav($event, start*1, 'next')\">\n" +
     "            <a href=\"javascript:void(0);\" title=\"Next layout (Ctrl→)\">🡢</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +

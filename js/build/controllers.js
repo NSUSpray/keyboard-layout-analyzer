@@ -347,6 +347,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
             $scope.applyTextPreset();
 
         $scope.typographic = function(lang) {
+            $("#typographics #" + lang).addClass("btn-info");
             var txt = $scope.data.text;
 
             /* spaces */
@@ -396,6 +397,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     //.replaceAll(/(?<=[A-Za-zА-ЯЁа-яё])\.(?=[A-Za-zА-ЯЁа-яё])/g, ". ")  // maybe web-adress
             ;
             $scope.data.text = txt;
+            setTimeout(function() {$("#typographics #" + lang).removeClass("btn-info");}, 250);
         }
 
         $scope.applyCalcPreset = function() {
