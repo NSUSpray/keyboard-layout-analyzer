@@ -124,7 +124,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    	return '<a href="'+keySet.moreInfoUrl+'">'+keySet.moreInfoText + '</a>';
 	    }
 
-        $scope.setLayout = function(keySet) {
+        $scope.setLayout = function(keySet, filter="all") {
             if ( Array.isArray(keySet) ) {
                 for (var i = 0; i < keySet.length; i++)
                     keyboards.setLayout( i, {
@@ -136,7 +136,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
                 return keyboards.setLayout( $scope.current, {
                     keySet: $.extend(true, {}, keySet),
                     keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(keySet.keyboardType))
-                }, $scope.submitter.importFilter);
+                }, filter);
             }
         }
 
@@ -150,7 +150,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
                     $importBtn.html('Import in Place of All Current');
                     return;
                 }
-                res = $scope.setLayout(res.keySet);
+                res = $scope.setLayout(res.keySet, $scope.submitter.importFilter);
 	        }
             if ( res.valid )
                 $('#kb-config-import-dialog').modal('hide');
@@ -162,7 +162,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             $importBtn.html('Import');
 	    };
 
-	    $scope.loadLayout = function() {
+	    $scope.loadLayout = function(loadFilter='all') {
             var value = $('#kb-config-select-list').find('option:selected').attr('value');
 	        var val = value.split(".");
             // TODO: do it normal
@@ -172,7 +172,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             	keyboards.setLayout( $scope.current, {
 	            	keySet: $.extend(true, {}, KB.keySet[val[0]][val[1]]),
             		keyMap: $.extend(true, {}, KB.keyMap[val[0]].s683_225)
-            	});
+            	}, loadFilter);
             } else {
 		    	$http({
 		    		method: 'GET',
@@ -183,7 +183,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
                     if ( typeof data.layouts !== 'undefined' && Array.isArray(data.layouts) )
                         res = $scope.setLayout(data.layouts);
                     else
-                        res = $scope.setLayout(data);
+                        res = $scope.setLayout(data, loadFilter);
                     if ( !res.valid ) alert(res.reason);
 		    	})
 		    	.error(function(data, status, headers, config) {

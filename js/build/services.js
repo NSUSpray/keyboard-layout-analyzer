@@ -196,11 +196,13 @@ appServices.factory('keyboards', [
                         else return mismatchError;
                     if (filter === 'altGr' && prop !== 'altGr' && prop !== 'shiftAltGr')
                         continue;
+                    if (filter === 'non-letters'
+                            && ( isLetter(nks.keys[jj][prop]) || isLetter(key[prop]) || prop === 'finger' )
+                    ) continue;
                     if (typeof key[prop] === "undefined" || key[prop] === -1) {
                         if (typeof nks.keys[jj][prop] !== 'undefined')
                             delete nks.keys[jj][prop];
-                    } else if (filter !== "non-letters"
-                            || !isLetter(nks.keys[jj][prop]) && !isLetter(key[prop]))
+                    } else
                         nks.keys[jj][prop] = key[prop];
                 }
             }

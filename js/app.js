@@ -85,32 +85,33 @@ $('#showAbout').click(function() {
 
 $('.email').mailto(); // setup email link
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function(e) {
 // instead of $(document).on("keydown") because jQuery doesn't get a key code
-    var s = event.shiftKey,
-        a = event.altKey,
-        c = event.ctrlKey,
-        k = event.key,
-        cd = event.code,
-        nf = !$("input, textarea").is(":focus");
-    if (nf && c && k === "ArrowLeft")
-        return $(".switcher[num=prev]").click();
-    if (nf && c && k === "ArrowRight")
-        return $(".switcher[num=next]").click();
-    if (nf && c && k === " ")
-        return $(".switcher[num=last]").click();
-    if (nf && c && (k === "c" || k === "Insert"))
-        return $("#kb-config-copy").trigger("click");
-    if (nf && (c && k === "v" || s && k === "Insert"))
-        return $("#kb-config-import").trigger("click");
-    if (c && k === "Enter") {
-        event.preventDefault();
-        return $(".kla-run-button .btn").trigger("click");
-    }
-    if (a && cd === "Digit1")
-        return $(location).attr("href", "#/config");
-    if (a && cd === "Digit2")
-        return $(location).attr("href", "#/main");
-    if (a && cd === "Digit3")
-        return $(location).attr("href", "#/results");
+    var c = e.ctrlKey, a = e.altKey, s = e.shiftKey,
+        cs = c && !a && !s,
+        as = !c && a && !s,
+        ss = !c && !a && s,
+        k = e.key, cd = e.code,
+        inf = !$("input, textarea").is(":focus"),
+        pd = function() {e.preventDefault();};
+    if (inf && cs && k === "ArrowLeft")
+        return $(".switcher[num=prev]").click() && pd();
+    if (inf && cs && k === "ArrowRight")
+        return $(".switcher[num=next]").click() && pd();
+    if (inf && cs && k === " ")
+        return $(".switcher[num=last]").click() && pd();
+    if (inf && cs && (k === "c" || k === "Insert"))
+        return $("#kb-config-copy").click() && pd();
+    if (inf && (cs && k === "v" || ss && k === "Insert"))
+        return $("#kb-config-import").click() && pd();
+    if (cs && k === "Enter")
+        return $(".kla-run-button .btn").click() && pd();
+    if (as && cd === "Digit1")
+        return $(location).attr("href", "#/config") && pd();
+    if (as && cd === "Digit2")
+        return $(location).attr("href", "#/main") && pd();
+    if (as && cd === "Digit3")
+        return $(location).attr("href", "#/results") && pd();
+    if ($("#kb-config-select-list").is(":focus") && !(c||a||s) && k === "Enter")
+        return $(".kb-config-load").click() && pd();
 });

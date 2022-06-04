@@ -346,7 +346,16 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"european_ss.colemak_dh.fingering\">ISO: Colemak-DH split-space</option>\n" +
     "                            </optgroup>\n" +
     "                        </select>\n" +
-    "                        <button class=\"kb-config-load btn\" ng-click=\"loadLayout()\">Load</button>\n" +
+    "                        <div class=\"btn-group dropdown\">\n" +
+    "                            <a class=\"kb-config-load btn\" ng-click=\"loadLayout('all')\" title=\"Load preset in place of current layout or whole set (Enter)\">Load</a>\n" +
+    "                            <button type=\"button\" class=\"btn dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+    "                                <span class=\"caret\"></span>\n" +
+    "                            </button>\n" +
+    "                            <ul class=\"dropdown-menu\">\n" +
+    "                                <li><a ng-click=\"loadLayout('non-letters')\">Load Non-Letters</a></li>\n" +
+    "                                <li><a ng-click=\"loadLayout('altGr')\">Load “Alt Gr” Layer</a></li>\n" +
+    "                            </ul>\n" +
+    "                        </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "<!--\n" +
@@ -370,7 +379,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <textarea class='input-block-level kb-config-dialog-txt'></textarea>\n" +
     "                <p class='text-left'>\n" +
-    "                    Paste the text of a previously copied or exported layout/set in the textbox above and press “Import” to load.\n" +
+    "                    Paste the text of a previously copied or exported layout/fingering/set in the textbox above and press “Import” to load.\n" +
     "                </p>\n" +
     "            </div>\n" +
     "\n" +
