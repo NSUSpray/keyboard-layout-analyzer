@@ -19,6 +19,9 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
         $scope.data.text = library.get('input-text');
         $scope.settings = library.get('settings');
 
+        if (typeof $scope.data.layoutPreset === 'undefined')
+            $scope.data.layoutPreset = 'none';
+
 	    $scope.switchLayout = function(evt, start, idx) {
 	        $scope.current = idx;
 	    };
@@ -163,7 +166,7 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 	    };
 
 	    $scope.loadLayout = function(loadFilter='all') {
-            var value = $('#kb-config-select-list').find('option:selected').attr('value');
+            var value = $scope.data.layoutPreset;
 	        var val = value.split(".");
             // TODO: do it normal
             if (typeof KB.keySet[val[0]] !== 'undefined'
@@ -414,14 +417,14 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                         weightKeystroke: 2,
                         weightSameFinger: 3,
                         weightSameHand: 0,
-                        weightSimilarity: 7,
+                        weightSimilarity: 0,
                         scoreThumb: 1.0,
                         scoreIndex: 1.0,
                         scoreMiddle: 1.1,
                         scoreRing: 1.3,
                         scorePinky: 1.6,
-                        thetaL: 25,
-                        thetaR: -15,
+                        thetas: {left: 15, right: -20},
+                        autoThetas: true,
                         depthThumb: 1.25,
                         depthIndex: 1.0,
                         depthMiddle: 1.1,
@@ -457,8 +460,8 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     	scoreMiddle: 1.1,
                     	scoreRing: 1.3,
                     	scorePinky: 1.6,
-                    	thetaL: 10,
-                    	thetaR: -10,
+                        thetas: {left: 10, right: -10},
+                        autoThetas: false,
                     	depthThumb: 1.25,
                     	depthIndex: 1.0,
                     	depthMiddle: 1.1,
@@ -473,10 +476,10 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                         refLayoutIndex: $scope.settings.refLayoutIndex,
                         layerChange: 1,
                         rowChange: 1,
-                        fingerChange: 1,
-                        handChange: 1,
-                        charMissing: 1,
-                        charFreqAccounting: false
+                        fingerChange: 2,
+                        handChange: 4,
+                        charMissing: 8,
+                        charFreqAccounting: true
                     }
                     break;
                 case "patorjk":
@@ -494,8 +497,8 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     	scoreMiddle: 1,
                     	scoreRing: 1.4,
                     	scorePinky: 1.6,
-                    	thetaL: 0,
-                    	thetaR: 0,
+                        thetas: {left: 0, right: 0},
+                        autoThetas: false,
                     	depthThumb: 1.0,
                     	depthIndex: 1.0,
                     	depthMiddle: 1.0,
@@ -510,10 +513,47 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                         refLayoutIndex: $scope.settings.refLayoutIndex,
                         layerChange: 1,
                         rowChange: 1,
-                        fingerChange: 1,
-                        handChange: 1,
-                        charMissing: 1,
-                        charFreqAccounting: false
+                        fingerChange: 2,
+                        handChange: 4,
+                        charMissing: 8,
+                        charFreqAccounting: true
+                    }
+                    break;
+                case "compromise":
+                    $scope.settings = {
+                        simplify: $scope.settings.simplify,
+                        ctrlKeys: $scope.settings.ctrlKeys,
+                        fScoringMethod: "stevep",
+                        weightDistance: 5,
+                        weightKeystroke: 2,
+                        weightSameFinger: 3,
+                        weightSameHand: 0,
+                        weightSimilarity: 7,
+                        scoreThumb: 1.0,
+                        scoreIndex: 1.0,
+                        scoreMiddle: 1.1,
+                        scoreRing: 1.3,
+                        scorePinky: 1.6,
+                        thetas: {left: 0, right: 0},
+                        autoThetas: true,
+                        depthThumb: 1.25,
+                        depthIndex: 1.0,
+                        depthMiddle: 1.1,
+                        depthRing: 1.3,
+                        depthPinky: 1.6,
+                        lateralThumb: 1.25,
+                        lateralIndex: 2.0,
+                        lateralMiddle: 2.0,
+                        lateralRing: 2.0,
+                        lateralPinky: 2.0,
+                        applyFittsLaw: true,
+                        refLayoutIndex: $scope.settings.refLayoutIndex,
+                        layerChange: 1,
+                        rowChange: 1,
+                        fingerChange: 2,
+                        handChange: 4,
+                        charMissing: 8,
+                        charFreqAccounting: true
                     }
                     break;
             }
@@ -526,7 +566,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         if (typeof $scope.settings.ctrlKeys === "undefined")
                 $scope.settings.ctrlKeys = false;
         if (typeof $scope.data.calcPreset === "undefined") {
-            $scope.data.calcPreset = "stevep";
+            $scope.data.calcPreset = "spray";
             $scope.applyCalcPreset();
         }
         if (typeof $scope.settings.refLayoutIndex === "undefined") {
@@ -556,10 +596,10 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
         $scope.$watch('settings', function(newVal, oldVal) {
             library.set('settings', $scope.settings);
         }, true);
-        $scope.$watch('settings.thetaL', function(newVal, oldVal) {
+        $scope.$watch('settings.thetas.left', function(newVal, oldVal) {
             $("#left-hand").css('transform', 'rotate(' + newVal + 'deg) scaleX(-1)');
         }, true);
-        $scope.$watch('settings.thetaR', function(newVal, oldVal) {
+        $scope.$watch('settings.thetas.right', function(newVal, oldVal) {
             $("#right-hand").css('transform', 'rotate(' + newVal + 'deg)');
         }, true);
 	}

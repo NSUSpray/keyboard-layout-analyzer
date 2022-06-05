@@ -247,7 +247,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                <div class='control-group'>\n" +
     "                    <!-- <label class='control-label' for=\"kb-config-select-list\">Preset:</label> -->\n" +
     "                    <div class='controls'>\n" +
-    "                        <select id=\"kb-config-select-list\" class=\"kb-config-select-list\">\n" +
+    "                        <select id=\"kb-config-select-list\" class=\"kb-config-select-list\" ng-model=\"data.layoutPreset\">\n" +
     "                            <option value=\"none\">[Select Preset]</option>\n" +
     "                            <option value=\"default.set\">Default Set</option>\n" +
     "                            <option value=\"famous.set\">Famous Latin Layouts</option>\n" +
@@ -341,14 +341,18 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <option value=\"standard.symmetric-typing-project.fingering\">ANSI: Symmetric Typing Project</option>\n" +
     "                                <option value=\"standard.untangled.fingering\">ANSI: Untangled</option>\n" +
     "                                <option value=\"european.classical.fingering\">ISO: Classical</option>\n" +
-    "                                <option value=\"european_ss.classical.fingering\">ISO: Classical split-space</option>\n" +
     "                                <option value=\"european.colemak_dh.fingering\">ISO: Colemak-DH</option>\n" +
-    "                                <option value=\"european_ss.colemak_dh.fingering\">ISO: Colemak-DH split-space</option>\n" +
+    "                                <option value=\"european_ss.classical.fingering\">ISO split-space: Classical</option>\n" +
+    "                                <option value=\"european_ss.colemak_dh.fingering\">ISO split-space: Colemak-DH</option>\n" +
     "                            </optgroup>\n" +
     "                        </select>\n" +
     "                        <div class=\"btn-group dropdown\">\n" +
-    "                            <a class=\"kb-config-load btn\" ng-click=\"loadLayout('all')\" title=\"Load preset in place of current layout or whole set (Enter)\">Load</a>\n" +
-    "                            <button type=\"button\" class=\"btn dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+    "                            <a class=\"kb-config-load btn\" ng-click=\"loadLayout('all')\"\n" +
+    "                                    title=\"Load preset in place of current layout or whole set (Enter)\"\n" +
+    "                                    ng-disabled=\"data.layoutPreset=='none'\">Load</a>\n" +
+    "                            <button type=\"button\" class=\"btn dropdown-toggle dropdown-toggle-split\"\n" +
+    "                                    data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\n" +
+    "                                    ng-disabled=\"data.layoutPreset=='none'||data.layoutPreset.slice(-4)=='.set'||data.layoutPreset.slice(-10)=='.fingering'\">\n" +
     "                                <span class=\"caret\"></span>\n" +
     "                            </button>\n" +
     "                            <ul class=\"dropdown-menu\">\n" +
@@ -573,9 +577,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <label class='control-label' for='calc-preset'>Preset:</label>\n" +
     "            <div class='controls'>\n" +
     "                <select id='calc-preset' ng-model='data.calcPreset' ng-change=\"applyCalcPreset()\">\n" +
+    "                    <option value='spray'>Spray</option>\n" +
     "                    <option value='stevep'>SteveP</option>\n" +
     "                    <option value='patorjk'>PAT or JK</option>\n" +
-    "                    <option value='spray'>Ergonomics/Difficulty</option>\n" +
+    "                    <option value='compromise'>Ergonomics/Difficulty</option>\n" +
     "                </select>\n" +
     "            </div>\n" +
     "        </div>\n" + 
@@ -619,11 +624,14 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Hand Approaches:</label>\n" +
     "            <div class='controls'>\n" +
-    "                <input class=\"input-block-level\" ng-model=\"settings.thetaL\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°\n" +
+    "                <input class=\"input-block-level\" ng-model=\"settings.thetas.left\" ng-disabled=\"settings.weightDistance==0||settings.autoThetas\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°\n" +
     "                <div id=\"left-hand\" title=\"Left hand approach\">🤚</div>\n" +
     "                <div id=\"right-hand\" title=\"Right hand approach\">🤚</div>\n" +
-    "                <input class=\"input-block-level\" ng-model=\"settings.thetaR\" type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°\n" +
+    "                <input class=\"input-block-level\" ng-model=\"settings.thetas.right\" ng-disabled=\"settings.weightDistance==0||settings.autoThetas\"type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°\n" +
     "                <button style=\"vertical-align: middle; margin-left: 4px; cursor: help;\" title=\"\\ ₍-₎\\\t−15 : −15°\tclassical\n\n/₍-₎\\\t+35° : −20°\tArensito\n\nI ₍-₎ I\t     0° :     0°\trude\" tabindex=\"-1\"><div class=\"kb-dialog-help\"></div></button>\n" +
+    "                <label class=\"checkbox inline\">\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.autoThetas\" ng-disabled=\"settings.weightDistance==0\" type=\"checkbox\"> <abbr title=\"Calculate the angles from the middle finger zones using the least squares method\">Automatic</abbr>\n" +
+    "                </label>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class='control-group'>\n" +
@@ -641,25 +649,25 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    </thead>\n" +
     "                    <tbody>\n" +
     "                        <tr>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthIndex\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthPinky\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthThumb\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthIndex\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthMiddle\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthRing\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.depthPinky\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <th title=\"Depth\">🤚⭥</th>\n" +
     "                        </tr>\n" +
     "                        <tr>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralIndex\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralPinky\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralThumb\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralIndex\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralMiddle\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralRing\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.lateralPinky\" ng-disabled=\"settings.weightDistance==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                            <th title=\"Lateral\">🤚⬌</th>\n" +
     "                        </tr>\n" +
     "                    </tbody>\n" +
     "                </table>\n" +
     "                <label class=\"checkbox\">\n" +
-    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.applyFittsLaw\" type=\"checkbox\"> <abbr title=\"According to Fitts’s law estimated effort for a variety of actions, based on the distance, should not linear\">Logarithmic distance</abbr>\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.applyFittsLaw\" ng-disabled=\"settings.weightDistance==0\" type=\"checkbox\"> <abbr title=\"According to Fitts’s law estimated effort for a variety of actions, based on the distance, should not linear\">Logarithmic distance</abbr>\n" +
     "                </label>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -679,11 +687,11 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    </thead>\n" +
     "                    <tbody>\n" +
     "                        <tr>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreThumb\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreIndex\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreMiddle\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreRing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scorePinky\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreThumb\" ng-disabled=\"settings.weightKeystroke==0\" type=\"number\" min=\"1\" step=\"0.05\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreIndex\" ng-disabled=\"settings.weightKeystroke==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreMiddle\" ng-disabled=\"settings.weightKeystroke==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scoreRing\" ng-disabled=\"settings.weightKeystroke==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.scorePinky\" ng-disabled=\"settings.weightKeystroke==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                        <tr>\n" +
     "                    </tbody>\n" +
     "                </table>\n" +
@@ -692,10 +700,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <div class='controls'>\n" +
     "                <div class=\"btn-group\">\n" +
     "                    <label class=\"radio inline\">\n" +
-    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"stevep\" ng-model=\"settings.fScoringMethod\"> SteveP\n" +
+    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"stevep\" ng-model=\"settings.fScoringMethod\" ng-disabled=\"settings.weightKeystroke==0\"> SteveP\n" +
     "                    </label>\n" +
     "                    <label class=\"radio inline\">\n" +
-    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\"> <abbr title=\"Weight ∼ exp(−5 Effort)\">PAT or JK</abbr>\n" +
+    "                        <input type=\"radio\" name=\"finger-score-method\" value=\"patorjk\" ng-model=\"settings.fScoringMethod\" ng-disabled=\"settings.weightKeystroke==0\"> <abbr title=\"Weight ∼ exp(−5 Effort)\">PAT or JK</abbr>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -705,7 +713,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <label class='control-label'>Transition Effort:</label>\n" +
     "            <div class='controls'>\n" +
     "                <div class=\"btn-group dropup pull-right\">\n" +
-    "                    <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"  data-placeholder=\"false\">Reference: {{layoutNames[settings.refLayoutIndex]}}<span class=\"caret\"></span></button>\n" +
+    "                    <button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\" data-placeholder=\"false\" ng-disabled=\"settings.weightSimilarity==0\">Reference: {{layoutNames[settings.refLayoutIndex]}}<span class=\"caret\"></span></button>\n" +
     "                    <ul class=\"dropdown-menu\">\n" +
     "                        <li ng-repeat=\"layoutName in layoutNames\">\n" +
     "                            <input type=\"radio\" name='kla-opt-layout-radio' id=\"kla-opt-dd-{{$index}}\" ng-model=\"settings.refLayoutIndex\" value='{{$index}}' /><label for=\"kla-opt-dd-{{$index}}\" >{{layoutName}}</label>\n" +
@@ -724,16 +732,16 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    </thead>\n" +
     "                    <tbody>\n" +
     "                        <tr>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.layerChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.rowChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.fingerChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.handChange\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
-    "                            <td><input class=\"input-block-level\" ng-model=\"settings.charMissing\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.layerChange\" ng-disabled=\"settings.weightSimilarity==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.rowChange\" ng-disabled=\"settings.weightSimilarity==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.fingerChange\" ng-disabled=\"settings.weightSimilarity==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.handChange\" ng-disabled=\"settings.weightSimilarity==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"settings.charMissing\" ng-disabled=\"settings.weightSimilarity==0\" type=\"number\" min=\"1\" step=\"0.1\"></td>\n" +
     "                        <tr>\n" +
     "                    </tbody>\n" +
     "                </table>\n" +
     "                <label class=\"checkbox\">\n" +
-    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.charFreqAccounting\" type=\"checkbox\"> Take into account the character frequency\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.charFreqAccounting\" ng-disabled=\"settings.weightSimilarity==0\" type=\"checkbox\"> Take into account the character frequency\n" +
     "                </label>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -754,14 +762,14 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </a>\n" +
     "        </li>\n" +
     "\n" +
-    "        <li class=\"switcher common\" num=\"last\" ng-click=\"handleNav($event, start*1, 'last')\">\n" +
-    "            <a href=\"javascript:void(0);\" title=\"Last layout (Ctrl+Space)\">⭯</a>\n" +
-    "        </li>\n" +
     "        <li class=\"switcher common\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
     "            <a href=\"javascript:void(0);\" title=\"Previous layout (←Ctrl)\">🡠</a>\n" +
     "        </li>\n" +
     "        <li class=\"switcher common\" num=\"next\" ng-click=\"handleNav($event, start*1, 'next')\">\n" +
     "            <a href=\"javascript:void(0);\" title=\"Next layout (Ctrl→)\">🡢</a>\n" +
+    "        </li>\n" +
+    "        <li class=\"switcher common\" num=\"last\" ng-click=\"handleNav($event, start*1, 'last')\">\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Last layout (Ctrl+Space)\">⭯</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "</div>"
@@ -893,10 +901,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            </p>\n" +
     "            <p>\n" +
     "                The layout score is based on a weighed calculation that factors in\n" +
-    "                a distance penalty due to how much your fingers moved,\n" +
+    "                a distance your fingers moved,\n" +
     "                how often you use particular fingers,\n" +
     "                how often you switch fingers while typing,\n" +
-    "                and how much the layout is similar to the reference\n" +
+    "                and how much the layout is similar to the reference,\n" +
     "                in the proportions specified by the analyzer settings.\n" +
     "            </p>\n" +
     "            <!--\n" +

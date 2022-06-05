@@ -1302,7 +1302,7 @@ textarea::-webkit-input-placeholder {
 .checkbox.inline {
   display: inline-block;
   padding-top: 5px;
-  margin-bottom: 0;
+  *margin-bottom: 0;
   vertical-align: middle;
 }
 

@@ -29,6 +29,78 @@ KLA.Analyzer = (function() {
         };
     };
 
+    function calculateThetas(keySet, keyMap, charFreq) {
+        var finger, id, fingerStart = {}, keys,
+            swThetaL, sWeightL, swThetaR, sWeightR,
+            fingerKeys, theta, weight,
+            thetaL, thetaR, delta, minDelta = 20;
+
+        for (finger in keySet.fingerStart)
+            switch (Number(finger)) {
+                // case KB.finger.LEFT_PINKY:
+                // case KB.finger.LEFT_RING:
+                case KB.finger.LEFT_MIDDLE:
+                // case KB.finger.LEFT_INDEX:
+                // case KB.finger.RIGHT_INDEX:
+                case KB.finger.RIGHT_MIDDLE:
+                // case KB.finger.RIGHT_RING:
+                // case KB.finger.RIGHT_PINKY:
+                    id = keySet.fingerStart[finger];
+                    fingerStart[finger] = {id: id,
+                            cx: keyMap[id].cx, cy: keyMap[id].cy};
+            }
+
+        keys = keySet.keys
+            .filter(function(k) {
+                switch (k.finger) {
+                    // case KB.finger.LEFT_PINKY:
+                    // case KB.finger.LEFT_RING:
+                    case KB.finger.LEFT_MIDDLE:
+                    // case KB.finger.LEFT_INDEX:
+                    // case KB.finger.RIGHT_INDEX:
+                    case KB.finger.RIGHT_MIDDLE:
+                    // case KB.finger.RIGHT_RING:
+                    // case KB.finger.RIGHT_PINKY:
+                        return true;
+                    default: return false;
+                }
+            })
+            .map(function(k) {
+                k.cx = keyMap[k.id].cx - fingerStart[k.finger].cx;
+                k.cy = keyMap[k.id].cy - fingerStart[k.finger].cy;
+                k.freq = (charFreq[k.primary]||0) + (charFreq[k.shift]||0)
+                        + (charFreq[k.altGr]||0) + (charFreq[k.shiftAltGr]||0) + 1;
+                return k;
+            });
+
+        swThetaL = sWeightL = swThetaR = sWeightR = 0;
+        for (finger in fingerStart) {
+            fingerKeys = keys.filter(function(k) { return k.finger == finger; });
+            theta = -Math.atan(
+                    fingerKeys.reduce(function(a, k) { return a + k.freq*k.cx*k.cy;}, 0)
+                    / fingerKeys.reduce(function(a, k) { return a + k.freq*k.cy*k.cy;}, 0)
+                ) * 180 / Math.PI;
+            weight = fingerKeys.reduce(function(a, k) { return a + k.freq; }, 0);
+            // console.log(theta, weight);
+            if (finger < KB.finger.RIGHT_THUMB) {
+                swThetaL += theta*weight;
+                sWeightL += weight;
+            } else {
+                swThetaR += theta*weight;
+                sWeightR += weight;
+            }
+        }
+        thetaL = swThetaL / sWeightL;
+        thetaR = swThetaR / sWeightR;
+        delta = thetaL - thetaR;
+        if (delta < minDelta) {
+            thetaL += (minDelta - delta) / 2;
+            thetaR -= (minDelta - delta) / 2;
+        }
+        console.log("thetaL: " + thetaL + ", thetaR: " + thetaR);
+        return {left: thetaL, right: thetaR};
+    }
+
     function distanceBetweenKeys(keyMap, keyIndex1, keyIndex2, finger) {
         var xDiff = (keyMap[keyIndex1].cx - keyMap[keyIndex2].cx),
             yDiff = (keyMap[keyIndex1].cy - keyMap[keyIndex2].cy);
@@ -565,10 +637,6 @@ KLA.Analyzer = (function() {
             analysis = {}; // holds data we collect
 
         settings = config.settings;
-        sinThetaL = Math.sin(settings.thetaL * Math.PI / 180.0);
-        cosThetaL = Math.cos(settings.thetaL * Math.PI / 180.0);
-        sinThetaR = Math.sin(settings.thetaR * Math.PI / 180.0);
-        cosThetaR = Math.cos(settings.thetaR * Math.PI / 180.0);
         
         //console.log('-----')
         console.log('Layout: ' + keySet.label)
@@ -689,35 +757,45 @@ KLA.Analyzer = (function() {
         var char, subs;
         for (ii = 0; ii < tLen; ii++) {
             charCode = text.charCodeAt(ii);
-            //console.log("char: " + charCode + " " + String.fromCharCode(charCode));
 
             // return object contains: fingerUsed, keyIndex, pushType, errors
             char2KeyMap[charCode] = char2KeyMap[charCode] || findCharInKeySet(keySet, charCode);
             
-            if ( char2KeyMap[charCode].fingerUsed === null ) {
-                if (settings.simplify) {
-                    char = text.charAt(ii);
-                    subs = toSimpleChars(char);
-                    if (subs.length > 0) {
-                        text = text.replaceAll(char, subs);
-                        tLen = text.length;
-                        ii--; continue;
-                    }
+            if ( char2KeyMap[charCode].fingerUsed === null && settings.simplify) {
+                char = text.charAt(ii);
+                subs = toSimpleChars(char);
+                if (subs.length > 0) {
+                    text = text.replaceAll(char, subs);
+                    tLen = text.length;
+                    ii--; continue;
                 }
-                console.log("Char code not found on keyboard (ignoring key):" + charCode); 
-                analysis.errors.push.apply(analysis.errors, char2KeyMap[charCode].errors);
-                if (typeof analysis.charFreq[charCode] === "undefined")
-                    analysis.charFreq[charCode] = 1;
-                else
-                    analysis.charFreq[charCode]++;
-                continue;
             }
-
             if (typeof analysis.charFreq[charCode] === "undefined")
                 analysis.charFreq[charCode] = 1;
             else
                 analysis.charFreq[charCode]++;
+        }
+
+        var thetas;
+        if (settings.autoThetas)
+            thetas = calculateThetas(config.keySet, config.keyMap, analysis.charFreq);
+        else
+            thetas = settings.thetas;
+        sinThetaL = Math.sin(thetas.left * Math.PI / 180.0);
+        cosThetaL = Math.cos(thetas.left * Math.PI / 180.0);
+        sinThetaR = Math.sin(thetas.right * Math.PI / 180.0);
+        cosThetaR = Math.cos(thetas.right * Math.PI / 180.0);
+
+        for (ii = 0; ii < tLen; ii++) {
+            charCode = text.charCodeAt(ii);
+            //console.log("char: " + charCode + " " + String.fromCharCode(charCode));
             
+            if ( char2KeyMap[charCode].fingerUsed === null ) {
+                console.log("Char code not found on keyboard (ignoring key):" + charCode); 
+                analysis.errors.push.apply(analysis.errors, char2KeyMap[charCode].errors);
+                continue;
+            }
+
             returnFingersToHomeRow({
                 keyMap: keyMap,
                 fingerHomes: keySet.fingerStart,
