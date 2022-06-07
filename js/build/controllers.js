@@ -412,6 +412,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     $scope.settings = {
                         simplify: $scope.settings.simplify,
                         ctrlKeys: $scope.settings.ctrlKeys,
+                        autoIndent: $scope.settings.autoIndent,
                         fScoringMethod: "stevep",
                         weightDistance: 5,
                         weightKeystroke: 2,
@@ -449,6 +450,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     $scope.settings = {
                         simplify: $scope.settings.simplify,
                         ctrlKeys: $scope.settings.ctrlKeys,
+                        autoIndent: $scope.settings.autoIndent,
                     	fScoringMethod: "stevep",
                     	weightDistance: 5,
                     	weightKeystroke: 2,
@@ -486,6 +488,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     $scope.settings = {
                         simplify: $scope.settings.simplify,
                         ctrlKeys: $scope.settings.ctrlKeys,
+                        autoIndent: $scope.settings.autoIndent,
                     	fScoringMethod: "patorjk",
                     	weightDistance: 2,
                     	weightKeystroke: 2,
@@ -523,6 +526,7 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                     $scope.settings = {
                         simplify: $scope.settings.simplify,
                         ctrlKeys: $scope.settings.ctrlKeys,
+                        autoIndent: $scope.settings.autoIndent,
                         fScoringMethod: "stevep",
                         weightDistance: 5,
                         weightKeystroke: 2,
@@ -565,6 +569,8 @@ appControllers.controller('MainCtrl', ['$scope', '$location', 'library', 'result
                 $scope.settings.simplify = true;
         if (typeof $scope.settings.ctrlKeys === "undefined")
                 $scope.settings.ctrlKeys = false;
+        if (typeof $scope.settings.autoIndent === "undefined")
+                $scope.settings.autoIndent = "none";
         if (typeof $scope.data.calcPreset === "undefined") {
             $scope.data.calcPreset = "spray";
             $scope.applyCalcPreset();

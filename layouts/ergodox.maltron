@@ -1,7 +1,9 @@
 {
     "label": "Maltron",
-    "author": "Patrick Gillespie",
+    "author": "L. Malt, S. Hobday",
     "authorUrl": "",
+    "moreInfoUrl": "https://www.maltron.com/usa.html",
+    "moreInfoText": "PCD Maltron Ltd",
     "fingerStart": {
         "1": 29,
         "2": 30,

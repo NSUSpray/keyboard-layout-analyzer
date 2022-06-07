@@ -1,7 +1,9 @@
 {
     "label": "RSTHD",
-    "author": "Patrick Gillespie",
+    "author": "Xuming Zeng",
     "authorUrl": "",
+    "moreInfoUrl": "https://xsznix.wordpress.com/2016/05/16/introducing-the-rsthd-layout/",
+    "moreInfoText": "RSTHD layout",
     "fingerStart": {
         "1": 29,
         "2": 30,

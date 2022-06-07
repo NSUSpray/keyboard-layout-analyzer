@@ -1,8 +1,8 @@
 {
     "label": "QGMLWY",
-    "author": "Mitchell",
-    "moreInfoUrl": "",
-    "moreInfoText": "",
+    "author": "Martin Krzywinski",
+    "moreInfoUrl": "http://mkweb.bcgsc.ca/carpalx/?full_optimization",
+    "moreInfoText": "Carpalx",
     "fingerStart": {
         "1": 29,
         "2": 30,

@@ -563,12 +563,36 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='control-group'>\n" +
     "            <label class='control-label'>Text Preprocessor:</label>\n" +
     "            <div class='controls'>\n" +
-    "                <label class='checkbox'>\n" +
-    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\"> <abbr title='Replace characters with their ASCII counterparts if they are not present in the target layout:\n\t\t— – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™ \nwith\n\t\t-- \" &apos; < > * (c) (R) TM'>Simplify punctuation for non-typographic layouts</abbr>\n" +
+    "                <label class='checkbox inline'>\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.simplify\" type=\"checkbox\">\n" +
+    "                        <abbr title='Replace characters with their ASCII counterparts if they are not present in the target layout:\n\t\t— – “ ” „ ‘ ’ ′ ″ ‴ « » ‹ › 〈 〉 × · © ® ™ \nwith\n\t\t-- \" &apos; < > * (c) (R) TM'>\n" +
+    "                            Simplify punctuation for non-typographic layouts\n" +
+    "                        </abbr>\n" +
     "                </label>\n" +
-    "                <label class='checkbox'>\n" +
-    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\"> <abbr title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt;, &lt;u:11&gt;, etc. as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>Allow modifier/control keys in input text</abbr>\n" +
+    "                <label class='checkbox inline'>\n" +
+    "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.ctrlKeys\" type=\"checkbox\">\n" +
+    "                        <abbr title='Interpret char sequences like &lt;u:8&gt;, &lt;u:1b&gt;, &lt;u:11&gt;, etc. as Backspace, Esc and Ctrl (8, 1b and 11 are hex codes of this keys)'>\n" +
+    "                            Allow modifier/control keys in input text\n" +
+    "                        </abbr>\n" +
     "                </label>\n" +
+    "            </div>\n" +
+    "            <label class='control-label'>Emulate Auto-Indent:</label>\n" +
+    "            <div class='controls'>\n" +
+    "                <div class=\"btn-group\">\n" +
+    "                    <label class=\"radio inline\">\n" +
+    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"none\" ng-model=\"settings.autoIndent\" ng-disabled=\"settings.weightKeystroke==0\"> None\n" +
+    "                    </label>\n" +
+    "                    <label class=\"radio inline\">\n" +
+    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"simple\" ng-model=\"settings.autoIndent\" ng-disabled=\"settings.weightKeystroke==0\">\n" +
+    "                        <abbr title=\"Skip extra indents and insert backspaces when indenting decreases (the text editor repeats the indentation of the previous line)\">\n" +
+    "                            Simple\n" +
+    "                        </abbr>\n" +
+    "                    </label>\n" +
+    "                    <label class=\"radio inline\">\n" +
+    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"smart\" ng-model=\"settings.autoIndent\" ng-disabled=\"settings.weightKeystroke==0\">\n" +
+    "                        <abbr title=\"Ignore indentation (the text editor arranges all indents automatically)\">Smart</abbr>\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </form>\n" +
@@ -628,7 +652,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                <div id=\"left-hand\" title=\"Left hand approach\">🤚</div>\n" +
     "                <div id=\"right-hand\" title=\"Right hand approach\">🤚</div>\n" +
     "                <input class=\"input-block-level\" ng-model=\"settings.thetas.right\" ng-disabled=\"settings.weightDistance==0||settings.autoThetas\"type=\"number\" min=\"-90\" max=\"90\" step=\"5\">°\n" +
-    "                <button style=\"vertical-align: middle; margin-left: 4px; cursor: help;\" title=\"\\ ₍-₎\\\t−15 : −15°\tclassical\n\n/₍-₎\\\t+35° : −20°\tArensito\n\nI ₍-₎ I\t     0° :     0°\trude\" tabindex=\"-1\"><div class=\"kb-dialog-help\"></div></button>\n" +
+    "                <button style=\"vertical-align: middle; margin-left: 4px; cursor: help;\" title=\"\\ ₍-₎\\\t−15 : −15°\tclassical\n\n/₍-₎\\\t+30° : −20°\tArensito\n\nI ₍-₎ I\t     0° :     0°\trude\" tabindex=\"-1\"><div class=\"kb-dialog-help\"></div></button>\n" +
     "                <label class=\"checkbox inline\">\n" +
     "                    <input class=\"kla-result-checkbox ng-pristine ng-valid\" ng-model=\"settings.autoThetas\" ng-disabled=\"settings.weightDistance==0\" type=\"checkbox\"> <abbr title=\"Calculate the angles from the middle finger zones using the least squares method\">Automatic</abbr>\n" +
     "                </label>\n" +
@@ -769,7 +793,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <a href=\"javascript:void(0);\" title=\"Next layout (Ctrl→)\">🡢</a>\n" +
     "        </li>\n" +
     "        <li class=\"switcher common\" num=\"last\" ng-click=\"handleNav($event, start*1, 'last')\">\n" +
-    "            <a href=\"javascript:void(0);\" title=\"Last layout (Ctrl+Space)\">⭯</a>\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Toggle recent layouts (Ctrl+Space)\">⭯</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "</div>"

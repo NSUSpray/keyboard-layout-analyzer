@@ -3,7 +3,7 @@
     "layouts": [
         {
             "label": "QWERTY",
-            "author": "Patrick Gillespie",
+            "author": "C. L. Sholes, E. Remington",
             "moreInfoUrl": "https://en.wikipedia.org/wiki/QWERTY",
             "moreInfoText": "Wikipedia Entry",
             "fingerStart": {
@@ -391,7 +391,7 @@
                 "11": 56
             },
             "keyboardType": "standard",
-            "author": "Patrick Gillespie",
+            "author": "August Dvorak",
             "moreInfoText": "Wikipedia Entry",
             "moreInfoUrl": "https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard",
             "keys": [
@@ -752,7 +752,7 @@
         },
         {
             "label": "Colemak",
-            "author": "Patrick Gillespie",
+            "author": "Shai Coleman",
             "moreInfoUrl": "http://colemak.com/",
             "moreInfoText": "colemak.com",
             "fingerStart": {
@@ -1127,7 +1127,7 @@
         },
         {
             "label": "Workman",
-            "author": "Mat Haverty",
+            "author": "OJ Bucao",
             "moreInfoUrl": "http://www.workmanlayout.com/",
             "moreInfoText": "workmanlayout.com",
             "fingerStart": {
@@ -1503,7 +1503,7 @@
         },
         {
             "label": "Norman",
-            "author": "Uli Troyo",
+            "author": "David Norman",
             "moreInfoUrl": "http://normanlayout.info/",
             "moreInfoText": "normanlayout.info",
             "fingerStart": {

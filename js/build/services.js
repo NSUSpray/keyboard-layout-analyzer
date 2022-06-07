@@ -450,6 +450,81 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
         */
         me.go = function(txt, settings) {
 
+            if (settings.ctrlKeys)
+                txt = txt.replaceAll(/<u:-?[0-9A-Fa-f]+>/g, function(a) {
+                    return String.fromCharCode(parseInt(a.slice(3, -1), 16));
+                });
+
+            if (settings.autoIndent !== "none") {
+                var indents, taboids, taboidLengths,
+                        hist = {}, weights = {}, tabWidth,
+                        indent, dIndentLength, prevIndent = "", newIndent,
+                        backspace = "\x08";
+                indents = txt.replaceAll(/^[\t ]+$/gm, "").match(/^[\t ]+/gm);
+                if (indents !== null) {
+                    taboids = indents.join("\n").match(/ +/g);
+                    if (taboids !== null) {
+
+                        // get tab width
+                        taboidLengths = taboids.map(function(t) { return t.length; });
+                        taboidLengths.forEach(function(l) { hist[l] = (hist[l] + 1) || 1; });
+                        Object.keys(hist).forEach(function(h) {
+                            weights[h] = Object.keys(hist)
+                                    .filter(function(k) { return k % h == 0; })
+                                    .map(function(k) { return hist[k]; /* *Math.exp(h - k);*/ })
+                                    .reduce(function(a, b) { return a + b; }) * (Math.log(h) + 1);
+                        });
+                        tabWidth = Number(Object.keys(weights).reduce(function(a, b) {
+                            return (weights[a] > weights[b])? a : b;
+                        }));
+                        console.log("INDENT HIST:", hist);
+                        console.log("INDENT WEIGHTS:", weights);
+                        console.log("INTENDED TAB WIDTH: " + tabWidth);
+
+                        tabInSpaces = new Array(tabWidth + 1).join(" ");
+
+                        /*// replace taboids by tab characters
+                        indents.forEach(function(i) {
+                            var new_i = i.replaceAll(new RegExp(tabInSpaces, "g"), "\t");
+                            txt = txt.replace(new RegExp("^" + i, "m"), new_i);
+                        });*/
+                        // replace tab characters by spaces
+                        indents.forEach(function(i) {
+                            var new_i = i.replaceAll(/\t/g, tabInSpaces);
+                            txt = txt.replace(new RegExp("^" + i, "m"), new_i);
+                        });
+
+                        // process
+                        switch (settings.autoIndent) {
+                            case "simple":
+                                txt = txt.split("\n");
+                                for (ii = 0; ii < txt.length; ii++) {
+                                    indent = txt[ii].match(/^ */)[0];
+                                    dIndentLength = indent.length - prevIndent.length;
+                                    if (dIndentLength >= 0)  // indent
+                                        txt[ii] = txt[ii].slice(prevIndent.length);
+                                    else  // unindent
+                                        txt[ii] = Array(-dIndentLength + 1).join(backspace)
+                                                + txt[ii].slice(indent.length);
+                                    prevIndent = indent;
+
+                                    if (tabWidth > 2 || true) {  // TODO: if (tabEffort < spaceEffort * tabWidth)
+                                        indent = txt[ii].match(/^ */)[0];
+                                        newIndent = indent.replaceAll(new RegExp(tabInSpaces, "g"), "\t");
+                                        txt[ii] = txt[ii].replace(new RegExp("^" + indent, "m"), newIndent);
+                                    }
+                                }
+                                txt = txt.join("\n");
+                                // console.log(txt);
+                                break;
+                            case "smart":
+                                txt = txt.replaceAll(/^ +/gm, ""); break;
+                        }
+
+                    }
+                }
+            }
+
             // --------------------------------------------------------------------
             // Create an analysis report on each layout
 

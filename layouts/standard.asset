@@ -1,8 +1,8 @@
 {
     "label": "Asset",
-    "author": "Mason Armstrong",
-    "moreInfoUrl": "",
-    "moreInfoText": "",
+    "author": "David Piepgrass",
+    "moreInfoUrl": "http://millikeys.sourceforge.net/asset/",
+    "moreInfoText": "The Asset Keyboard",
     "fingerStart": {
         "1": 29,
         "2": 30,

@@ -193,7 +193,7 @@ KB.Keyboard = (function() {
             keySet - An array of sub-arrays. The sub arrays contain information about the keys.
             keyMap - Metadata on where keys go.
         */
-        me.setLayout = function(config) {        
+        me.setLayout = function(config) {
             var ii,
                 len,
                 kk;

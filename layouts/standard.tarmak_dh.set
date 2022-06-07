@@ -3,7 +3,7 @@
     "layouts": [
         {
             "label": "QWERTY",
-            "author": "Patrick Gillespie",
+            "author": "C. L. Sholes, E. Remington",
             "moreInfoUrl": "https://en.wikipedia.org/wiki/QWERTY",
             "moreInfoText": "Wikipedia Entry",
             "fingerStart": {

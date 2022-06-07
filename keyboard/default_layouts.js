@@ -19,7 +19,7 @@ KB.keySet.matrix_split = {};
 
 KB.keySet.standard.qwerty = {
     label: "QWERTY",
-    author: "Patrick Gillespie",
+    author: "C. L. Sholes, E. Remington",
     moreInfoUrl: "https://en.wikipedia.org/wiki/QWERTY", 
     moreInfoText: "Wikipedia Entry",
     fingerStart: {},
@@ -100,7 +100,7 @@ KB.keySet.standard.qwerty = {
 
 KB.keySet.standard.simplifiedDvorak = {
     label: "Simplified Dvorak",
-    author: "Patrick Gillespie",
+    author: "August Dvorak",
     moreInfoUrl: "https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard", 
     moreInfoText: "Wikipedia Entry",
     fingerStart: {},
@@ -180,7 +180,7 @@ KB.keySet.standard.simplifiedDvorak = {
 
 KB.keySet.standard.colemak = {
     label: "Colemak",
-    author: "Patrick Gillespie",
+    author: "Shai Coleman",
     moreInfoUrl: "http://colemak.com/", 
     moreInfoText: "colemak.com",
     fingerStart: {},
@@ -260,7 +260,7 @@ KB.keySet.standard.colemak = {
 
 KB.keySet.standard.capewell = {
     label: "Capewell",
-    author: "Patrick Gillespie",
+    author: "Michael Capewell",
     moreInfoUrl: "http://www.michaelcapewell.com/projects/keyboard/", 
     moreInfoText: "michaelcapewell.com",
     fingerStart: {},
@@ -341,7 +341,7 @@ KB.keySet.standard.capewell = {
 
 KB.keySet.standard.programmerDvorak = {
     label: "Programmer Dvorak",
-    author: "Patrick Gillespie",
+    author: "Roland Kaufmann",
     moreInfoUrl: "http://www.kaufmann.no/roland/dvorak/", 
     moreInfoText: "kaufmann.no",
     fingerStart: {},
@@ -514,7 +514,7 @@ KB.keySet.european.azerty = {
 
 KB.keySet.european.simplifiedDvorak = {
     label: "Simplified Dvorak",
-    author: "Patrick Gillespie",
+    author: "August Dvorak",
     authorUrl: "",
     fingerStart: {},
     keyboardType: "european",
@@ -593,7 +593,7 @@ KB.keySet.european.simplifiedDvorak = {
 
 KB.keySet.european.colemak = {
     "label": "Colemak",
-    "author": "",
+    "author": "Shai Coleman",
     "moreInfoUrl": "https://colemak.com/",
     "moreInfoText": "Colemak",
     "fingerStart": {
@@ -1357,7 +1357,7 @@ KB.keySet.european.colemak_dh = {
 
 KB.keySet.european.qwerty = {
     label: "QWERTY",
-    author: "",
+    author: "C. L. Sholes, E. Remington",
     moreInfoUrl: "http://en.wikipedia.org/wiki/Qwerty", 
     moreInfoText: "Wikipedia Entry",
    "fingerStart":{

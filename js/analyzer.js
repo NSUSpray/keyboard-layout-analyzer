@@ -97,7 +97,7 @@ KLA.Analyzer = (function() {
             thetaL += (minDelta - delta) / 2;
             thetaR -= (minDelta - delta) / 2;
         }
-        console.log("thetaL: " + thetaL + ", thetaR: " + thetaR);
+        console.log("THETA L: " + thetaL + ", THETA R: " + thetaR);
         return {left: thetaL, right: thetaR};
     }
 
@@ -198,7 +198,7 @@ KLA.Analyzer = (function() {
         //console.log("Entering findCharInKeySet");
 
         len = keys.length;
-        for (ii = 0; ii < len; ii++) {
+        for (ii = len - 1; ii >= 0; ii--) {
             if ( keys[ii].primary && keys[ii].primary === charCode ) {
                 ret.fingerUsed = keys[ii].finger;
                 ret.keyIndex = ii;
@@ -710,11 +710,6 @@ KLA.Analyzer = (function() {
             return analysis; 
         }
         
-        if (settings.ctrlKeys)
-            text = text.replaceAll(/<u:-?[0-9A-Fa-f]+>/g, function(a) {
-                return String.fromCharCode(parseInt(a.slice(3, -1), 16));
-            });
-
         // compare with reference layout
         var diff, key, refKey, pp, qq, found;
         for (ii = 0; ii < refKeySet.keys.length; ii++) {

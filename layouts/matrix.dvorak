@@ -1,5 +1,6 @@
 {
     "label": "Dvorak",
+    "author": "SteveP",
     "moreInfoUrl": "https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard", 
     "moreInfoText": "Wikipedia Entry",
     "fingerStart": {

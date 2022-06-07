@@ -3,7 +3,7 @@
     "layouts": [
         {
             "label": "QWERTY",
-            "author": "Patrick Gillespie",
+            "author": "C. L. Sholes, E. Remington",
             "moreInfoUrl": "https://en.wikipedia.org/wiki/QWERTY",
             "moreInfoText": "Wikipedia Entry",
             "fingerStart": {
@@ -770,7 +770,7 @@
         },
         {
             "label": "Simplified Dvorak",
-            "author": "Patrick Gillespie",
+            "author": "August Dvorak",
             "moreInfoUrl": "https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard",
             "moreInfoText": "Wikipedia Entry",
             "fingerStart": {
@@ -1144,7 +1144,7 @@
         },
         {
             "label": "Programmer Dvorak",
-            "author": "Patrick Gillespie",
+            "author": "Roland Kaufmann",
             "moreInfoUrl": "http://www.kaufmann.no/roland/dvorak/",
             "moreInfoText": "kaufmann.no",
             "fingerStart": {
@@ -1518,7 +1518,7 @@
         },
         {
             "label": "Colemak",
-            "author": "Patrick Gillespie",
+            "author": "Shai Coleman",
             "moreInfoUrl": "http://colemak.com/",
             "moreInfoText": "colemak.com",
             "fingerStart": {

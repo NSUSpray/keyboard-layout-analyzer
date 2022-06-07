@@ -1,8 +1,8 @@
 {
     "label": "TNWMLC",
-    "author": "Michael Rouse",
-    "moreInfoUrl": "",
-    "moreInfoText": "",
+    "author": "Martin Krzywinski",
+    "moreInfoUrl": "http://mkweb.bcgsc.ca/carpalx/?worst_layout",
+    "moreInfoText": "Carpalx",
     "fingerStart": {
         "1": 29,
         "2": 30,

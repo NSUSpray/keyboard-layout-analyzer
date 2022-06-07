@@ -15,10 +15,10 @@
         "false": -1
     },
     "keyboardType": "standard",
-    "author": "Dave Ferree",
+    "author": "Håkon Hallingstad",
     "authorUrl": "",
-    "moreInfoUrl": "http://web.archive.org/web/20050306181446/http://www.pvv.org/~hakonhal/keyboard/",
-    "moreInfoText": "web.archive.org",
+    "moreInfoUrl": "http://www.pvv.org/~hakonhal/main.cgi/keyboard",
+    "moreInfoText": "Arensito Keyboard Layout",
     "keys": [
         {
             "finger": 1,
