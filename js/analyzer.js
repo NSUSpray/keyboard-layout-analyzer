@@ -818,7 +818,8 @@ KLA.Analyzer = (function() {
         });
         
         analysis.pixelsPerCm = keyMap.pixelsPerCm;
-        analysis.layoutName = keySet.label;
+        analysis.layoutName = forceLabel(keySet);
+        analysis.layoutTitle = makeTitle(keySet);
         analysis.hardwareType = hardwareType(keySet.keyboardType);
         analysis.numChars = tLen;
         

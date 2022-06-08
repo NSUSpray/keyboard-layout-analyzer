@@ -130,7 +130,7 @@ appDirectives.directive('keyboardheatmap', [
                 'myindex': '@'
             },
 
-            template: '<div id="{{id}}"><div id="{{hmId}}"></div><div id="{{infoId}}"></div><div style="font-weight:bold;position:relative;z-index:2;">{{layout.keySet.label}}</div></div>',
+            template: '<div id="{{id}}"><div id="{{hmId}}"></div><div id="{{infoId}}"></div><div style="font-weight:bold;position:relative;z-index:2;">{{forceLabel(layout.keySet)}}</div></div>',
 
             controller: function($scope) {
                 var myInstance = instance++;
@@ -138,6 +138,7 @@ appDirectives.directive('keyboardheatmap', [
                 $scope.hmId = 'kla-kbhm-map-'+myInstance;
                 $scope.infoId = 'kla-kbhm-info-'+myInstance;
                 $scope.keyboard = null;
+                $scope.forceLabel = forceLabel;
             },
 
             link: function(scope, element, attrs, controller) {
@@ -281,49 +282,46 @@ appDirectives.directive('paginate', [
                 $scope.stop = parseInt($scope.stop, 10);
                 $scope.maxVal = $scope.stop - $scope.start;
                 $scope.keyboards = keyboards;
-                $scope.typedLabel = function(layout) {
-                    var label = layout.keySet.label.trim();
-                    switch (layout.keySet.keyboardType) {
-                        case "ergodox":
-                            label = "Ergodox " + label; break;
-                        case "matrix":
-                            label += " Matrix"; break;
-                    }
-                    return label;
-                }
-                $scope.shortLabel = function(layout) {
-                    var label = $scope.typedLabel(layout);
-                    if (label == "")
-                        return "<empty>";
-                    var l = label,
+
+                $scope.makeTitle = makeTitle;
+                $scope.shortTitle = function(keySet, index) {
+                    var label = makeTitle(keySet, index),
+                        l = label,
                         maxPagLength = 118,
                         numSwitchers = $(".switcher.common").length,
                         maxLabelLength =
                                 (maxPagLength - 2*numSwitchers) / ($scope.stop - $scope.start + 1);
                     for (i = 1; l.replaceAll(/[WMЩЮЖМШ]/ug, "...")
-                            .replaceAll(/[^ijlI. ]/ug, "..").length > maxLabelLength; ++i) {
+                            .replaceAll(/[^ijlI. ᴱˢ]/ug, "..").length > maxLabelLength; ++i) {
                         switch (i) {
                             // trash
                             case 1: l = l.replaceAll(/[^\wа-яё -]/ugi, "").replaceAll(/-/ug, " "); break;
+                            // type
+                            case 2:
+                                l = l.replace(/(.*) split[ -]space$/u, "$1ˢˢ")
+                                        .replace(/^Ergodox (.*)/u, "$1ᴱ")
+                                        .replace(/(.*) Matrix$/u, "$1ᴹ");
+                                break;
                             // vowels
-                            case 2: l = l.replaceAll(/(?<=[\wА-ЯЁа-яё])[aeiouyаеёийоуыэюя]/ug, ""); break;
+                            case 3: l = l.replaceAll(/(?<=[\wА-ЯЁа-яё])[aeiouyаеёийоуыэюя]/ug, ""); break;
                             // abbreviation
-                            case 3: l = l.replaceAll(/([A-Za-zА-ЯЁа-яё][a-zа-яё])[a-zа-яё]+/ug, "$1."); break;
+                            case 4: l = l.replaceAll(/([A-Za-zА-ЯЁа-яё][a-zа-яё])[a-zа-яё]+/ug, "$1."); break;
                             // dots
-                            case 4: l = l.replaceAll(/\./ug, ""); break;
-                            case 5:  // lower
+                            case 5: l = l.replaceAll(/\./ug, ""); break;
+                            case 6:  // lower
                                 l = l.replaceAll(/(?<=[\wА-ЯЁа-яё])[a-zа-яё]/ug, "")
                                 .replaceAll(/(?<=[\wА-ЯЁа-яё])[A-ZА-ЯЁ]/ug, function(a) {return a.toLowerCase();})
                                 .replaceAll(/ /ug, "");
                                 break;
                             // digits
-                            case 6: l = l.replaceAll(/(\d)\d+/g, "$1"); break;
-                            default: i = 2; break;
+                            case 7: l = l.replaceAll(/(\d)\d+/ug, "$1"); break;
+                            default: i = 3; break;
                         }
                         l = l.trim();
                     }
                     return (l == "")? label.slice(0, 6) + "…" : l;
                 };
+
                 $scope.current = 0;
 
                 var last = $scope.current;
@@ -663,7 +661,7 @@ appDirectives.directive('seriesbarchart', ['$log',
                     }
                     $scope.plot = $.jqplot($scope.chartId, seriesData, plotOpts);
 
-                    $('#'+ $scope.chartId ).bind('jqplotDataHighlight', 
+                    $('#'+ $scope.chartId).bind('jqplotDataHighlight', 
                         function (ev, seriesIndex, pointIndex, data ) {
                             var mouseX = ev.pageX ;
                             var mouseY = ev.pageY - 38;

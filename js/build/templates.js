@@ -580,17 +580,17 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "            <div class='controls'>\n" +
     "                <div class=\"btn-group\">\n" +
     "                    <label class=\"radio inline\">\n" +
-    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"none\" ng-model=\"settings.autoIndent\" ng-disabled=\"settings.weightKeystroke==0\"> None\n" +
+    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"none\" ng-model=\"settings.autoIndent\"> None\n" +
     "                    </label>\n" +
     "                    <label class=\"radio inline\">\n" +
-    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"simple\" ng-model=\"settings.autoIndent\" ng-disabled=\"settings.weightKeystroke==0\">\n" +
+    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"simple\" ng-model=\"settings.autoIndent\">\n" +
     "                        <abbr title=\"Skip extra indents and insert backspaces when indenting decreases (the text editor repeats the indentation of the previous line)\">\n" +
-    "                            Simple\n" +
+    "                            Basic\n" +
     "                        </abbr>\n" +
     "                    </label>\n" +
     "                    <label class=\"radio inline\">\n" +
-    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"smart\" ng-model=\"settings.autoIndent\" ng-disabled=\"settings.weightKeystroke==0\">\n" +
-    "                        <abbr title=\"Ignore indentation (the text editor arranges all indents automatically)\">Smart</abbr>\n" +
+    "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"smart\" ng-model=\"settings.autoIndent\">\n" +
+    "                        <abbr title=\"Ignore indentation (the text editor arranges all indents automatically)\">IDE</abbr>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -781,19 +781,19 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <li ng-repeat='ii in [start, stop] | makeRange' \n" +
     "            ng-class=\"{switcher: true, active: ($index === current)}\" \n" +
     "            num=\"$index\" ng-click=\"handleNav($event, start*1, $index)\">\n" +
-    "            <a href=\"javascript:void(0);\" title=\"{{typedLabel(keyboards.getLayout($index))}}\">" +
-    "                {{shortLabel(keyboards.getLayout($index))}}" +
+    "            <a href=\"javascript:void(0);\" title=\"{{makeTitle(keyboards.getLayout($index).keySet, $index)}}\">" +
+    "                {{shortTitle(keyboards.getLayout($index).keySet, $index)}}" +
     "            </a>\n" +
     "        </li>\n" +
     "\n" +
     "        <li class=\"switcher common\" num=\"prev\" ng-click=\"handleNav($event, start*1,'prev')\">\n" +
-    "            <a href=\"javascript:void(0);\" title=\"Previous layout (←Ctrl)\">🡠</a>\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Previous layout (←)\">🡠</a>\n" +
     "        </li>\n" +
     "        <li class=\"switcher common\" num=\"next\" ng-click=\"handleNav($event, start*1, 'next')\">\n" +
-    "            <a href=\"javascript:void(0);\" title=\"Next layout (Ctrl→)\">🡢</a>\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Next layout (→)\">🡢</a>\n" +
     "        </li>\n" +
     "        <li class=\"switcher common\" num=\"last\" ng-click=\"handleNav($event, start*1, 'last')\">\n" +
-    "            <a href=\"javascript:void(0);\" title=\"Toggle recent layouts (Ctrl+Space)\">⭯</a>\n" +
+    "            <a href=\"javascript:void(0);\" title=\"Toggle recent layouts (Space)\">⭯</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "</div>"

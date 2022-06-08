@@ -57,12 +57,11 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             $("#kb-config-copy").addClass("btn-info");
             var keySet = $.extend(true, {}, keyboards.getKeySet($scope.current));
             if (fingering) {
-                var ignore = 0;
                 keySet.label = keySet.author = keySet.moreInfoUrl
-                        = keySet.moreInfoText = ignore;
+                        = keySet.moreInfoText = KB.Key.IGNORE;
                 keySet.keys = keySet.keys.map(function(key) {
                     key.primary = key.shift = key.altGr = key.shiftAltGr =
-                            ignore;
+                            KB.Key.IGNORE;
                     return key;
                 });
             }
@@ -86,12 +85,11 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             var keySet = $.extend(true, {}, keyboards.getKeySet($scope.current));
             var filename = keySet.label + "." + keySet.keyboardType;
             if (fingering) {
-                var ignore = 0;
                 keySet.label = keySet.author = keySet.moreInfoUrl
-                        = keySet.moreInfoText = ignore;
+                        = keySet.moreInfoText = KB.Key.IGNORE;
                 keySet.keys = keySet.keys.map(function(key) {
                     key.primary = key.shift = key.altGr = key.shiftAltGr =
-                            ignore;
+                            KB.Key.IGNORE;
                     return key;
                 });
                 filename += ".fingering";
@@ -268,7 +266,7 @@ appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$
                 }
             } catch(err) {
                 alert( err.message );
-                $location.path('/main');
+                $location.path('/config');
             }
         };
 
@@ -629,6 +627,7 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
         $scope.share.generatingUrl = false;
         $scope.share.url = '';
         $scope.share.returnedUrl = '';
+        $scope.forceLabel = forceLabel;
 
         // If no result data exist, redirect to the main page
         if ( typeof $scope.results['distance'] === 'undefined') {

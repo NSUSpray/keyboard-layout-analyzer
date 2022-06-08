@@ -22,8 +22,7 @@ appServices.factory('keyboards', [
 
 	function() {
         var me = {},
-            layouts = [],
-            ignore = 0;
+            layouts = [];
 
         // setup layouts
     
@@ -167,10 +166,10 @@ appServices.factory('keyboards', [
             
             for (prop of ['label', 'author', 'authorUrl', 'moreInfoUrl',
                     'moreInfoText', 'fingerStart', 'keyboardType'])
-                if (!sameType && ks[prop] === ignore)
+                if (!sameType && ks[prop] === KB.Key.IGNORE)
                     return mismatchError;
                 else if (filter === "all")
-                    if (typeof ks[prop] !== "undefined" && ks[prop] !== ignore)
+                    if (typeof ks[prop] !== "undefined" && ks[prop] !== KB.Key.IGNORE)
                         nks[prop] = ks[prop];
                     else if (typeof ks[prop] === 'undefined' && typeof nks[prop] !== 'undefined')
                         delete nks[prop];
@@ -191,7 +190,7 @@ appServices.factory('keyboards', [
 
                 key = keys[ii];
                 for (prop of ['primary', 'shift', 'altGr', 'shiftAltGr', 'finger']) {
-                    if (key[prop] === ignore)
+                    if (key[prop] === KB.Key.IGNORE)
                         if (sameType) continue;
                         else return mismatchError;
                     if (filter === 'altGr' && prop !== 'altGr' && prop !== 'shiftAltGr')
@@ -286,7 +285,7 @@ appServices.factory('keyboards', [
 
         me.parseKeySet = function(nn) {
             var vv = {}, prop, ii, valid = true;
-            if (typeof nn.label === "string" || nn.label === ignore) {
+            if (typeof nn.label === "string" || nn.label === KB.Key.IGNORE) {
                 vv.label = nn.label;
             } else {
                 return {
@@ -312,7 +311,7 @@ appServices.factory('keyboards', [
                     reason: "Finger start is not a object."
                 };
             }
-            if (typeof nn.keyboardType === "string" || nn.keyboardType === ignore) {
+            if (typeof nn.keyboardType === "string" || nn.keyboardType === KB.Key.IGNORE) {
                 vv.keyboardType = nn.keyboardType;
             } else {
                 return {
@@ -322,7 +321,7 @@ appServices.factory('keyboards', [
             }
             if (typeof nn.author === "string" || typeof nn.author === 'undefined') {
                 vv.author = nn.author || 'Unknown';
-            } else if (nn.author === ignore) {
+            } else if (nn.author === KB.Key.IGNORE) {
                 vv.author = nn.author;
             } else {
                 return {
@@ -334,7 +333,7 @@ appServices.factory('keyboards', [
             // deprecated, ignore
             if (typeof nn.authorUrl === "string" || typeof nn.authorUrl === 'undefined') {
                 vv.authorUrl = nn.authorUrl || '';
-            } else if (nn.authorUrl === ignore) {
+            } else if (nn.authorUrl === KB.Key.IGNORE) {
                 vv.authorUrl = nn.authorUrl;
             } else {
                 return {
@@ -346,7 +345,7 @@ appServices.factory('keyboards', [
 
             if (typeof nn.moreInfoUrl === "string" || typeof nn.moreInfoUrl === 'undefined') {
                 vv.moreInfoUrl = nn.moreInfoUrl || '';
-            } else if (nn.moreInfoUrl === ignore) {
+            } else if (nn.moreInfoUrl === KB.Key.IGNORE) {
                 vv.moreInfoUrl = nn.moreInfoUrl;
             } else {
                 return {
@@ -356,7 +355,7 @@ appServices.factory('keyboards', [
             }
             if (typeof nn.moreInfoText === "string" || typeof nn.moreInfoText === 'undefined') {
                 vv.moreInfoText = nn.moreInfoText || '';
-            } else if (nn.moreInfoText === ignore) {
+            } else if (nn.moreInfoText === KB.Key.IGNORE) {
                 vv.moreInfoText = nn.moreInfoText;
             } else {
                 return {
@@ -785,49 +784,49 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
 
             for (ii = 0; ii < analysis.length; ii++) {
                 distSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].distance.slice(1),
                     visible: true
                 });
                 fuSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].fingerUsage.slice(1),
                     visible: true
                 });
                 rowSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].rowUsage.slice(0),
                     visible: true
                 });
                 cfuSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].consecFingerPress.slice(0),
                     visible: true
                 });
                 cfuidSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].consecFingerPressIgnoreDups.slice(0),
                     visible: true
                 });
                 chuSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].consecHandPress,
                     visible: true
                 });
                 chuidSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].consecHandPressIgnoreDups,
                     visible: true
                 });
                 modSeriesData.push({
-                    label: analysis[ii].layoutName,
+                    label: analysis[ii].layoutTitle,
                     color: seriesColors[ii],
                     data: analysis[ii].modifierUse,
                     visible: true

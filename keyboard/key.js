@@ -382,6 +382,7 @@ KB.Key.getDisplayText = function(keyInput) {
     return String.fromCharCode(key);
 };
 
+KB.Key.IGNORE = 0;
 KB.Key.NONE = -1;
 KB.Key.WIN = -91;
 KB.Key.ALT_GR = -18;
@@ -400,6 +401,7 @@ KB.Key.labels[-18] = "Alt Gr";
 KB.Key.labels[20] = "\u2BB8";  // Caps Lock
 KB.Key.labels[27] = "Esc";
 KB.Key.labels[32] = "Space";
+KB.Key.labels[127] = "\u2326";  // Delete
 KB.Key.labels[160] = "\u237D";  // Non-Breaking Space
 KB.Key.labels[-91] = "Win";
 KB.Key.labels[-93] = "\u25A4";  // Menu
