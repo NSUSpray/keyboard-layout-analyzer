@@ -228,7 +228,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <li><a ng-click=\"copyAllJson()\" title=\"Copy the whole set\">Copy All Layouts</a></li>\n" +
     "                            </ul>\n" +
     "                        </div>\n" +
-    "                        <button id=\"kb-config-import\" class=\"btn\" ng-click=\"showImportDialog()\" title=\"Load some layout/set here (Ctrl+V)\">Paste</button>\n" +
+    "                        <button id=\"kb-config-import\" class=\"btn\" ng-click=\"showImportDialog()\" title=\"Load some layout/fingering/set here (Ctrl+V)\">Paste</button>\n" +
     "                        <!-- <input type=\"file\" id=\"kb-config-import\" class=\"btn\" ng-click=\"importJson()\" title=\"Load some layout data from computer\">Import</button> -->\n" +
     "                        <div class=\"btn-group dropdown\">\n" +
     "                            <a id=\"kb-config-export\" class=\"btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +

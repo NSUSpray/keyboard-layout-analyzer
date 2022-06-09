@@ -144,6 +144,14 @@ appServices.factory('keyboards', [
 
             return layouts[index];
         };
+
+        me.setLayoutAutoKeyMap = function(index, keySet, filter="all") {
+            return me.setLayout(index, {
+                keySet: $.extend(true, {}, keySet),
+                keyMap: $.extend(true, {}, me.getKeyMapFromKeyboardType(keySet.keyboardType))
+            }, filter);
+        }
+
         me.setLayout = function(index, layout, filter="all") {
             if (typeof layouts[index] === 'undefined') {
                 throw Error("keyboards service: Invalid index");

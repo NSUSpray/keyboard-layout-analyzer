@@ -127,19 +127,42 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
 
         $scope.setLayout = function(keySet, filter="all") {
             if ( Array.isArray(keySet) ) {
-                for (var i = 0; i < keySet.length; i++)
-                    keyboards.setLayout( i, {
-                        keySet: $.extend(true, {}, keySet[i]),
-                        keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(keySet[i].keyboardType))
-                    });
+                var wait = false;
+                if (keySet.filter(function(L) { return typeof L === 'string'; }).length > 0) {
+                    var val;
+                    for (var i = 0; i < keySet.length; i++) {
+                        if (typeof keySet[i] !== "string") continue;
+                        val = keySet[i].split(".");
+                        // TODO: do it normal
+                        if (typeof KB.keySet[val[0]] !== 'undefined'
+                                && typeof KB.keySet[val[0]][val[1]] !== 'undefined'
+                                && val[2] !== 'fingering')
+                            keySet[i] = KB.keySet[val[0]][val[1]];
+                        else {
+                            $http({
+                                method: 'GET',
+                                url: './layouts/' + keySet[i],
+                                data: i
+                            })
+                            .success(function(data, status, headers, config) {
+                                keySet[config.data] = data;
+                                if (keySet.filter(function(L) { return typeof L === "string"; }).length === 0)
+                                    for (var j = 0; j < keySet.length; j++)
+                                        keyboards.setLayoutAutoKeyMap(j, keySet[j]);
+                            })
+                            .error(function(data, status, headers, config) {
+                                alert('Unexpected Error. Layout not loaded.');
+                            });
+                            wait = true;
+                        }
+                    }
+                }
+                if (!wait) for (var j = 0; j < keySet.length; j++)
+                    keyboards.setLayoutAutoKeyMap(j, keySet[j]);
                 return {valid: true};
-            } else {
-                return keyboards.setLayout( $scope.current, {
-                    keySet: $.extend(true, {}, keySet),
-                    keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(keySet.keyboardType))
-                }, filter);
-            }
-        }
+            } else
+                return keyboards.setLayoutAutoKeyMap($scope.current, keySet, filter);
+        };
 
 	    $scope.importLayout = function() {
 	        var res = keyboards.parseKeySets($('#kb-config-import-dialog .kb-config-dialog-txt').val());
@@ -292,12 +315,9 @@ appControllers.controller('LoadCtrl', ['$scope', '$routeParams', '$location', '$
                         var ii;
                         for (ii = 0; ii < layouts.length; ii++) {
                             var res = keyboards.parseKeySet( JSON.stringify(layouts[ii].keySet) );
-                            if ( res.valid ) {              
-                                keyboards.setLayout( ii, {
-                                    keySet: $.extend(true, {}, res.keySet),
-                                    keyMap: $.extend(true, {}, keyboards.getKeyMapFromKeyboardType(res.keySet.keyboardType))
-                                });
-                            } else {
+                            if ( res.valid )
+                                keyboards.setLayoutAutoKeyMap(ii, res.keySet);
+                            else {
                                 $log.debug('unable to load layout');
                                 $log.debug(res);
                             }
