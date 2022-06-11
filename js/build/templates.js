@@ -231,13 +231,13 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                        <button id=\"kb-config-import\" class=\"btn\" ng-click=\"showImportDialog()\" title=\"Load some layout/fingering/set here (Ctrl+V)\">Paste</button>\n" +
     "                        <!-- <input type=\"file\" id=\"kb-config-import\" class=\"btn\" ng-click=\"importJson()\" title=\"Load some layout data from computer\">Import</button> -->\n" +
     "                        <div class=\"btn-group dropdown\">\n" +
-    "                            <a id=\"kb-config-export\" class=\"btn\" ng-click=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
+    "                            <a id=\"kb-config-export\" class=\"btn\" ng-mouseenter=\"exportJson()\" title=\"Save this layout to file\">Export</a>\n" +
     "                            <button type=\"button\" class=\"btn dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
     "                                <span class=\"caret\"></span>\n" +
     "                            </button>\n" +
     "                            <ul class=\"dropdown-menu\">\n" +
-    "                                <li><a id=\"kb-config-export-fingering\" ng-click=\"exportJson(fingering=true)\" title=\"Save finger zones and positions\">Export Fingering</a></li>\n" +
-    "                                <li><a id=\"kb-config-export-all\" ng-click=\"exportAllJson()\" title=\"Save the whole set to single file\">Exprot All Layouts</a></li>\n" +
+    "                                <li><a id=\"kb-config-export-fingering\" ng-mouseenter=\"exportJson(fingering=true)\" title=\"Save finger zones and positions\">Export Fingering</a></li>\n" +
+    "                                <li><a id=\"kb-config-export-all\" ng-mouseenter=\"exportAllJson()\" title=\"Save the whole set to single file\">Exprot All Layouts</a></li>\n" +
     "                            </ul>\n" +
     "                        </div>\n" +
     "                        <!-- <button id=\"kb-config-export\" class=\"btn\" ng-click=\"showExportDialog()\">Export</button> -->\n" +
@@ -590,7 +590,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    </label>\n" +
     "                    <label class=\"radio inline\">\n" +
     "                        <input type=\"radio\" name=\"emulate-auto-indent\" value=\"smart\" ng-model=\"settings.autoIndent\">\n" +
-    "                        <abbr title=\"Ignore indentation (the text editor arranges all indents automatically)\">IDE</abbr>\n" +
+    "                        <abbr title=\"Skip indentation (the text editor arranges all indents automatically)\">IDE</abbr>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "            </div>\n" +

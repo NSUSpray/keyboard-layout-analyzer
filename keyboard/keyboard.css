@@ -21,9 +21,9 @@
     *border: 1px solid #888888;
     -moz-border-radius: 15px;
     border-radius: 15px;
-    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-       -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+       -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .kb-dialog {

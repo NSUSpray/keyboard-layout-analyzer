@@ -285,46 +285,57 @@ KB.glyphLayouts.matrix[KB.SHIFT_ALTGR_PUSH] = function(keyCode,fontSize,coords) 
 
 KB.glyphLayouts.ergodox = {};
 KB.glyphLayouts.ergodox.getCoords = function(id, type, keyCode, fontSize, coords) {
-    return KB.glyphLayouts.ergodox[type](keyCode, fontSize, coords);
+    var angle;
+    if (id >= 64 && id <= 69)  // left thumb keys
+        angle = 0.45;
+    else if (id >= 70 && id <= 75)  // right thumb keys
+        angle = -0.45;
+    else
+        angle = 0.0;
+    return KB.glyphLayouts.ergodox[type](keyCode, fontSize, coords, angle);
 };
  
-KB.glyphLayouts.ergodox[KB.PRIME_PUSH] = function(keyCode,fontSize,coords) {
+KB.glyphLayouts.ergodox[KB.PRIME_PUSH] = function(keyCode,fontSize,coords, angle) {
     var width = coords[1].x - coords[0].x,
-        padding = fontSize*0.4;//width * 0.1;
+        padding = {x: fontSize*0.4, y: -fontSize*0.2};//width * 0.1;
+    rotatePoint(angle, {x: 0, y: 0}, padding);
         
     return {
-        x: coords[3].x + padding,
-        y:coords[3].y - padding/2,
+        x: coords[3].x + padding.x,
+        y:coords[3].y + padding.y,
         textAlign: "left",
         textBaseline: "bottom"
     };
 };
-KB.glyphLayouts.ergodox[KB.SHIFT_PUSH] = function(keyCode,fontSize,coords) {
+KB.glyphLayouts.ergodox[KB.SHIFT_PUSH] = function(keyCode,fontSize,coords, angle) {
     var width = coords[1].x - coords[0].x,
-        padding = fontSize*0.4;//width * 0.1;
+        padding = {x: fontSize*0.4, y: fontSize*0.2};//width * 0.1;
+    rotatePoint(angle, {x: 0, y: 0}, padding);
     return {
-        x: coords[0].x + padding,
-        y:coords[0].y + padding/2,
+        x: coords[0].x + padding.x,
+        y:coords[0].y + padding.y,
         textAlign: "left",
         textBaseline: "top"
     };
 };
-KB.glyphLayouts.ergodox[KB.ALTGR_PUSH] = function(keyCode,fontSize,coords) {
+KB.glyphLayouts.ergodox[KB.ALTGR_PUSH] = function(keyCode,fontSize,coords, angle) {
     var width = coords[1].x - coords[0].x,
-        padding = fontSize*0.4;//width * 0.1;
+        padding = {x: -fontSize*0.4, y: -fontSize*0.2};//width * 0.1;
+    rotatePoint(angle, {x: 0, y: 0}, padding);
     return {
-        x: coords[2].x - padding,
-        y:coords[2].y - padding/2,
+        x: coords[2].x + padding.x,
+        y:coords[2].y + padding.y,
         textAlign: "right",
         textBaseline: "bottom"
     };
 };
-KB.glyphLayouts.ergodox[KB.SHIFT_ALTGR_PUSH] = function(keyCode,fontSize,coords) {
+KB.glyphLayouts.ergodox[KB.SHIFT_ALTGR_PUSH] = function(keyCode,fontSize,coords, angle) {
     var width = coords[1].x - coords[0].x,
-        padding = fontSize*0.4;//width * 0.1;
+        padding = {x: -fontSize*0.4, y: fontSize*0.2};//width * 0.1;
+    rotatePoint(angle, {x: 0, y: 0}, padding);
     return {
-        x: coords[1].x - padding,
-        y:coords[1].y + padding/2,
+        x: coords[1].x + padding.x,
+        y:coords[1].y + padding.y,
         textAlign: "right",
         textBaseline: "top"
     };
@@ -349,6 +360,20 @@ var setMountPoints = function( key ) {
 	mountPoint["left"].y = key.y + (key.h/2);
 	return mountPoint;
 };
+
+var rotatePoint = function(angle, aroundPoint, rotatingPoint) {
+    var s = Math.sin(angle);
+    var c = Math.cos(angle);
+
+    rotatingPoint.x -= aroundPoint.x;
+    rotatingPoint.y -= aroundPoint.y;
+
+    var newX = rotatingPoint.x * c - rotatingPoint.y * s;
+    var newY = rotatingPoint.x * s + rotatingPoint.y * c;
+
+    rotatingPoint.x = newX + aroundPoint.x;
+    rotatingPoint.y = newY + aroundPoint.y;
+}
 
 
 // standard keymap (ansi)
@@ -720,20 +745,6 @@ KB.keyMap.ergodox.s683_225.split = true;
 
             idx++;
         }
-    }
-
-    var rotatePoint = function(angle, aroundPoint, rotatingPoint) {
-        var s = Math.sin(angle);
-        var c = Math.cos(angle);
-
-        rotatingPoint.x -= aroundPoint.x;
-        rotatingPoint.y -= aroundPoint.y;
-
-        var newX = rotatingPoint.x * c - rotatingPoint.y * s;
-        var newY = rotatingPoint.x * s + rotatingPoint.y * c;
-
-        rotatingPoint.x = newX + aroundPoint.x;
-        rotatingPoint.y = newY + aroundPoint.y;
     }
 
     var tCoords = [
