@@ -222,6 +222,57 @@ appServices.factory('keyboards', [
             return {valid: true};
         };
 
+        me.convertType = function(index) {
+            var keySet = layouts[index].keySet;
+            var keyMap = layouts[index].keyMap;
+
+            var newType = keySet.keyboardType;
+            var initalKeySet = KB.keySet[newType].inital;
+
+            var newKeySet = $.extend(true, {}, keySet);
+            newKeySet.fingerStart = $.extend(true, {}, initalKeySet.fingerStart);
+            newKeySet.keys = [];
+            var newKeyMap = KB.keyMap[newType].s683_225;
+            var newLength = Object.keys(newKeyMap)
+                    .filter(function(k) { return !isNaN(k); }).length;
+
+            var scan, id, sourceKeySet, newKey, initalFinger, startFingers;
+            for (var ii = 0; ii < newLength; ii++) {
+
+                // translate id: from ii (target) to id (current)
+                scan = newKeyMap[ii].scan;
+                id = Object.keys(keyMap).find(function(id) {
+                    return keyMap[id].scan === scan;
+                });
+
+                sourceKeySet = (id !== undefined)? keySet : initalKeySet;
+
+                newKey = sourceKeySet.keys
+                        .find(function(k) { return k.id == (id||ii); });
+                newKey = $.extend(true, {}, newKey);
+                newKey.id = ii;
+                initalFinger = initalKeySet.keys[ii].finger;
+                if (id !== undefined
+                        && newKeyMap[ii].row === keyMap[id].row
+                        && KB.finger.sameGroup(newKey.finger, initalFinger)) {
+                    // keep finger and arrange finger start if present
+                    startFingers = Object.keys(sourceKeySet.fingerStart)
+                            .filter(function(finger) {
+                                return sourceKeySet.fingerStart[finger] == id;
+                            });
+                    for (var startFinger of startFingers)
+                        newKeySet.fingerStart[startFinger] = ii;
+                } else
+                    newKey.finger = initalFinger;
+                newKeySet.keys.push(newKey);
+            }
+            layouts[index].keySet = newKeySet;
+            layouts[index].keyMap = newKeyMap;
+            if (layouts[index].keyboard !== null) {
+                layouts[index].keyboard.setLayout( layouts[index] );
+            }
+        }
+
         me.getKeySet = function(index) {
             if (typeof layouts[index] === 'undefined') {
                 throw Error("keyboards service: Invalid index");

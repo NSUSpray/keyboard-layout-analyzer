@@ -324,7 +324,7 @@ appDirectives.directive('paginate', [
 
                 $scope.current = 0;
 
-                var last = $scope.current;
+                var last = 0 + !$scope.current;
                 $scope.handleNav = function(evt, start, idx) {
 
                     idx = (idx === 'next') ? $scope.current + 1 : idx;

@@ -191,22 +191,33 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <label class='control-label' for=\"kb-config-name\">Name:</label>\n" +
     "                    <div class=\"controls\">\n" +
     "                        <input id=\"kb-config-name\" class=\"kb-config-name\" type=\"text\" ng-model=\"keyboards.getLayout(current).keySet.label\"/>\n" +
+    "                        <select class=\"span2\"\n" +
+    "                                ng-model=\"keyboards.getLayout(current).keySet.keyboardType\"\n" +
+    "                                ng-change=\"keyboards.convertType(current)\">\n" +
+    "                            <option value=\"standard\">ANSI</option>\n" +
+    "                            <option value=\"european\">ISO</option>\n" +
+    "                            <option value=\"european_ss\">ISO split-space</option>\n" +
+    "                            <option value=\"matrix\">Matrix</option>\n" +
+    "                            <option value=\"ergodox\">Ergodox</option>\n" +
+    "                        </select>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"control-group\">\n" +
     "                    <label class='control-label'>Author:</label>\n" +
     "                    <div class=\"controls\">\n" +
-    "                        <label>{{keyboards.getLayout(current).keySet.author}}</label>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"control-group\">\n" +
-    "                    <label class='control-label'>More Info:</label>\n" +
-    "                    <div class=\"controls\"><label>\n" +
-    "                        <span ng-hide='keyboards.getLayout(current).keySet.moreInfoUrl'>None</span>\n" +
-    "                        <span ng-show='keyboards.getLayout(current).keySet.moreInfoUrl'>\n" +
-    "                            <a href='{{keyboards.getLayout(current).keySet.moreInfoUrl}}'>{{keyboards.getLayout(current).keySet.moreInfoText}}</a>\n" +
+    "                        <label ng-hide='keyboards.getLayout(current).keySet.author'>Unknown</label>\n" +
+    "                        <label ng-show='keyboards.getLayout(current).keySet.author'>\n" +
+    "                            {{keyboards.getLayout(current).keySet.author}}\n" +
+    "                        </label>\n" +
+    "                        <!-- <span ng-hide='keyboards.getLayout(current).keySet.moreInfoUrl'>None</span> -->\n" +
+    "                        <span class='kb-config-more-info'\n" +
+    "                                ng-show='keyboards.getLayout(current).keySet.moreInfoUrl'>\n" +
+    "                            <a href='{{keyboards.getLayout(current).keySet.moreInfoUrl}}'\n" +
+    "                                    title='{{keyboards.getLayout(current).keySet.moreInfoText}}'>\n" +
+    "                                More Info\n" +
+    "                            </a>\n" +
     "                        </span>\n" +
-    "                    </label></div>\n" +
+    "                    </div>\n" +
     "                </div>\n" +
     "            </form>\n" +
     "        <paginate start=\"1\" stop=\"6\" handler=\"switchLayout\"></paginate>\n" +
@@ -247,7 +258,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                <div class='control-group'>\n" +
     "                    <!-- <label class='control-label' for=\"kb-config-select-list\">Preset:</label> -->\n" +
     "                    <div class='controls'>\n" +
-    "                        <select id=\"kb-config-select-list\" class=\"kb-config-select-list\" ng-model=\"data.layoutPreset\">\n" +
+    "                        <select id=\"kb-config-select-list\" ng-model=\"data.layoutPreset\">\n" +
     "                            <option value=\"none\">[Select Preset]</option>\n" +
     "                            <option value=\"default.set\">Default Set</option>\n" +
     "                            <option value=\"famous.set\">Famous Latin Layouts</option>\n" +

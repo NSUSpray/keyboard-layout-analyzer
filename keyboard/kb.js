@@ -139,6 +139,16 @@ KB.finger.leftRightOrThumb = function(finger) {
     return "none";
 };
 
+KB.finger.sameGroup = function(finger1, finger2) {
+    if (finger1 === KB.finger.NONE || finger2 === KB.finger.NONE)
+        return false;
+    if (KB.finger.whichHand(finger1) !== KB.finger.whichHand(finger2))
+        return false;
+    if (KB.finger.isThumb(finger1) !== KB.finger.isThumb(finger2))
+        return false;
+    return true;
+};
+
 KB.glyphLayouts = {};
 KB.glyphLayouts.standard = {};
 KB.glyphLayouts.standard.getCoords = function(id, type, keyCode, fontSize, coords) {
@@ -424,6 +434,7 @@ KB.keyMap.standard.s683_225.split = false;
             km[index].cx = km[index].x + (km[index].w/2);
             km[index].cy = km[index].y + (km[index].h/2);
             km[index].row = row;
+            km[index].scan = index + (row === 3 && ii > 0? 2 : 1);
             
             // set the mount points - these are points where dialogs will attach to keys
             // all our keys are squares, so this is simple
@@ -435,6 +446,16 @@ KB.keyMap.standard.s683_225.split = false;
         curX = 0.5;//2.5
         curY += normKeySize;
     }
+    km[0].scan = 0x29;  // OEM_3: `~
+    km[27].scan = 0x2b;  // OEM_5: \|
+    km[28].scan = 0x3a;  // Caps Lock
+    km[40].scan = 0x1c;  // Enter
+    km[53].scan = 0x1d;  // Left Ctrl
+    km[54].scan = -0x5b  // Left Win
+    km[57].scan = -0x38;  // Right Alt
+    km[58].scan = -0x5c;  // Right Win
+    km[59].scan = -0x5d;  // Menu
+    km[60].scan = -0x1d;  // Right Ctrl
 })();
 
 // European keymap (ISO)
@@ -484,6 +505,7 @@ KB.keyMap.european.s683_225.split = false;
             km[index].cx = km[index].x + (km[index].w/2);
             km[index].cy = km[index].y + (km[index].h/2);
             km[index].row = row;
+            km[index].scan = index + (row === 4? 0 : 1);
             
             if (row === 1 && ii === 13) {
                 var enterBottomWidth = 62.5;//keyWidths["3,0"]+12*normKeySize;
@@ -529,6 +551,16 @@ KB.keyMap.european.s683_225.split = false;
         curX = 0.5;//2.5
         curY += normKeySize;
     }
+    km[0].scan = 0x29;  // OEM_3: `~
+    km[28].scan = 0x3a;  // Caps Lock
+    km[40].scan = 0x2b;  // OEM_5: \|
+    km[42].scan = 0x56;  // OEM_102: |\
+    km[54].scan = 0x1d;  // Left Ctrl
+    km[55].scan = -0x5b  // Left Win
+    km[58].scan = -0x38;  // Right Alt
+    km[59].scan = -0x5c;  // Right Win
+    km[60].scan = -0x5d;  // Menu
+    km[61].scan = -0x1d;  // Right Ctrl
 })();
 
 // European keymap with split spacebar
@@ -579,6 +611,7 @@ KB.keyMap.european_ss.s683_225.split = false;
             km[index].cx = km[index].x + (km[index].w/2);
             km[index].cy = km[index].y + (km[index].h/2);
             km[index].row = row;
+            km[index].scan = index + (row === 4? 0 : 1);
             
             // make centre of spacebars near the edges?
             if (row === 4 && ii === 3) { //l.space
@@ -632,6 +665,19 @@ KB.keyMap.european_ss.s683_225.split = false;
         curX = 0.5;//2.5
         curY += normKeySize;
     }
+    km[0].scan = 0x29;  // OEM_3: `~
+    km[13].scan = -0x53;  // Backspace as Delete
+    km[28].scan = 0x3a;  // Caps Lock
+    km[40].scan = 0x2b;  // OEM_5: \|
+    km[42].scan = 0x56;  // OEM_102: |\
+    km[54].scan = 0x1d;  // Left Ctrl
+    km[55].scan = -0x5b  // Left Win
+    km[57].scan = 0x0e;  // “Left Space” as Backspace
+    km[58].scan = 0x39;  // “Right Space” as Space
+    km[59].scan = -0x38;  // Right Alt
+    km[60].scan = -0x5c;  // Right Win
+    km[61].scan = -0x5d;  // Menu
+    km[62].scan = -0x1d;  // Right Ctrl
 })();
 
 
@@ -651,7 +697,7 @@ KB.keyMap.ergodox.s683_225.split = true;
         km = KB.keyMap.ergodox.s683_225,
         normKeySize = 50,
         row,
-        keyCount = [14,14,13,12,8],
+        // keyCount = [14,14,13,12,8],
         index = 0,
         curX = 0.5,//2.5
         curY = 0.5,//2.5
@@ -686,11 +732,18 @@ KB.keyMap.ergodox.s683_225.split = true;
 
     var idx = 0;
     var yOffset = [
-        [0, 0, -8, -12, -8, -5,      -5,        -5, -5,  -8, -12,  -8, 0, 0],
-        [0, 0, -8, -12, -8, -5,      -5,        -5, -5,  -8, -12,  -8, 0, 0],
-        [0, 0, -8, -12, -8, -5,                 -5,      -8, -12,  -8, 0, 0],
-        [0, 0, -8, -12, -8, -5, -5 - 23,   -5 - 23, -5,  -8, -12,  -8, 0, 0],
-        [0, 0, -8, -12, -8,                              -8, -12,  -8, 0, 0]
+        [0, 0, -8, -12, -8, -5,    -5,    -5, -5, -8, -12, -8, 0, 0],
+        [0, 0, -8, -12, -8, -5,    -5,    -5, -5, -8, -12, -8, 0, 0],
+        [0, 0, -8, -12, -8, -5,               -5, -8, -12, -8, 0, 0],
+        [0, 0, -8, -12, -8, -5, -5-23, -5-23, -5, -8, -12, -8, 0, 0],
+        [0, 0, -8, -12, -8,                       -8, -12, -8, 0, 0]
+    ];
+    var scanCodes = [
+        [0x0d, 0x02, 0x03,  0x04,  0x05, 0x06, 0x01,    -1, 0x07,  0x08,  0x09, 0x0a, 0x0b,  0x0c],
+        [0x0f, 0x10, 0x11,  0x12,  0x13, 0x14,   -1,    -1, 0x15,  0x16,  0x17, 0x18, 0x19,  0x2b],
+        [0x3a, 0x1e, 0x1f,  0x20,  0x21, 0x22,              0x23,  0x24,  0x25, 0x26, 0x27,  0x28],
+        [0x2a, 0x2c, 0x2d,  0x2e,  0x2f, 0x30,   -1, -0x38, 0x31,  0x32,  0x33, 0x34, 0x35,  0x36],
+        [  -1, 0x29, 0x56, -0x4b, -0x4d,                          -0x48, -0x50, 0x1a, 0x1b, -0x5d]
     ];
 
     var rowY = [
@@ -742,6 +795,7 @@ KB.keyMap.ergodox.s683_225.split = true;
             km[idx].w = keyWidth[idx] || sw;
             km[idx].h = keyHeight[idx] || sh;
             km[idx].row = row;
+            km[idx].scan = scanCodes[row][col];
 
             idx++;
         }
@@ -761,6 +815,12 @@ KB.keyMap.ergodox.s683_225.split = true;
         {x: 508, y: 309, r: -0.45},
         {x: 531, y: 244, r: -0.45},
         {x: 575, y: 223, r: -0.45}
+    ];
+    scanCodes = [
+        // lctrl, lalt, backspace, delete, home, end
+        0x1d, 0x38, 0x0e, -0x53, -0x47, -0x4f,
+        // lwin, rctrl, pgup, pgdn, enter, space
+        -0x5b, -0x1d, -0x49, -0x51, 0x1c, 0x39
     ];
     for (ii = 0; ii < tCoords.length; ii++) {
         km[idx] = {};
@@ -800,6 +860,8 @@ KB.keyMap.ergodox.s683_225.split = true;
         km[idx].mountPoint["bottom"].y = ySum / km[idx].coords.length;
         km[idx].mountPoint["left"].x = xSum / km[idx].coords.length;
         km[idx].mountPoint["left"].y = ySum / km[idx].coords.length;
+
+        km[idx].scan = scanCodes[ii];
 
         idx++;
     }
@@ -881,6 +943,7 @@ KB.keyMap.matrix.s683_225.split = false;
             km[index].cx = km[index].x + (km[index].w/2);
             km[index].cy = km[index].y + (km[index].h/2);
             km[index].row = row;
+            km[index].scan = index + row*2 + 1;
 
             // set the mount points - these are points where dialogs will attach to keys
             // all our keys are squares, so this is simple
@@ -892,6 +955,19 @@ KB.keyMap.matrix.s683_225.split = false;
 
         curY += normKeySize;
     }
+    km[0].scan = 0x29;  // OEM_3: `~
+    km[23].scan = 0x0d;  // OEM_Plus: =+
+    km[24].scan = 0x3a;  // Caps Lock
+    km[36].scan = 0x2a;  // Left Shift
+    var scanCodes = [
+        // lctrl, lwin, lalt, oem5\|, backspace, [,
+        0x1d, -0x5b, 0x38, 0x2b, 0x0e, 0x1a,
+        // ], space, enter, ralt, menu, rctrl
+        0x1b, 0x39, 0x1c, -0x38, -0x5d, -0x1d
+    ];
+    var row4start = 48;
+    for (ii = 0; ii < scanCodes.length; ii++)
+        km[row4start + ii].scan = scanCodes[ii];
 })();
 
 KB.keyMap.matrix_split = {};
