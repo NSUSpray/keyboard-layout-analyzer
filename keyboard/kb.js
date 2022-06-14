@@ -392,8 +392,8 @@ KB.keyMap.standard = {};
 // 50 pixels = 1.9cm
 // 26.315789 pixels = 1cm
 KB.keyMap.standard.s683_225 = {};
-KB.keyMap.standard.s683_225.width = 754;//756
-KB.keyMap.standard.s683_225.height = 252;//254
+KB.keyMap.standard.s683_225.width = 15*50 + 4;//756
+KB.keyMap.standard.s683_225.height = 5*50 + 2;//254
 KB.keyMap.standard.s683_225.pixelsPerCm = 26.315789;
 KB.keyMap.standard.s683_225.split = false;
 (function() {
@@ -464,8 +464,8 @@ KB.keyMap.european = {};
 // 50 pixels = 1.9cm
 // 26.315789 pixels = 1cm
 KB.keyMap.european.s683_225 = {};
-KB.keyMap.european.s683_225.width = 754;//756
-KB.keyMap.european.s683_225.height = 252;//254
+KB.keyMap.european.s683_225.width = 15*50 + 4;//756
+KB.keyMap.european.s683_225.height = 5*50 + 2;//254
 KB.keyMap.european.s683_225.pixelsPerCm = 26.315789;
 KB.keyMap.european.s683_225.split = false;
 (function() {
@@ -569,8 +569,8 @@ KB.keyMap.european_ss = {};
 // 50 pixels = 1.9cm
 // 26.315789 pixels = 1cm
 KB.keyMap.european_ss.s683_225 = {};
-KB.keyMap.european_ss.s683_225.width = 754;//756
-KB.keyMap.european_ss.s683_225.height = 252;//254
+KB.keyMap.european_ss.s683_225.width = 15*50 + 4;//756
+KB.keyMap.european_ss.s683_225.height = 5*50 + 2;//254
 KB.keyMap.european_ss.s683_225.pixelsPerCm = 26.315789;
 KB.keyMap.european_ss.s683_225.split = false;
 (function() {
@@ -913,8 +913,8 @@ KB.keyMap.matrix = {};
 // 50 pixels = 1.9cm
 // 26.315789 pixels = 1cm
 KB.keyMap.matrix.s683_225 = {};
-KB.keyMap.matrix.s683_225.width = 12*50;
-KB.keyMap.matrix.s683_225.height = 254;
+KB.keyMap.matrix.s683_225.width = 12*50 + 4;
+KB.keyMap.matrix.s683_225.height = 5*50 + 2;
 KB.keyMap.matrix.s683_225.pixelsPerCm = 26.315789;
 KB.keyMap.matrix.s683_225.split = false;
 (function() {
@@ -974,8 +974,8 @@ KB.keyMap.matrix_split = {};
 // 50 pixels = 1.9cm
 // 26.315789 pixels = 1cm
 KB.keyMap.matrix_split.s683_225 = {};
-KB.keyMap.matrix_split.s683_225.width = 12*50 + 150;
-KB.keyMap.matrix_split.s683_225.height = 254;
+KB.keyMap.matrix_split.s683_225.width = 12*50 + 3*50 + 4;
+KB.keyMap.matrix_split.s683_225.height = 5*50 + 2;
 KB.keyMap.matrix_split.s683_225.pixelsPerCm = 26.315789;
 KB.keyMap.matrix_split.s683_225.split = true;
 (function() {

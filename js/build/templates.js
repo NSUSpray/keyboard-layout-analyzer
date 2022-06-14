@@ -207,7 +207,10 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <div class=\"controls\">\n" +
     "                        <label ng-hide='keyboards.getLayout(current).keySet.author'>Unknown</label>\n" +
     "                        <label ng-show='keyboards.getLayout(current).keySet.author'>\n" +
-    "                            {{keyboards.getLayout(current).keySet.author}}\n" +
+    "                            <span ng-hide='keyboards.getLayout(current).keySet.authorUrl'>{{keyboards.getLayout(current).keySet.author}}</span>\n" +
+    "                            <span ng-show='keyboards.getLayout(current).keySet.authorUrl'>\n" +
+    "                                <a href='{{keyboards.getLayout(current).keySet.authorUrl}}'>{{keyboards.getLayout(current).keySet.author}}</a>\n" +
+    "                            </span>\n" +
     "                        </label>\n" +
     "                        <!-- <span ng-hide='keyboards.getLayout(current).keySet.moreInfoUrl'>None</span> -->\n" +
     "                        <span class='kb-config-more-info'\n" +
