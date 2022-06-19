@@ -498,7 +498,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
   $templateCache.put('partials/load.htm',
     "<div class='loading-container text-center'>\n" +
     "    <p>\n" +
-    "    	<img src='http://patorjk.com/images/qwerty.png'/>\n" +
+    "    	<img src='img/loading_keyboard.png'/>\n" +
     "    </p>\n" +
     "    <p>\n" +
     "    	<img src='img/loading2.gif'>\n" +
@@ -618,7 +618,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                    <option value='spray'>Spray</option>\n" +
     "                    <option value='stevep'>SteveP</option>\n" +
     "                    <option value='patorjk'>PAT or JK</option>\n" +
-    "                    <option value='compromise'>Ergonomics/Difficulty</option>\n" +
+    "                    <option value='compromise'>Ergonomics vs Difficulty</option>\n" +
     "                </select>\n" +
     "            </div>\n" +
     "        </div>\n" + 
@@ -895,7 +895,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "        <div class='tab-pane active' id='summary'>\n" +
     "            <div style='text-align:center; position:relative;'>\n" +
     "                <img src='./img/trophy-32.png' style='display:inline-block; position:relative; top:-4px;margin-right:6px;'>\n" +
-    "                <div style='display:inline-block' class='best-layout'>{{results.summary.bestLayout}}</div>\n" +
+    "                <div style='display:inline-block' class='best-layout'>{{results.summary.rankedLayouts[0].layoutName}}</div>\n" +
     "                \n" +
     "            </div>\n" +
     "            <p>\n" +
@@ -916,7 +916,7 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                    <div class='text-left'>Layout</div>\n" +
     "                                </th>\n" +
     "                                <th>\n" +
-    "                                    <div class='text-right'>Score</div>\n" +
+    "                                    <div id='kla-score-head' class='text-right' ng-click='sortRankedLayouts()'>Score</div>\n" +
     "                                </th>\n" +
     "                                <th></th>\n" +
     "                            </tr>\n" +
@@ -928,8 +928,19 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                                <td></td>\n" +
     "                                <td><div class='text-left'>{{layout.hardwareType}}</div></td>\n" +
     "                                <td><div class='text-left'>{{layout.layoutName}}</div></td>\n" +
-    "                                <td><div class='text-right'>{{layout.score.toFixed(2)}}</div></td>\n" +
-    "                                <td class='chart-bar'><div style=\"width:{{layout.score}}px;\"></div></td>\n" +
+    "                                <td><div class='text-right'>{{score(layout).toFixed(2)}}</div></td>\n" +
+    "                                <td class='chart-bar'>" +
+    "<div class=\"kla-distance-score\"\n" +
+    "    style=\"width:{{layout.distScore*results.summary.settings.weightDistance/wholeWeight()}}px;\"></div>" +
+    "<div class=\"kla-f-usage-score\"\n" +
+    "    style=\"width:{{layout.fingerScore*results.summary.settings.weightKeystroke/wholeWeight()}}px;\"></div>" +
+    "<div class=\"kla-same-f-score\"\n" +
+    "    style=\"width:{{layout.consecFingerScore*results.summary.settings.weightSameFinger/wholeWeight()}}px;\"></div>" +
+    "<div class=\"kla-same-h-score\"\n" +
+    "    style=\"width:{{layout.consecHandScore*results.summary.settings.weightSameHand/wholeWeight()}}px;\"></div>" +
+    "<div class=\"kla-similarity-score\"\n" +
+    "    style=\"width:{{layout.similarityScore*results.summary.settings.weightSimilarity/wholeWeight()}}px;\"></div>" +
+    "                                </td>\n" +
     "                            </tr>\n" +
     "                    \n" +
     "                        </tbody>\n" +
@@ -943,8 +954,45 @@ angular.module('kla').run(['$templateCache', function($templateCache) {
     "                how often you use particular fingers,\n" +
     "                how often you switch fingers while typing,\n" +
     "                and how much the layout is similar to the reference,\n" +
-    "                in the proportions specified by the analyzer settings.\n" +
+    "                in the following proportions:\n" +
     "            </p>\n" +
+    "            <form class='form-horizontal'>\n" +
+    "                <table class=\"kla-table-adjust\">\n" +
+    "                    <colgroup>\n" +
+    "                        <col id=\"kla-distance-score\"><col>\n" +
+    "                        <col id=\"kla-f-usage-score\"><col>\n" +
+    "                        <col id=\"kla-same-f-score\"><col>\n" +
+    "                        <col id=\"kla-same-h-score\"><col>\n" +
+    "                        <col id=\"kla-similarity-score\">\n" +
+    "                    </colgroup>\n" +
+    "                    <thead>\n" +
+    "                        <tr>\n" +
+    "                            <th>Distance</th>\n" +
+    "                            <th></th>\n" +
+    "                            <th><abbr title=\"Finger usage\">F. Usage</abbr></th>\n" +
+    "                            <th></th>\n" +
+    "                            <th><abbr title=\"Same finger\">Same F.</abbr></th>\n" +
+    "                            <th></th>\n" +
+    "                            <th><abbr title=\"Same hand\">Same H.</abbr></th>\n" +
+    "                            <th></th>\n" +
+    "                            <th>Similarity</th>\n" +
+    "                        </tr>\n" +
+    "                    </thead>\n" +
+    "                    <tbody>\n" +
+    "                        <tr>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"results.summary.settings.weightDistance\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"results.summary.settings.weightKeystroke\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"results.summary.settings.weightSameFinger\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"results.summary.settings.weightSameHand\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                            <td>:</td>\n" +
+    "                            <td><input class=\"input-block-level\" ng-model=\"results.summary.settings.weightSimilarity\" type=\"number\" min=\"0\" step=\"1\"></td>\n" +
+    "                        <tr>\n" +
+    "                    </tbody>\n" +
+    "                </table>\n" +
+    "            </form>\n" +
     "            <!--\n" +
     "            <p>\n" +
     "                <div class='text-center' ng-show='share.showSection'>\n" +

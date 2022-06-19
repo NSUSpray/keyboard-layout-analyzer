@@ -647,8 +647,9 @@ appServices.factory('resultsGenerator', ['$log', 'keyboards', 'analyzer', 'libra
             
             var scores = analyzer.scoreLayouts(analysis);
             library.set('summary', {
-                bestLayout: scores.finalList[0].layoutName,
-                rankedLayouts: scores.finalList
+                settings: $.extend(true, {}, settings),
+                rankedLayouts: scores.finalList,
+                isNew: true
             });
 
             // --------------------------------------------------------------------

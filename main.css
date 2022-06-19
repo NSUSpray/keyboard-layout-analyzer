@@ -110,6 +110,11 @@ input[type=number].full-width {
     text-align: center;
 }
 
+/* center table of ratio adjusting at summary page */
+form > .kla-table-adjust {
+    margin: 0 auto;
+}
+
 .kla-table-adjust thead th,
 .kla-table-adjust tfoot th {
     font-weight: normal;
@@ -117,6 +122,11 @@ input[type=number].full-width {
 
 .kla-table-adjust th {
     text-align: left;
+}
+
+.kla-table-adjust th.highlighted {
+    border-radius: 6px;
+    background-color: #fff;
 }
 
 #left-hand, #right-hand {
@@ -260,12 +270,16 @@ input[type=number].full-width {
 .kla-table-data tr:hover {
     color: #000000;
 }
-.kla-table-data tr .chart-bar div {
+.kla-table-data .chart-bar div {
+    display: inline-block;
     height: 12px;
     background-color: rgba(102, 102, 102, 50%);
 }
-.kla-table-data tr:hover .chart-bar div {
-    background-color: rgba(102, 102, 102, 100%);
+.kla-table-data .chart-bar div:hover  {
+    background-color: #000000;
+}
+.kla-table-data .chart-bar div.background {
+    background-color: rgba(102, 102, 102, 33%);
 }
 
 .kla-table-data th, .kla-table-data td {
@@ -283,7 +297,37 @@ input[type=number].full-width {
     border-bottom-width:1px;
     border-bottom-style:solid;
     border-color: #476FB2;
-    text-align: center;
+    *text-align: center;
+}
+
+#kla-score-head { cursor: pointer; }
+#kla-score-head::before {
+    content: "🠗";
+    visibility: hidden;
+}
+.kla-table-data:hover #kla-score-head::before {
+    visibility: visible;
+}
+
+.kla-table-data .kla-distance-score.highlighted,
+.kla-table-data:hover .kla-distance-score {
+    background-color: rgb(94, 121, 167);
+}
+.kla-table-data .kla-f-usage-score.highlighted,
+.kla-table-data:hover .kla-f-usage-score {
+    background-color: rgb(38, 155, 97);
+}
+.kla-table-data .kla-same-f-score.highlighted,
+.kla-table-data:hover .kla-same-f-score {
+    background-color: rgb(104, 190, 63);
+}
+.kla-table-data .kla-same-h-score.highlighted,
+.kla-table-data:hover .kla-same-h-score {
+    background-color: rgb(195, 105, 139);
+}
+.kla-table-data .kla-similarity-score.highlighted,
+.kla-table-data:hover .kla-similarity-score {
+    background-color: rgb(215, 166, 121);
 }
 
 /*

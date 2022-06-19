@@ -131,37 +131,41 @@ function makeTitle(keySet, index) {
     return label;
 }
 
-document.addEventListener("keydown", function(e) {
-// instead of $(document).on("keydown") because jQuery doesn't get a key code
-    var c = e.ctrlKey, a = e.altKey, s = e.shiftKey,
-        clear = !c && !a && !s,
-        cs = c && !a && !s,
-        as = !c && a && !s,
-        ss = !c && !a && s,
-        k = e.key, cd = e.code,
-        inf = !$("input, textarea").is(":focus"),
-        pd = function() {e.preventDefault();};
-    if (inf && clear && k === "ArrowLeft")
-        return $(".switcher[num=prev]").click() && pd();
-    if (inf && clear && k === "ArrowRight")
-        return $(".switcher[num=next]").click() && pd();
-    if (inf && clear && k === " ")
-        return $(".switcher[num=last]").click() && pd();
-    if (inf && cs && (k === "c" || k === "Insert")
-            && window.getSelection().toString() === "")
-        return $("#kb-config-copy").click() && pd();
-    if (inf && (cs && k === "v" || ss && k === "Insert"))
-        return $("#kb-config-import").click() && pd();
-    if (cs && k === "Enter")
-        return $(".kla-run-button .btn").click() && pd();
-    if (as && cd === "Digit1")
-        return $(location).attr("href", "#/config") && pd();
-    if (as && cd === "Digit2")
-        return $(location).attr("href", "#/main") && pd();
-    if (as && cd === "Digit3")
-        return $(location).attr("href", "#/results") && pd();
-    if (clear && k === "Enter"
-            && $("#kb-config-select-list").is(":focus")
-            && !$(".kb-config-load").attr("disabled"))
-        return $(".kb-config-load").click() && pd();
+$(document).ready(function() {
+
+    document.addEventListener("keydown", function(e) {
+    // instead of $(document).on("keydown") because jQuery doesn't get a key code
+        var c = e.ctrlKey, a = e.altKey, s = e.shiftKey,
+            clear = !c && !a && !s,
+            cs = c && !a && !s,
+            as = !c && a && !s,
+            ss = !c && !a && s,
+            k = e.key, cd = e.code,
+            inf = !$("input, textarea").is(":focus"),
+            pd = function() {e.preventDefault();};
+        if (inf && clear && k === "ArrowLeft")
+            return $(".switcher[num=prev]").click() && pd();
+        if (inf && clear && k === "ArrowRight")
+            return $(".switcher[num=next]").click() && pd();
+        if (inf && clear && k === " ")
+            return $(".switcher[num=last]").click() && pd();
+        if (inf && cs && (k === "c" || k === "Insert")
+                && window.getSelection().toString() === "")
+            return $("#kb-config-copy").click() && pd();
+        if (inf && (cs && k === "v" || ss && k === "Insert"))
+            return $("#kb-config-import").click() && pd();
+        if (cs && k === "Enter")
+            return $(".kla-run-button .btn").click() && pd();
+        if (as && cd === "Digit1")
+            return $(location).attr("href", "#/config") && pd();
+        if (as && cd === "Digit2")
+            return $(location).attr("href", "#/main") && pd();
+        if (as && cd === "Digit3")
+            return $(location).attr("href", "#/results") && pd();
+        if (clear && k === "Enter"
+                && $("#kb-config-select-list").is(":focus")
+                && !$(".kb-config-load").attr("disabled"))
+            return $(".kb-config-load").click() && pd();
+    });
+
 });

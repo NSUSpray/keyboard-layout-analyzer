@@ -719,23 +719,28 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
         };
 
         var processInputData = function(tab) {
-            var lookup = {}, ii;
-            lookup['distance'] = ['distance'];
-            lookup['fingerUsage'] = ['fingerUsage'];
-            lookup['rowUsage'] = ['rowUsage'];
-            lookup['miscellaneous'] = ['consecFingerPress', 'consecHandPress', 'modifierUse']
-            lookup['consecFingerPress'] = ['consecFingerPress']
-            lookup['consecHandPress'] = ['consecHandPress']
-            lookup['modifierUse'] = ['modifierUse']
+            var lookup = {
+                distance: ['distance'],
+                fingerUsage: ['fingerUsage'],
+                rowUsage: ['rowUsage'],
+                miscellaneous: ['consecFingerPress', 'consecHandPress', 'modifierUse'],
+                consecFingerPress: ['consecFingerPress'],
+                consecHandPress: ['consecHandPress'],
+                modifierUse: ['modifierUse']
+            };
+            var ii;
 
             if ( !lookup[tab] ) return;
 
             for (ii = 0; ii < lookup[tab].length; ii++) {
                     var prop = lookup[tab][ii];
-                    $scope.results[prop].seriesData = $scope.results[prop].displayFilter(   $scope.results[prop].displayType, 
-                                                                                            $scope.results[prop].units, 
-                                                                                            $scope.results[prop].rawSeriesData,
-                                                                                            $scope.results[prop].displayData );
+                    $scope.results[prop].seriesData = $scope.results[prop]
+                            .displayFilter(
+                                $scope.results[prop].displayType, 
+                                $scope.results[prop].units, 
+                                $scope.results[prop].rawSeriesData,
+                                $scope.results[prop].displayData
+                            );
                     $scope.results[prop].dirty = Date.now();
             }
         };
@@ -751,6 +756,35 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
             processInputData(tab);
         };
 
+
+        // --------------------------------------------------------------------
+        // Compute best layout
+
+        var settings = $scope.results.summary.settings;
+
+        $scope.wholeWeight = function() {
+            return settings.weightSameHand + settings.weightSameFinger
+                    + settings.weightKeystroke + settings.weightDistance
+                    + settings.weightSimilarity;
+        }
+
+        $scope.score = function(e) {
+            var score = e.consecHandScore * settings.weightSameHand
+                    + e.consecFingerScore * settings.weightSameFinger
+                    + e.fingerScore * settings.weightKeystroke
+                    + e.distScore * settings.weightDistance
+                    + e.similarityScore * settings.weightSimilarity;
+            score /= $scope.wholeWeight();
+            return (!isFinite(score))? 0 : score;
+        }
+
+        $scope.sortRankedLayouts = function() {
+            $scope.results.summary.rankedLayouts.sort(function(a, b) {
+                return $scope.score(b) - $scope.score(a);
+            });
+        }
+
+
         /*
             Init and watches
         */
@@ -761,6 +795,39 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
             $scope.share.returnedUrl = $scope.share.url;
             library.set('textKey', null); // for future uses
         }
+
+        $('#results-navbar-link').removeClass('invisible');
+
+        if ($scope.results.summary.isNew) {
+            $scope.sortRankedLayouts();
+            $scope.results.summary.isNew = false;
+        }
+
+        $('.kla-table-adjust th, .kla-table-adjust td')
+                .on('mouseenter mouseleave', function(evt) {
+            var t = parseInt($(this).index()) + 1;
+            var id = $(this).parents('table').find('col:nth-child(' + t + ')').attr('id');
+            var anotherBars = $('.kla-table-data .chart-bar div:not(.' + id + ')');
+            var thisBar = $('.kla-table-data .' + id);
+            if (evt.type === 'mouseenter') {
+                anotherBars.addClass('background');
+                thisBar.addClass('highlighted');
+            } else {
+                anotherBars.removeClass('background');
+                thisBar.removeClass('highlighted');
+            }
+        });
+
+        $('.kla-table-data').on('mouseenter mouseleave', '.chart-bar div',
+                function(evt) {
+            var col = $('#' + $(this).attr('class'));
+            var t = parseInt(col.index()) + 1;
+            var th = $('.kla-table-adjust th:nth-child(' + t + ')');
+            if (evt.type === 'mouseenter')
+                th.addClass('highlighted');
+            else
+                th.removeClass('highlighted');
+        });
 
         var seriesTypes = ['distance', 'fingerUsage', 'rowUsage', 'consecFingerPress', 'consecHandPress', 'modifierUse']
         var ii = 0;
@@ -788,7 +855,5 @@ appControllers.controller('ResultsCtrl', ['$scope', '$location', '$http', '$log'
         $scope.$watch('settings.chuIgnoreDups', function(newVal, oldVal, scope) {
             scope.results.consecHandPress.displayType = (newVal === true) ? 'nodups' : 'dups';
         });
-
-        $('#results-navbar-link').removeClass('invisible');
 	}
 ]);

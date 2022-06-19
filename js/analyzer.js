@@ -958,7 +958,7 @@ KLA.Analyzer = (function() {
 
         // SIMILARITY
         var charCode, factor;
-        results.similarity = [];
+        results.similarityScores = [];
         for (ii = 0; ii < len; ii++) {
             total = 0;
             if (analysis[ii].charFreqAccounting) {
@@ -971,37 +971,23 @@ KLA.Analyzer = (function() {
                     total += analysis[ii].difference[charCode];
                 factor = analysis[ii].maxDifferencePerChar * Object.keys(analysis[ii].difference).length;
             }
-            results.similarity[ii] = 100 * Math.max(0, 1 - total / factor);
-            console.log("SIMILARITY: L%d %f", ii, results.similarity[ii]);
+            results.similarityScores[ii] = 100 * Math.max(0, 1 - total / factor);
+            console.log("SIMILARITY: L%d %f", ii, results.similarityScores[ii]);
         }
         
         // put it all together!
-        var whole = settings.weightDistance + settings.weightKeystroke
-                + settings.weightSameFinger + settings.weightSameHand
-                + settings.weightSimilarity;
-        var consecHandWeight = settings.weightSameHand / whole,
-                consecFingerWeight = settings.weightSameFinger / whole,
-                fingerUsageWeight = settings.weightKeystroke / whole,
-                distWeight = settings.weightDistance / whole,
-                similarityWeight = settings.weightSimilarity / whole;
         results.finalList = [];
-        for (ii = 0; ii < len; ii++) {
-            results.finalList[ii] = {};
-            results.finalList[ii].layoutName = analysis[ii].layoutName;
-            results.finalList[ii].hardwareType = analysis[ii].hardwareType;
-            results.finalList[ii].score = 
-                (results.consecHandScores[ii] * consecHandWeight) +
-                (results.consecFingerScores[ii] * consecFingerWeight) +
-                (results.fingerScores[ii] * fingerUsageWeight) +
-                (results.distScores[ii] * distWeight) +
-                (results.similarity[ii] * similarityWeight);
-            if ( !isFinite( results.finalList[ii].score ) ) { results.finalList[ii].score=0;}
-        }
+        for (ii = 0; ii < len; ii++)
+            results.finalList[ii] = {
+                layoutName: analysis[ii].layoutName,
+                hardwareType: analysis[ii].hardwareType,
+                consecHandScore: results.consecHandScores[ii],
+                consecFingerScore: results.consecFingerScores[ii],
+                fingerScore: results.fingerScores[ii],
+                distScore: results.distScores[ii],
+                similarityScore: results.similarityScores[ii]
+            };
         
-        results.finalList.sort(function(a,b) {
-            return b.score - a.score;
-        });
-
         return results;
     };
 
