@@ -31,12 +31,12 @@ appControllers.controller('ConfigCtrl', ['$scope', '$http', '$timeout', '$log', 
             $scope.submitter.importFilter = "all";
             var $importBtn = $('#kb-config-import-dialog .btn').first();
             $('#kb-config-import-dialog').modal('show');
-            $('#kb-config-import-dialog').keyup(function(event) {
-                if (event.key === "v" || event.key === "Insert") {
-                    if ($importBtn.hasClass('btn-warning')) return;
+            $('#kb-config-import-dialog').on('paste', function(event) {
+                if ($importBtn.hasClass('btn-warning')) return;
+                setTimeout(function() {
                     $('#kb-config-import-dialog .btn').first().click();
                     $('#kb-config-import').focus();  // WORKAROUND
-                }
+                }, 0);
             });
             $('#importFilter').removeClass('hide');
             $importBtn.removeClass('btn-warning');

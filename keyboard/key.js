@@ -108,7 +108,7 @@ KB.Key = (function() {
             offsetY = offsetY || 0;
                 
             myCtx.save();
-            myCtx.font = fontSize + "px Lato, sans-serif";
+            myCtx.font = fontSize + 'px Lato, "Helvetica Neue", Helvetica, Arial, sans-serif, "KLA Symbol"';
             myCtx.fillStyle = "rgba(0, 0, 0, 1)";
                 
             var pName;
